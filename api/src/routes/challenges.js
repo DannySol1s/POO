@@ -12,6 +12,16 @@ function shuffle(arr) {
   return copy;
 }
 
+function randomizeOptions(challenge) {
+  const correctAnswer = challenge.options[challenge.correctIndex];
+  const shuffledOptions = shuffle(challenge.options);
+  return {
+    ...challenge,
+    options: shuffledOptions,
+    correctIndex: shuffledOptions.indexOf(correctAnswer),
+  };
+}
+
 challengesRouter.get("/", (c) => {
   const { topic, difficulty } = c.req.query();
   let result = challenges;
@@ -42,7 +52,7 @@ challengesRouter.get("/random", (c) => {
     );
   }
 
-  const selected = shuffle(pool).slice(0, limit);
+  const selected = shuffle(pool).slice(0, limit).map(randomizeOptions);
   return c.json({ data: selected, total: selected.length });
 });
 
