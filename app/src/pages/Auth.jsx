@@ -56,8 +56,8 @@ export default function Auth({ onBack }) {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.1, duration: 0.3 }}
       >
-        <div className="auth-logo">POO</div>
-        <h1 className="auth-title">Acceso al Arena</h1>
+        <div className="auth-logo">&lt;/&gt;</div>
+        <h1 className="auth-title">POO Challenge</h1>
 
         <div className="auth-tabs">
           <button

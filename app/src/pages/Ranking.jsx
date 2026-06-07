@@ -45,7 +45,7 @@ export default function Ranking({ onBack }) {
     >
       <div className="ranking-header">
         <button className="auth-back" onClick={onBack}>← Volver</button>
-        <h1 className="ranking-title">Clasificación</h1>
+        <h1 className="ranking-title">🏆 Ranking</h1>
       </div>
 
       <div className="ranking-tabs">

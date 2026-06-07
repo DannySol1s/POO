@@ -63,8 +63,8 @@ export default function ChallengeCard({
           >
             <span className="option-letter">{String.fromCharCode(65 + i)}</span>
             <span className="option-text">{option}</span>
-            {isAnswered && i === challenge.correctIndex && <span className="option-marker">OK</span>}
-            {isAnswered && i === selectedAnswer && !isCorrect && <span className="option-marker">NO</span>}
+            {isAnswered && i === challenge.correctIndex && <span className="option-marker">✓</span>}
+            {isAnswered && i === selectedAnswer && !isCorrect && <span className="option-marker">✗</span>}
           </motion.button>
         ))}
       </div>

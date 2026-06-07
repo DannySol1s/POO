@@ -34,12 +34,12 @@ const TrophyIcon = () => (
 );
 
 const TOPICS = [
-  { id: "todos",           label: "Todos",           color: "#00d4ff" },
-  { id: "clases",          label: "Clases",           color: "#7c3aed" },
-  { id: "objetos",         label: "Objetos",          color: "#fbbf24" },
-  { id: "herencia",        label: "Herencia",         color: "#00e87a" },
-  { id: "polimorfismo",    label: "Polimorfismo",     color: "#f97316" },
-  { id: "encapsulamiento", label: "Encapsulamiento",  color: "#ff3366" },
+  { id: "todos",           label: "Todos",           color: "#6366f1" },
+  { id: "clases",          label: "Clases",           color: "#3b82f6" },
+  { id: "objetos",         label: "Objetos",          color: "#f59e0b" },
+  { id: "herencia",        label: "Herencia",         color: "#10b981" },
+  { id: "polimorfismo",    label: "Polimorfismo",     color: "#8b5cf6" },
+  { id: "encapsulamiento", label: "Encapsulamiento",  color: "#f43f5e" },
 ];
 
 const container = { animate: { transition: { staggerChildren: 0.06 } } };
@@ -102,7 +102,7 @@ export default function Home({ onStart, onAuth, onRanking }) {
           &lt;/&gt;
         </motion.div>
         <h1 className="home-title">POO CHALLENGE</h1>
-        <p className="home-subtitle">Demuestra tu dominio en la arena</p>
+        <p className="home-subtitle">Pon a prueba tus conocimientos de<br />Programación Orientada a Objetos</p>
       </motion.header>
 
       <motion.div
@@ -113,7 +113,7 @@ export default function Home({ onStart, onAuth, onRanking }) {
       >
         {user ? (
           <>
-            <span className="user-greeting">Operador: <strong>{user.username}</strong></span>
+            <span className="user-greeting">Hola, <strong>{user.username}</strong></span>
             <div className="user-actions">
               <button className="btn-link" onClick={onRanking}>
                 <TrophyIcon /> Ranking
@@ -129,7 +129,7 @@ export default function Home({ onStart, onAuth, onRanking }) {
       </motion.div>
 
       <motion.section variants={container} initial="initial" animate="animate">
-        <h2 className="section-label">Seleccionar modo</h2>
+        <h2 className="section-label">Elegir tema</h2>
         <div className="topics-grid">
           {TOPICS.map((topic) => (
             <motion.button
@@ -176,7 +176,7 @@ export default function Home({ onStart, onAuth, onRanking }) {
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.97 }}
       >
-        {loading ? "Cargando..." : "Entrar al arena"}
+        {loading ? "Cargando..." : "⚡ Comenzar desafío"}
       </motion.button>
 
       <motion.div

@@ -6,12 +6,12 @@ import ProgressBar from "../components/ProgressBar.jsx";
 import Timer from "../components/Timer.jsx";
 
 const TOPIC_COLORS = {
-  clases:          "#7c3aed",
-  objetos:         "#fbbf24",
-  herencia:        "#00e87a",
-  polimorfismo:    "#f97316",
-  encapsulamiento: "#ff3366",
-  todos:           "#00d4ff",
+  clases:          "#3b82f6",
+  objetos:         "#f59e0b",
+  herencia:        "#10b981",
+  polimorfismo:    "#8b5cf6",
+  encapsulamiento: "#f43f5e",
+  todos:           "#6366f1",
 };
 
 export default function Game({ config, onFinish }) {
@@ -104,7 +104,7 @@ export default function Game({ config, onFinish }) {
             transition={{ duration: 0.25, ease: "easeOut" }}
           >
             <div className={`feedback-banner ${isCorrect ? "feedback-banner--correct" : "feedback-banner--wrong"}`}>
-              <span className="feedback-icon">{isCorrect ? "OK" : "—"}</span>
+              <span className="feedback-icon">{isCorrect ? "✓" : "✗"}</span>
               <div className="feedback-content">
                 <strong>{isCorrect ? "¡Correcto!" : "Incorrecto"}</strong>
                 {!isCorrect && selectedAnswer === -1 && <span> — Tiempo agotado</span>}
@@ -121,7 +121,7 @@ export default function Game({ config, onFinish }) {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.97, y: 4 }}
             >
-              {isLast ? "Ver resultados" : "Siguiente ronda →"}
+              {isLast ? "Ver resultados" : "Siguiente pregunta →"}
             </motion.button>
           </motion.div>
         )}
