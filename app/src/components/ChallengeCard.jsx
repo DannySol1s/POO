@@ -50,9 +50,11 @@ export default function ChallengeCard({
             initial="initial"
             animate={
               isAnswered && i === challenge.correctIndex
-                ? { scale: [1, 1.03, 1], transition: { duration: 0.35, delay: 0.1 } }
+                ? { opacity: 1, x: 0, scale: [1, 1.03, 1], transition: { duration: 0.35, delay: 0.1 } }
                 : isAnswered && i === selectedAnswer && !isCorrect
-                ? { x: [-8, 8, -6, 6, -3, 3, 0], transition: { duration: 0.4 } }
+                ? { opacity: 1, x: [-8, 8, -6, 6, -3, 3, 0], transition: { duration: 0.4 } }
+                : isAnswered
+                ? { opacity: 1, x: 0, scale: 1 }
                 : "animate"
             }
             onClick={() => !isAnswered && onSelect(i)}
