@@ -877,6 +877,30 @@ h1, h2, h3 {
 }
 .field-input::placeholder { color: var(--text-dim); }
 
+.field-password {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.field-password .field-input {
+  padding-right: 44px;
+}
+.field-eye {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  border-radius: var(--radius-xs);
+  transition: color .15s;
+  flex-shrink: 0;
+}
+.field-eye:hover { color: var(--text-muted); }
+
 /* ═══════════════════════════════════════
    RANKING
 ═══════════════════════════════════════ */
