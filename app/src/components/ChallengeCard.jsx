@@ -15,7 +15,7 @@ export default function ChallengeCard({
     if (!isAnswered) return "option";
     if (index === challenge.correctIndex) return "option option--correct";
     if (index === selectedAnswer && !isCorrect) return "option option--wrong";
-    return "option option--dim";
+    return "option";
   }
 
   return (
