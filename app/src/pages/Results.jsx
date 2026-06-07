@@ -1,8 +1,11 @@
+import { useEffect, useState } from "react";
+import { useAuth } from "../context/AuthContext.jsx";
+
 const RANK = [
-  { min: 90, label: "Maestro POO", emoji: "🏆", color: "#f59e0b" },
+  { min: 90, label: "Maestro POO",        emoji: "🏆", color: "#f59e0b" },
   { min: 70, label: "Desarrollador Senior", emoji: "🥇", color: "#6366f1" },
-  { min: 50, label: "En Progreso", emoji: "🥈", color: "#10b981" },
-  { min: 0, label: "Sigue Practicando", emoji: "📚", color: "#8b5cf6" },
+  { min: 50, label: "En Progreso",         emoji: "🥈", color: "#10b981" },
+  { min: 0,  label: "Sigue Practicando",   emoji: "📚", color: "#8b5cf6" },
 ];
 
 function getRank(correct, total) {
@@ -10,13 +13,31 @@ function getRank(correct, total) {
   return RANK.find((r) => pct >= r.min);
 }
 
-export default function Results({ result, config, onRestart }) {
+export default function Results({ result, config, onRestart, onRanking }) {
+  const { user, token } = useAuth();
   const { score, answerHistory, topic } = result;
   const correct = answerHistory.filter((a) => a.correct).length;
   const total = answerHistory.length;
   const rank = getRank(correct, total);
-  const maxScore = total * (100 + 50 + 50);
   const pct = Math.round((correct / total) * 100);
+
+  const [saveStatus, setSaveStatus] = useState(null); // null | "saving" | "ok" | "error"
+
+  useEffect(() => {
+    if (!user || !token) return;
+    setSaveStatus("saving");
+
+    fetch("/api/partidas", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ tema: topic, puntuacion: score, correctas: correct, total }),
+    })
+      .then((r) => setSaveStatus(r.ok ? "ok" : "error"))
+      .catch(() => setSaveStatus("error"));
+  }, []);
 
   return (
     <div className="results">
@@ -28,6 +49,17 @@ export default function Results({ result, config, onRestart }) {
           <div className="stat-pill stat-pill--correct">{correct}/{total} correctas</div>
           <div className="stat-pill stat-pill--pct">{pct}% precisión</div>
         </div>
+
+        {user && (
+          <div className={`save-status save-status--${saveStatus}`}>
+            {saveStatus === "saving" && "Guardando resultado..."}
+            {saveStatus === "ok"     && "✓ Guardado en el ranking"}
+            {saveStatus === "error"  && "No se pudo guardar"}
+          </div>
+        )}
+        {!user && (
+          <p className="save-hint">Inicia sesión para guardar tu puntaje en el ranking</p>
+        )}
       </div>
 
       <section className="results-breakdown">
@@ -61,6 +93,9 @@ export default function Results({ result, config, onRestart }) {
       <div className="results-actions">
         <button className="btn btn--primary btn--lg" onClick={() => onRestart(true)}>
           Repetir ({config?.topic === "todos" ? "todos" : config?.topic})
+        </button>
+        <button className="btn btn--ghost" onClick={onRanking}>
+          🏆 Ver Ranking
         </button>
         <button className="btn btn--ghost" onClick={() => onRestart(false)}>
           Elegir otro tema

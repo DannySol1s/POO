@@ -1,15 +1,17 @@
 import { useState, useEffect } from "react";
+import { useAuth } from "../context/AuthContext.jsx";
 
 const TOPICS = [
-  { id: "todos", label: "Todos los temas", color: "#0ea5e9", icon: "🎯" },
-  { id: "clases", label: "Clases", color: "#6366f1", icon: "🏛️" },
-  { id: "objetos", label: "Objetos", color: "#f59e0b", icon: "📦" },
-  { id: "herencia", label: "Herencia", color: "#10b981", icon: "🧬" },
-  { id: "polimorfismo", label: "Polimorfismo", color: "#8b5cf6", icon: "🔀" },
-  { id: "encapsulamiento", label: "Encapsulamiento", color: "#f43f5e", icon: "🔒" },
+  { id: "todos",           label: "Todos los temas",  color: "#0ea5e9", icon: "🎯" },
+  { id: "clases",          label: "Clases",            color: "#6366f1", icon: "🏛️" },
+  { id: "objetos",         label: "Objetos",           color: "#f59e0b", icon: "📦" },
+  { id: "herencia",        label: "Herencia",          color: "#10b981", icon: "🧬" },
+  { id: "polimorfismo",    label: "Polimorfismo",      color: "#8b5cf6", icon: "🔀" },
+  { id: "encapsulamiento", label: "Encapsulamiento",   color: "#f43f5e", icon: "🔒" },
 ];
 
-export default function Home({ onStart }) {
+export default function Home({ onStart, onAuth, onRanking }) {
+  const { user, logout } = useAuth();
   const [selectedTopic, setSelectedTopic] = useState("todos");
   const [counts, setCounts] = useState({});
   const [loading, setLoading] = useState(false);
@@ -30,12 +32,11 @@ export default function Home({ onStart }) {
     setLoading(true);
     setError(null);
     try {
-      const url = `/api/challenges/random?topic=${selectedTopic}&count=10`;
-      const res = await fetch(url);
+      const res = await fetch(`/api/challenges/random?topic=${selectedTopic}&count=10`);
       const json = await res.json();
-      if (!json.data?.length) throw new Error("Sin preguntas disponibles");
+      if (!json.data?.length) throw new Error();
       onStart({ topic: selectedTopic, challenges: json.data });
-    } catch (e) {
+    } catch {
       setError("No se pudo cargar el desafío. ¿Está corriendo la API?");
     } finally {
       setLoading(false);
@@ -49,6 +50,22 @@ export default function Home({ onStart }) {
         <h1 className="home-title">POO Challenge</h1>
         <p className="home-subtitle">Pon a prueba tus conocimientos de<br />Programación Orientada a Objetos</p>
       </header>
+
+      <div className="home-user-bar">
+        {user ? (
+          <>
+            <span className="user-greeting">Hola, <strong>{user.username}</strong></span>
+            <div className="user-actions">
+              <button className="btn-link" onClick={onRanking}>🏆 Ranking</button>
+              <button className="btn-link btn-link--muted" onClick={logout}>Salir</button>
+            </div>
+          </>
+        ) : (
+          <button className="btn btn--ghost btn--sm" onClick={onAuth}>
+            Iniciar sesión / Registrarse
+          </button>
+        )}
+      </div>
 
       <section className="home-section">
         <h2 className="section-label">Elige un tema</h2>
@@ -78,11 +95,7 @@ export default function Home({ onStart }) {
 
       {error && <p className="error-msg">{error}</p>}
 
-      <button
-        className="btn btn--primary btn--lg"
-        onClick={handleStart}
-        disabled={loading}
-      >
+      <button className="btn btn--primary btn--lg" onClick={handleStart} disabled={loading}>
         {loading ? "Cargando..." : "Empezar Desafío"}
       </button>
 
