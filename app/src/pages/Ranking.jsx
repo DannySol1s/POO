@@ -3,12 +3,12 @@ import { motion } from "motion/react";
 import { useAuth } from "../context/AuthContext.jsx";
 
 const TEMAS = [
-  { id: "todos",           label: "Global",          icon: "🎯" },
-  { id: "clases",          label: "Clases",          icon: "🏛️" },
-  { id: "objetos",         label: "Objetos",         icon: "📦" },
-  { id: "herencia",        label: "Herencia",        icon: "🧬" },
-  { id: "polimorfismo",    label: "Polimorfismo",    icon: "🔀" },
-  { id: "encapsulamiento", label: "Encapsulamiento", icon: "🔒" },
+  { id: "todos",           label: "Global"          },
+  { id: "clases",          label: "Clases"          },
+  { id: "objetos",         label: "Objetos"         },
+  { id: "herencia",        label: "Herencia"        },
+  { id: "polimorfismo",    label: "Polimorfismo"    },
+  { id: "encapsulamiento", label: "Encapsulamiento" },
 ];
 
 const MEDALLAS = ["🥇", "🥈", "🥉"];
@@ -45,7 +45,7 @@ export default function Ranking({ onBack }) {
     >
       <div className="ranking-header">
         <button className="auth-back" onClick={onBack}>← Volver</button>
-        <h1 className="ranking-title">🏆 Ranking</h1>
+        <h1 className="ranking-title">Clasificación</h1>
       </div>
 
       <div className="ranking-tabs">
@@ -55,7 +55,6 @@ export default function Ranking({ onBack }) {
             className={`ranking-tab ${tema === t.id ? "ranking-tab--active" : ""}`}
             onClick={() => setTema(t.id)}
           >
-            <span>{t.icon}</span>
             <span className="ranking-tab-label">{t.label}</span>
           </button>
         ))}

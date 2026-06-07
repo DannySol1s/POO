@@ -10,22 +10,22 @@ export default function Timer({ timeLeft, maxTime, isAnswered, color }) {
 
   useEffect(() => { spring.set(pct); }, [pct]);
 
+  const barColor = isUrgent ? "#ff3366" : pct > 50 ? color : "#f97316";
+
   return (
-    <div className="timer">
+    <div className="timer-hud">
+      <span className="timer-label-hud">Tiempo</span>
       <div className="timer-bar-track">
         <motion.div
           className="timer-bar-fill"
-          style={{
-            width,
-            backgroundColor: isUrgent ? "#ef4444" : color,
-          }}
-          animate={isUrgent ? { opacity: [1, 0.6, 1] } : { opacity: 1 }}
+          style={{ width, backgroundColor: barColor }}
+          animate={isUrgent ? { opacity: [1, 0.55, 1] } : { opacity: 1 }}
           transition={isUrgent ? { duration: 0.5, repeat: Infinity } : {}}
         />
       </div>
       <motion.span
-        className={`timer-label ${isUrgent ? "timer-label--urgent" : ""}`}
-        animate={isUrgent ? { scale: [1, 1.15, 1] } : { scale: 1 }}
+        className={`timer-digits ${isUrgent ? "timer-digits--urgent" : ""}`}
+        animate={isUrgent ? { scale: [1, 1.12, 1] } : { scale: 1 }}
         transition={isUrgent ? { duration: 0.5, repeat: Infinity } : {}}
       >
         {timeLeft}s

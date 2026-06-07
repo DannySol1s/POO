@@ -3,10 +3,10 @@ import { motion } from "motion/react";
 import { useAuth } from "../context/AuthContext.jsx";
 
 const RANK = [
-  { min: 90, label: "Maestro POO",          emoji: "🏆", color: "#f59e0b" },
-  { min: 70, label: "Desarrollador Senior", emoji: "🥇", color: "#4f46e5" },
-  { min: 50, label: "En Progreso",           emoji: "🥈", color: "#10b981" },
-  { min: 0,  label: "Sigue Practicando",     emoji: "📚", color: "#8b5cf6" },
+  { min: 90, label: "Maestro POO",          emoji: "🏆", color: "#fbbf24" },
+  { min: 70, label: "Desarrollador Senior", emoji: "🥇", color: "#00d4ff" },
+  { min: 50, label: "En Progreso",           emoji: "🥈", color: "#00e87a" },
+  { min: 0,  label: "Sigue Practicando",     emoji: "📚", color: "#7c3aed" },
 ];
 
 function getRank(correct, total) {
@@ -150,17 +150,17 @@ export default function Results({ result, config, onRestart, onRanking }) {
           className="btn btn--cta btn--lg"
           onClick={() => onRestart(true)}
           whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.97, y: 4 }}
+          whileTap={{ scale: 0.97 }}
         >
-          ⚡ Repetir ({config?.topic === "todos" ? "todos" : config?.topic})
+          Revancha — {config?.topic === "todos" ? "todos" : config?.topic}
         </motion.button>
         <motion.button className="btn btn--ghost" onClick={onRanking}
-          whileTap={{ scale: 0.97, y: 4 }}>
-          🏆 Ver Ranking
+          whileTap={{ scale: 0.97 }}>
+          Ver clasificación
         </motion.button>
         <motion.button className="btn btn--ghost" onClick={() => onRestart(false)}
-          whileTap={{ scale: 0.97, y: 4 }}>
-          Elegir otro tema
+          whileTap={{ scale: 0.97 }}>
+          Cambiar modo
         </motion.button>
       </div>
     </motion.div>
