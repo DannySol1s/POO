@@ -1,0 +1,10 @@
+{
+  "name": "poo-challenge",
+  "private": true,
+  "scripts": {
+    "dev:api": "cd api && bun run dev",
+    "dev:app": "cd app && bun run dev",
+    "build": "cd app && bun run build",
+    "install:all": "cd api && bun install && cd ../app && bun install"
+  }
+}
