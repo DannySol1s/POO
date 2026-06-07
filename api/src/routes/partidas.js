@@ -5,6 +5,8 @@ import { requireAuth } from "../middleware/auth.js";
 export const partidasRouter = new Hono();
 
 const TEMAS_VALIDOS = ["todos", "clases", "objetos", "herencia", "polimorfismo", "encapsulamiento"];
+// 10 preguntas × (100 base + 50 tiempo + 50 racha máx) = 2000 pts teórico
+const MAX_PUNTUACION = 2000;
 
 partidasRouter.post("/", requireAuth, async (c) => {
   const user = c.get("user");
@@ -17,7 +19,7 @@ partidasRouter.post("/", requireAuth, async (c) => {
     return c.json({ error: "Tema inválido" }, 400);
   }
   if (
-    !Number.isInteger(puntuacion) || puntuacion < 0 ||
+    !Number.isInteger(puntuacion) || puntuacion < 0 || puntuacion > MAX_PUNTUACION ||
     !Number.isInteger(correctas) || correctas < 0 ||
     !Number.isInteger(total)     || total < 1 || total > 20 ||
     correctas > total

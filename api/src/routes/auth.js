@@ -2,6 +2,10 @@ import { Hono } from "hono";
 import { sign } from "hono/jwt";
 import db from "../db/index.js";
 import { JWT_SECRET } from "../middleware/auth.js";
+import { rateLimit } from "../middleware/rateLimit.js";
+
+// 10 intentos por IP cada 15 minutos en rutas de autenticación
+const authLimiter = rateLimit({ max: 10, windowMs: 15 * 60 * 1000 });
 
 export const authRouter = new Hono();
 
@@ -16,7 +20,7 @@ function makeToken(id, username) {
   );
 }
 
-authRouter.post("/registro", async (c) => {
+authRouter.post("/registro", authLimiter, async (c) => {
   const body = await c.req.json().catch(() => null);
   if (!body) return c.json({ error: "Cuerpo de solicitud inválido" }, 400);
 
@@ -52,7 +56,7 @@ authRouter.post("/registro", async (c) => {
   }
 });
 
-authRouter.post("/login", async (c) => {
+authRouter.post("/login", authLimiter, async (c) => {
   const body = await c.req.json().catch(() => null);
   if (!body) return c.json({ error: "Cuerpo de solicitud inválido" }, 400);
 

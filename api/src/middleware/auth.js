@@ -1,6 +1,10 @@
 import { verify } from "hono/jwt";
 
-const JWT_SECRET = process.env.JWT_SECRET ?? "dev-secret-change-in-production";
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+  console.error("FATAL: JWT_SECRET no está definido en .env — el servidor no puede arrancar de forma segura.");
+  process.exit(1);
+}
 
 export async function requireAuth(c, next) {
   const header = c.req.header("Authorization");
