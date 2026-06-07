@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
+  <rect width="192" height="192" rx="36" fill="#0f172a"/>
+  <rect width="192" height="192" rx="36" fill="url(#grad)"/>
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e293b"/>
+      <stop offset="100%" style="stop-color:#0f172a"/>
+    </linearGradient>
+  </defs>
+  <text x="96" y="82" text-anchor="middle" fill="#6366f1" font-family="monospace,sans-serif" font-size="42" font-weight="bold">&lt;/&gt;</text>
+  <text x="96" y="136" text-anchor="middle" fill="#f1f5f9" font-family="monospace,sans-serif" font-size="34" font-weight="bold">POO</text>
+</svg>
