@@ -1498,7 +1498,7 @@ h1, h2, h3 {
   .game-header { padding: 10px 18px; }
   .challenge-card { padding: 22px 28px; gap: 14px; min-height: 360px; }
   .challenge-question { font-size: 1.05rem; }
-  .code-block { font-size: .84rem; padding: 12px 16px; line-height: 1.6; max-height: 210px; overflow-y: auto; }
+  .code-block { font-size: .84rem; padding: 12px 16px; line-height: 1.6; max-height: 165px; overflow-y: auto; }
   .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .option { padding: 13px 16px; align-items: flex-start; }
   .option-letter { width: 28px; height: 28px; font-size: .72rem; flex-shrink: 0; margin-top: 1px; }
