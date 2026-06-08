@@ -9,7 +9,7 @@ const optionVariants = {
 };
 
 export default function ChallengeCard({
-  challenge, selectedAnswer, isAnswered, isCorrect, onSelect,
+  challenge, selectedAnswer, isAnswered, isCorrect, onSelect, difficulty, hint,
 }) {
   function getOptionClass(index) {
     if (!isAnswered) return "option";
@@ -17,6 +17,8 @@ export default function ChallengeCard({
     if (index === selectedAnswer && !isCorrect) return "option option--wrong";
     return "option";
   }
+
+  const showHint = isAnswered && !isCorrect && hint && difficulty === "facil";
 
   return (
     <div className="challenge-card">
@@ -68,6 +70,17 @@ export default function ChallengeCard({
           </motion.button>
         ))}
       </div>
+
+      {showHint && (
+        <motion.p
+          className="challenge-hint"
+          initial={{ opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.2 }}
+        >
+          💡 {hint}
+        </motion.p>
+      )}
     </div>
   );
 }

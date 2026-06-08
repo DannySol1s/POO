@@ -13,6 +13,23 @@ const TEMAS = [
 
 const MEDALLAS = ["🥇", "🥈", "🥉"];
 
+const RANKS_CUMULATIVE = [
+  { min: 4500, label: "Senior Master VRG",           emoji: "👑" },
+  { min: 3600, label: "Hacker de Cybercafé",          emoji: "⚡" },
+  { min: 2800, label: "Senior de Pasillo",            emoji: "🦾" },
+  { min: 2100, label: "Arquitecto del Polimorfismo",  emoji: "🏗️" },
+  { min: 1500, label: "Domador de Excepciones",       emoji: "🎯" },
+  { min: 1000, label: "Puesto Trucha",                emoji: "🔒" },
+  { min: 600,  label: 'En mi máquina sí funciona',    emoji: "💻" },
+  { min: 300,  label: "Compilando en la Mente",       emoji: "🧠" },
+  { min: 100,  label: "Junior Despistado",            emoji: "☕" },
+  { min: 0,    label: "Copypaster de StackOverflow",  emoji: "📋" },
+];
+
+function getRankBadge(score) {
+  return RANKS_CUMULATIVE.find((r) => score >= r.min) ?? RANKS_CUMULATIVE[RANKS_CUMULATIVE.length - 1];
+}
+
 const rowVariants = {
   initial: { opacity: 0, x: 20 },
   animate: (i) => ({
@@ -78,34 +95,42 @@ export default function Ranking({ onBack }) {
           <div className="ranking-row ranking-row--header">
             <span>#</span>
             <span>Jugador</span>
+            <span>Rango</span>
             <span>Mejor puntaje</span>
             <span>Precisión</span>
             <span>Partidas</span>
           </div>
 
-          {rows.map((row, i) => (
-            <motion.div
-              key={`${row.username}-${i}`}
-              className={`ranking-row ${user?.username === row.username ? "ranking-row--me" : ""}`}
-              custom={i}
-              variants={rowVariants}
-              initial="initial"
-              animate="animate"
-            >
-              <span className="ranking-pos">
-                {i < 3 ? MEDALLAS[i] : i + 1}
-              </span>
-              <span className="ranking-username">
-                {row.username}
-                {user?.username === row.username && (
-                  <span className="ranking-you"> (tú)</span>
-                )}
-              </span>
-              <span className="ranking-score">{row.mejor_puntuacion.toLocaleString()}</span>
-              <span className="ranking-pct">{row.precision_pct}%</span>
-              <span className="ranking-games">{row.partidas}</span>
-            </motion.div>
-          ))}
+          {rows.map((row, i) => {
+            const badge = getRankBadge(row.puntuacion_total ?? row.mejor_puntuacion);
+            return (
+              <motion.div
+                key={`${row.username}-${i}`}
+                className={`ranking-row ${user?.username === row.username ? "ranking-row--me" : ""}`}
+                custom={i}
+                variants={rowVariants}
+                initial="initial"
+                animate="animate"
+              >
+                <span className="ranking-pos">
+                  {i < 3 ? MEDALLAS[i] : i + 1}
+                </span>
+                <span className="ranking-username">
+                  {row.username}
+                  {user?.username === row.username && (
+                    <span className="ranking-you"> (tú)</span>
+                  )}
+                </span>
+                <span className="ranking-badge" title={badge.label}>
+                  <span className="ranking-badge-emoji">{badge.emoji}</span>
+                  <span className="ranking-badge-label">{badge.label}</span>
+                </span>
+                <span className="ranking-score">{row.mejor_puntuacion.toLocaleString()}</span>
+                <span className="ranking-pct">{row.precision_pct}%</span>
+                <span className="ranking-games">{row.partidas}</span>
+              </motion.div>
+            );
+          })}
         </div>
       )}
     </motion.div>
