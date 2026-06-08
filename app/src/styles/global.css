@@ -1506,7 +1506,7 @@ h1, h2, h3 {
 
   /* challenge-wrap ocupa siempre la misma fila 1fr */
   .challenge-wrap { display: flex; flex-direction: column; min-height: 0; }
-  .challenge-card { padding: 22px 28px; gap: 14px; flex: 1; min-height: 0; }
+  .challenge-card { padding: 22px 28px; gap: 20px; flex: 1; min-height: 0; justify-content: center; }
 
   .challenge-question { font-size: 1.05rem; }
   .code-block { font-size: .84rem; padding: 12px 16px; line-height: 1.6; max-height: 210px; overflow-y: auto; }
