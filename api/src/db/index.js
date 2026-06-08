@@ -28,6 +28,13 @@ db.exec(`
   )
 `);
 
+// Migración idempotente: agrega columna dificultad si no existe
+try {
+  db.exec("ALTER TABLE partidas ADD COLUMN dificultad TEXT NOT NULL DEFAULT 'normal'");
+} catch {
+  // La columna ya existe — no hacer nada
+}
+
 db.exec("CREATE INDEX IF NOT EXISTS idx_partidas_puntuacion ON partidas(puntuacion DESC)");
 db.exec("CREATE INDEX IF NOT EXISTS idx_partidas_usuario    ON partidas(usuario_id)");
 db.exec("CREATE INDEX IF NOT EXISTS idx_partidas_tema       ON partidas(tema)");

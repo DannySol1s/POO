@@ -36,19 +36,33 @@ challengesRouter.get("/", (c) => {
   return c.json({ data: result, total: result.length });
 });
 
+// Modos de juego → dificultades de pregunta que incluyen
+const DIFFICULTY_MAP = {
+  facil:      ["facil"],
+  normal:     ["facil", "medio"],
+  heroico:    ["medio", "dificil"],
+  legendario: ["dificil"],
+};
+
 challengesRouter.get("/random", (c) => {
-  const { topic, count = "10" } = c.req.query();
+  const { topic, count = "10", difficulty } = c.req.query();
   const limit = Math.min(parseInt(count, 10) || 10, 20);
+
+  const allowedDifficulties = DIFFICULTY_MAP[difficulty] ?? null;
 
   let pool = challenges;
 
+  if (allowedDifficulties) {
+    pool = pool.filter((ch) => allowedDifficulties.includes(ch.difficulty));
+  }
+
   if (topic && topic !== "todos") {
     pool = pool.filter((ch) => ch.topic === topic);
-  } else if (topic === "todos") {
+  } else if (!topic || topic === "todos") {
     const topics = ["clases", "objetos", "herencia", "polimorfismo", "encapsulamiento"];
     const perTopic = Math.ceil(limit / topics.length);
     pool = topics.flatMap((t) =>
-      shuffle(challenges.filter((ch) => ch.topic === t)).slice(0, perTopic)
+      shuffle(pool.filter((ch) => ch.topic === t)).slice(0, perTopic)
     );
   }
 
