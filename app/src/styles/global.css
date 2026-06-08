@@ -91,9 +91,9 @@ body {
 #root { min-height: 100dvh; }
 
 .app {
-  max-width: 640px;
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 0 16px;
+  padding: 0 clamp(16px, 4vw, 48px);
   padding-bottom: env(safe-area-inset-bottom, 24px);
 }
 
@@ -1391,12 +1391,122 @@ h1, h2, h3 {
 }
 
 /* ═══════════════════════════════════════
-   RESPONSIVE
+   RESPONSIVE — mobile first
 ═══════════════════════════════════════ */
-@media (min-width: 480px) { .topics-grid { grid-template-columns: repeat(3, 1fr); } }
+
+/* 480px — topic grid 3 cols */
+@media (min-width: 480px) {
+  .topics-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* 640px — mode select crece */
+@media (min-width: 640px) {
+  .modeselect { padding-top: 36px; gap: 20px; }
+  .modeselect-title { font-size: 2rem; letter-spacing: .16em; }
+  .modeselect-body { min-height: 400px; }
+  .modeselect-list { width: 180px; padding: 8px 0; }
+  .modeselect-item { padding: 16px 20px; font-size: .85rem; }
+  .modeselect-preview { min-height: 400px; padding: 40px 32px; }
+  .modeselect-art { width: 130px; height: 130px; }
+  .modeselect-art-glyph { font-size: 3rem; }
+  .modeselect-name { font-size: 2rem; }
+  .modeselect-desc { font-size: .92rem; max-width: 340px; }
+}
+
+/* 768px — home 2 col, game centrado, results más amplio */
+@media (min-width: 768px) {
+
+  /* HOME — topics + legend side by side */
+  .home { padding-top: 52px; gap: 24px; }
+  .home-title { font-size: 2.6rem; }
+  .home-logo  { font-size: 3.8rem; }
+  .home-subtitle { font-size: 1rem; }
+
+  .home-body {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 20px;
+    align-items: start;
+  }
+
+  .topics-grid { grid-template-columns: repeat(3, 1fr); }
+
+  .score-legend { height: 100%; }
+
+  .home .btn--cta { max-width: 320px; align-self: flex-end; }
+
+  /* GAME — card centrada con más espacio */
+  .game { max-width: 820px; margin: 0 auto; width: 100%; padding-top: 36px; gap: 16px; }
+
+  .game-header { padding: 12px 20px; }
+
+  .challenge-card { padding: 32px 36px; gap: 22px; }
+  .challenge-question { font-size: 1.1rem; }
+  .code-block { font-size: .88rem; padding: 18px 20px; }
+  .options-grid { gap: 12px; }
+  .option { padding: 15px 20px; }
+  .option-letter { width: 32px; height: 32px; font-size: .76rem; }
+
+  .feedback-banner { padding: 16px 20px; }
+
+  /* RESULTS — hero más grande, acciones en fila */
+  .results { padding-top: 48px; gap: 28px; }
+  .results-hero { padding: 48px 40px; gap: 14px; }
+  .results-emoji { font-size: 5rem; }
+  .results-rank  { font-size: 1.8rem; }
+  .results-score { font-size: 4.2rem; }
+  .results-rank-desc { font-size: .92rem; max-width: 500px; }
+
+  .results-actions {
+    flex-direction: row;
+    justify-content: center;
+    gap: 12px;
+  }
+  .results-actions .btn { width: auto; flex: 1; max-width: 240px; }
+
+  /* RANKING — tabla más amplia */
+  .ranking { padding-top: 40px; gap: 24px; }
+  .ranking-title { font-size: 2rem; }
+
+  .ranking-row:not(.ranking-row--header),
+  .ranking-row--header {
+    grid-template-columns: 52px 1fr 200px 130px 80px 70px;
+    padding: 14px 20px;
+    font-size: .9rem;
+  }
+  .ranking-badge-label { display: block; }
+  .ranking-pos { font-size: 1.15rem; }
+}
+
+/* 960px — mode select sidebar más ancha, breakdown 2 col */
+@media (min-width: 960px) {
+  .modeselect-list { width: 210px; }
+  .modeselect-item { padding: 18px 24px; font-size: .9rem; }
+  .modeselect-art { width: 160px; height: 160px; }
+  .modeselect-art-glyph { font-size: 3.6rem; }
+  .modeselect-name { font-size: 2.4rem; }
+  .modeselect-title { font-size: 2.4rem; }
+  .modeselect-accept { min-width: 260px; }
+
+  /* breakdown en 2 columnas */
+  .breakdown-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  /* Topics grid 6 en fila */
+  .topics-grid { grid-template-columns: repeat(6, 1fr); }
+
+  /* home-body: topics toma más espacio */
+  .home-body { grid-template-columns: 1fr 300px; }
+}
+
+/* Móvil muy pequeño */
 @media (max-width: 360px) {
   .code-block { font-size: .74rem; }
   .challenge-question { font-size: .95rem; }
+  .modeselect-title { font-size: 1.15rem; }
 }
 
 /* ═══════════════════════════════════════

@@ -190,32 +190,47 @@ export default function Home({ onStart, onAuth, onRanking }) {
             )}
           </motion.div>
 
-          <motion.section
-            variants={{ animate: { transition: { staggerChildren: 0.06 } } }}
-            initial="initial"
-            animate="animate"
-          >
-            <h2 className="section-label">Elegir tema</h2>
-            <div className="topics-grid">
-              {TOPICS.map((t) => (
-                <motion.button
-                  key={t.id}
-                  className={`topic-card ${selectedTopic === t.id ? "topic-card--active" : ""}`}
-                  style={{ "--topic-color": t.color }}
-                  onClick={() => setSelectedTopic(t.id)}
-                  variants={topicItem}
-                  whileHover={{ y: -2 }}
-                  whileTap={{ y: 1, scale: 0.98 }}
-                >
-                  <span className="topic-icon"><TopicIcon id={t.id} size={28} /></span>
-                  <span className="topic-label">{t.label}</span>
-                  {counts[t.id] != null && (
-                    <span className="topic-count">{counts[t.id]} retos</span>
-                  )}
-                </motion.button>
-              ))}
-            </div>
-          </motion.section>
+          <div className="home-body">
+            <motion.section
+              variants={{ animate: { transition: { staggerChildren: 0.06 } } }}
+              initial="initial"
+              animate="animate"
+            >
+              <h2 className="section-label">Elegir tema</h2>
+              <div className="topics-grid">
+                {TOPICS.map((t) => (
+                  <motion.button
+                    key={t.id}
+                    className={`topic-card ${selectedTopic === t.id ? "topic-card--active" : ""}`}
+                    style={{ "--topic-color": t.color }}
+                    onClick={() => setSelectedTopic(t.id)}
+                    variants={topicItem}
+                    whileHover={{ y: -2 }}
+                    whileTap={{ y: 1, scale: 0.98 }}
+                  >
+                    <span className="topic-icon"><TopicIcon id={t.id} size={28} /></span>
+                    <span className="topic-label">{t.label}</span>
+                    {counts[t.id] != null && (
+                      <span className="topic-count">{counts[t.id]} retos</span>
+                    )}
+                  </motion.button>
+                ))}
+              </div>
+            </motion.section>
+
+            <motion.div
+              className="score-legend"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5, duration: 0.3 }}
+            >
+              <h2 className="section-label" style={{ marginBottom: 8 }}>Sistema de puntuación</h2>
+              <div className="legend-item"><span className="legend-dot legend-dot--base"></span>100 pts por respuesta correcta</div>
+              <div className="legend-item"><span className="legend-dot legend-dot--time"></span>+50 bonus por velocidad</div>
+              <div className="legend-item"><span className="legend-dot legend-dot--streak"></span>+10~50 pts por racha consecutiva</div>
+              <div className="legend-item"><span className="legend-dot legend-dot--base"></span>Máximo posible: 1,900 pts</div>
+            </motion.div>
+          </div>
 
           <motion.button
             className="btn btn--cta btn--lg"
@@ -228,19 +243,6 @@ export default function Home({ onStart, onAuth, onRanking }) {
           >
             Continuar →
           </motion.button>
-
-          <motion.div
-            className="score-legend"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5, duration: 0.3 }}
-          >
-            <h2 className="section-label" style={{ marginBottom: 8 }}>Sistema de puntuación</h2>
-            <div className="legend-item"><span className="legend-dot legend-dot--base"></span>100 pts por respuesta correcta</div>
-            <div className="legend-item"><span className="legend-dot legend-dot--time"></span>+50 bonus por velocidad</div>
-            <div className="legend-item"><span className="legend-dot legend-dot--streak"></span>+10~50 pts por racha consecutiva</div>
-            <div className="legend-item"><span className="legend-dot legend-dot--base"></span>Máximo posible: 1,900 pts</div>
-          </motion.div>
         </motion.div>
 
       ) : (
