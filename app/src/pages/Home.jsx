@@ -150,48 +150,55 @@ export default function Home({ onStart, onAuth, onRanking }) {
           exit={{ opacity: 0, x: -30 }}
           transition={{ duration: 0.3 }}
         >
-          <motion.header
-            className="home-header"
-            initial={{ opacity: 0, y: -20 }}
+          {/* TOP ROW: brand (izquierda) + user bar (derecha en desktop) */}
+          <motion.div
+            className="home-top"
+            initial={{ opacity: 0, y: -16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, ease: "easeOut" }}
           >
-            <motion.div
-              className="home-logo"
-              animate={{ opacity: [0.85, 1, 0.85] }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-            >
-              &lt;/&gt;
-            </motion.div>
-            <h1 className="home-title">POO CHALLENGE</h1>
-            <p className="home-subtitle">Pon a prueba tus conocimientos de<br />Programación Orientada a Objetos</p>
-          </motion.header>
+            <div className="home-brand">
+              <motion.span
+                className="home-logo"
+                animate={{ opacity: [0.85, 1, 0.85] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              >
+                &lt;/&gt;
+              </motion.span>
+              <div className="home-brand-text">
+                <h1 className="home-title">POO CHALLENGE</h1>
+                <p className="home-subtitle">Pon a prueba tus conocimientos de Programación Orientada a Objetos</p>
+              </div>
+            </div>
 
-          <motion.div
-            className="home-user-bar"
-            initial={{ opacity: 0, x: -12 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.15, duration: 0.3 }}
-          >
-            {user ? (
-              <>
-                <span className="user-greeting">Hola, <strong>{user.username}</strong></span>
-                <div className="user-actions">
-                  <button className="btn-link" onClick={onRanking}>
-                    <TrophyIcon /> Ranking
-                  </button>
-                  <button className="btn-link btn-link--muted" onClick={logout}>Salir</button>
-                </div>
-              </>
-            ) : (
-              <button className="btn btn--ghost btn--sm" onClick={onAuth}>
-                Iniciar sesión / Registrarse
-              </button>
-            )}
+            <motion.div
+              className="home-user-bar"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.3 }}
+            >
+              {user ? (
+                <>
+                  <span className="user-greeting">Hola, <strong>{user.username}</strong></span>
+                  <div className="user-actions">
+                    <button className="btn-link" onClick={onRanking}>
+                      <TrophyIcon /> Ranking
+                    </button>
+                    <button className="btn-link btn-link--muted" onClick={logout}>Salir</button>
+                  </div>
+                </>
+              ) : (
+                <button className="btn btn--ghost btn--sm" onClick={onAuth}>
+                  Iniciar sesión / Registrarse
+                </button>
+              )}
+            </motion.div>
           </motion.div>
 
+          {/* BODY: temas (izquierda) + sidebar (derecha) */}
           <div className="home-body">
             <motion.section
+              className="home-topics"
               variants={{ animate: { transition: { staggerChildren: 0.06 } } }}
               initial="initial"
               animate="animate"
@@ -218,31 +225,30 @@ export default function Home({ onStart, onAuth, onRanking }) {
               </div>
             </motion.section>
 
-            <motion.div
-              className="score-legend"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5, duration: 0.3 }}
+            <motion.aside
+              className="home-sidebar"
+              initial={{ opacity: 0, x: 16 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.35, duration: 0.3 }}
             >
-              <h2 className="section-label" style={{ marginBottom: 8 }}>Sistema de puntuación</h2>
-              <div className="legend-item"><span className="legend-dot legend-dot--base"></span>100 pts por respuesta correcta</div>
-              <div className="legend-item"><span className="legend-dot legend-dot--time"></span>+50 bonus por velocidad</div>
-              <div className="legend-item"><span className="legend-dot legend-dot--streak"></span>+10~50 pts por racha consecutiva</div>
-              <div className="legend-item"><span className="legend-dot legend-dot--base"></span>Máximo posible: 1,900 pts</div>
-            </motion.div>
-          </div>
+              <div className="score-legend">
+                <h2 className="section-label" style={{ marginBottom: 10 }}>Puntuación</h2>
+                <div className="legend-item"><span className="legend-dot legend-dot--base"></span>100 pts por acierto</div>
+                <div className="legend-item"><span className="legend-dot legend-dot--time"></span>+50 bonus por velocidad</div>
+                <div className="legend-item"><span className="legend-dot legend-dot--streak"></span>+10~50 pts por racha</div>
+                <div className="legend-item legend-item--max"><span className="legend-dot legend-dot--base"></span>Máximo: <strong>1,900 pts</strong></div>
+              </div>
 
-          <motion.button
-            className="btn btn--cta btn--lg"
-            onClick={() => setStep("mode")}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.3 }}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.97 }}
-          >
-            Continuar →
-          </motion.button>
+              <motion.button
+                className="btn btn--cta btn--lg"
+                onClick={() => setStep("mode")}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.97 }}
+              >
+                Continuar →
+              </motion.button>
+            </motion.aside>
+          </div>
         </motion.div>
 
       ) : (
