@@ -113,7 +113,7 @@ export default function Game({ config, onFinish }) {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.97 }}
             >
-              Ver resultado parcial
+              Ver Daño Parcial (Resultados)
             </motion.button>
           </div>
         </motion.div>
@@ -233,7 +233,7 @@ export default function Game({ config, onFinish }) {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.97, y: 4 }}
             >
-              {isLast ? "Ver resultados" : "Siguiente pregunta →"}
+              {isLast ? "Ver Botín Final" : "Siguiente Quest →"}
             </motion.button>
           </motion.div>
         )}

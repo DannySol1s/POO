@@ -47,8 +47,8 @@ const MODES = [
     id: "facil",
     label: "Fácil",
     tag: "MODO BÁSICO",
-    desc: "Solo teoría y código de 2 líneas. Pistas incluidas al fallar. Ideal para calentar motores.",
-    chips: ["30 seg", "Pistas incluidas", "Sin vidas"],
+    desc: "Pura teoría y código de 2 líneas. Hay pistas de compas si la riegas. Ideal para calentar motores antes de que compile de verdad.",
+    chips: ["30 seg", "Pistas de compas", "Vidas infinitas"],
     color: "#10b981",
     art: "</>",
     lives: null,
@@ -58,8 +58,8 @@ const MODES = [
     id: "normal",
     label: "Normal",
     tag: "MODO ESTÁNDAR",
-    desc: "Mezcla de teoría y código. Sin pistas, sin red de seguridad. El modo sin excusas.",
-    chips: ["30 seg", "Sin pistas"],
+    desc: "Mezcla justa de teoría y código. Sin acordeón, sin pistas, sin red de seguridad. El modo sin excusas para el estudiante promedio.",
+    chips: ["30 seg", "Sin pistas", "Con dignidad"],
     color: "#6366f1",
     art: "{ }",
     lives: null,
@@ -69,8 +69,8 @@ const MODES = [
     id: "heroico",
     label: "Heroico",
     tag: "MODO ÉLITE",
-    desc: "Código con trampas y preguntas difíciles. Tienes 3 vidas — úsalas bien.",
-    chips: ["30 seg", "3 vidas"],
+    desc: "Bloques de código con trampas de sintaxis y lógica densa. Tienes 3 vidas en el server — adminístralas bien o vas para atrás.",
+    chips: ["30 seg", "3 Vidas", "Carrilla pesada"],
     color: "#f59e0b",
     art: "❤️",
     lives: 3,
@@ -80,8 +80,8 @@ const MODES = [
     id: "legendario",
     label: "Legendario",
     tag: "MODO CRÍTICO",
-    desc: "Muerte súbita. 15 segundos por pregunta. Un solo error y todo se acaba. Sin piedad.",
-    chips: ["15 seg", "Muerte súbita"],
+    desc: "Muerte súbita. 15 segundos en el reloj por pregunta. Un solo punto y coma que te falte y todo se va al vacío. Sin piedad, solo para Seniors.",
+    chips: ["15 seg", "Muerte Súbita", "Modo VRG"],
     color: "#f43f5e",
     art: "null",
     lives: 1,
@@ -134,7 +134,7 @@ export default function Home({ onStart, onAuth, onRanking }) {
         maxTime: mode.maxTime,
       });
     } catch {
-      setError("No se pudo cargar el desafío. ¿Está corriendo la API?");
+      setError("Se cayó el server o no levantaste la API en Hono. Dale un pop al back, carnal.");
       setLoading(false);
     }
   }
@@ -166,8 +166,8 @@ export default function Home({ onStart, onAuth, onRanking }) {
                 &lt;/&gt;
               </motion.span>
               <div className="home-brand-text">
-                <h1 className="home-title">POO CHALLENGE</h1>
-                <p className="home-subtitle">Pon a prueba tus conocimientos de Programación Orientada a Objetos</p>
+                <h1 className="home-title">POO CHALLENGE: TVRG</h1>
+                <p className="home-subtitle">Demuestra tu lógica, supera las quests y ponte trucha con la POO... o catarreará tu código.</p>
               </div>
             </div>
 
@@ -179,17 +179,17 @@ export default function Home({ onStart, onAuth, onRanking }) {
             >
               {user ? (
                 <>
-                  <span className="user-greeting">Hola, <strong>{user.username}</strong></span>
+                  <span className="user-greeting">Qué tranza, <strong>{user.username}</strong></span>
                   <div className="user-actions">
                     <button className="btn-link" onClick={onRanking}>
-                      <TrophyIcon /> Ranking
+                      <TrophyIcon /> Ranking Global
                     </button>
-                    <button className="btn-link btn-link--muted" onClick={logout}>Salir</button>
+                    <button className="btn-link btn-link--muted" onClick={logout}>Cerrar Sesión</button>
                   </div>
                 </>
               ) : (
                 <button className="btn btn--ghost btn--sm" onClick={onAuth}>
-                  Iniciar sesión / Registrarse
+                  Forjar Identidad (Log In / Sign Up)
                 </button>
               )}
             </motion.div>
@@ -203,7 +203,7 @@ export default function Home({ onStart, onAuth, onRanking }) {
               initial="initial"
               animate="animate"
             >
-              <h2 className="section-label">Elegir tema</h2>
+              <h2 className="section-label">Seleccionar Quest (Tema)</h2>
               <div className="topics-grid">
                 {TOPICS.map((t) => (
                   <motion.button
@@ -218,7 +218,7 @@ export default function Home({ onStart, onAuth, onRanking }) {
                     <span className="topic-icon"><TopicIcon id={t.id} size={28} /></span>
                     <span className="topic-label">{t.label}</span>
                     {counts[t.id] != null && (
-                      <span className="topic-count">{counts[t.id]} retos</span>
+                      <span className="topic-count">{counts[t.id]} misiones</span>
                     )}
                   </motion.button>
                 ))}
@@ -232,11 +232,11 @@ export default function Home({ onStart, onAuth, onRanking }) {
               transition={{ delay: 0.35, duration: 0.3 }}
             >
               <div className="score-legend">
-                <h2 className="section-label" style={{ marginBottom: 10 }}>Puntuación</h2>
-                <div className="legend-item"><span className="legend-dot legend-dot--base"></span>100 pts por acierto</div>
-                <div className="legend-item"><span className="legend-dot legend-dot--time"></span>+50 bonus por velocidad</div>
-                <div className="legend-item"><span className="legend-dot legend-dot--streak"></span>+10~50 pts por racha</div>
-                <div className="legend-item legend-item--max"><span className="legend-dot legend-dot--base"></span>Máximo: <strong>1,900 pts</strong></div>
+                <h2 className="section-label" style={{ marginBottom: 10 }}>Reglas del Backend (Botín)</h2>
+                <div className="legend-item"><span className="legend-dot legend-dot--base"></span>100 pts por quest correcta</div>
+                <div className="legend-item"><span className="legend-dot legend-dot--time"></span>+50 pts si respondes rápido</div>
+                <div className="legend-item"><span className="legend-dot legend-dot--streak"></span>+10-50 pts por racha de aciertos</div>
+                <div className="legend-item legend-item--max"><span className="legend-dot legend-dot--base"></span>Techo del sistema: <strong>1,900 pts</strong></div>
               </div>
 
               <motion.button
@@ -245,7 +245,7 @@ export default function Home({ onStart, onAuth, onRanking }) {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.97 }}
               >
-                Continuar →
+                Darle Con Todo →
               </motion.button>
             </motion.aside>
           </div>
@@ -331,7 +331,7 @@ export default function Home({ onStart, onAuth, onRanking }) {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.97 }}
           >
-            {loading ? "Cargando..." : "⚡ ACEPTAR"}
+            {loading ? "Cargando..." : "⚡ INICIAR MISIÓN"}
           </motion.button>
         </motion.div>
       )}

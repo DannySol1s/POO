@@ -34,7 +34,7 @@ const RANKS_GAME = [
   {
     min: 100,
     label: "Junior Despistado",
-    desc: "Ya sabes declarar variables y meter algún IF, pero todavía crees que el café se convierte en código por arte de magia. Conceptos como punteros o memoria te dan amnesia selectiva.",
+    desc: "Ya sabes declarar variables y meter algún IF, pero todavía crees que el café se convierte en código por arte de magia. Conceptos como herencia o polimorfismo te dan amnesia selectiva.",
     emoji: "☕",
     color: "#10b981",
   },
@@ -122,7 +122,7 @@ export default function Results({ result, config, onRestart, onRanking }) {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.1 }}
           >
-            Game Over — resultado parcial
+            Despliegue Fallido — Resultado Parcial
           </motion.div>
         )}
 
@@ -144,7 +144,7 @@ export default function Results({ result, config, onRestart, onRanking }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
           >
-            COMPILACIÓN PERFECTA. 1,900/1,900. Eres el único ser en esta base de datos que alcanzó el techo real del sistema. El backend no puede rechazarte porque eres legítimo, vrg.
+            COMPILACIÓN PERFECTA. 1,900/1,900. Eres el único ser en esta base de datos que alcanzó el techo real del sistema. El backend no puede rechazarte porque eres legítimo, vrg. ¡Vete por una coca, te la ganaste!
           </motion.p>
         )}
 
@@ -177,18 +177,18 @@ export default function Results({ result, config, onRestart, onRanking }) {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6 }}
           >
-            Sigue jugando para llegar a Arquitecto del Polimorfismo y más allá.
+            Sigue farmeando experiencia para subir a Arquitecto del Polimorfismo en el Ranking.
           </motion.p>
         )}
 
         {user && (
           <div className={`save-status save-status--${saveStatus}`}>
-            {saveStatus === "saving" && "Guardando resultado..."}
-            {saveStatus === "ok"     && "✓ Guardado en el ranking"}
-            {saveStatus === "error"  && "No se pudo guardar"}
+            {saveStatus === "saving" && "Escribiendo en SQLite..."}
+            {saveStatus === "ok"     && "✓ Guardado en el ranking global"}
+            {saveStatus === "error"  && "❌ Explotó el commit, no se guardó."}
           </div>
         )}
-        {!user && <p className="save-hint">Inicia sesión para guardar tu puntaje</p>}
+        {!user && <p className="save-hint">Inicia sesión o te quedarás como Copypaster anónimo sin puntos.</p>}
       </motion.div>
 
       <section className="results-breakdown">
@@ -230,15 +230,15 @@ export default function Results({ result, config, onRestart, onRanking }) {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.97 }}
         >
-          ⚡ Repetir ({config?.topic === "todos" ? "todos" : config?.topic})
+          ⚡ Reintentar Quest ({config?.topic === "todos" ? "todos" : config?.topic})
         </motion.button>
         <motion.button className="btn btn--ghost" onClick={onRanking}
           whileTap={{ scale: 0.97 }}>
-          🏆 Ver Ranking
+          🏆 Ir al Tablero de Leyendas
         </motion.button>
         <motion.button className="btn btn--ghost" onClick={() => onRestart(false)}
           whileTap={{ scale: 0.97 }}>
-          Elegir otro tema
+          Cambiar de Misión
         </motion.button>
       </div>
     </motion.div>

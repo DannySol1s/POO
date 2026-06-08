@@ -87,18 +87,18 @@ export default function Ranking({ onBack }) {
         </motion.div>
       ) : rows.length === 0 ? (
         <div className="ranking-empty">
-          <p>Aún no hay partidas registradas</p>
-          <p className="ranking-empty-sub">¡Sé el primero en jugar!</p>
+          <p>Aún no hay registros en la DB.</p>
+          <p className="ranking-empty-sub">Sé el primero en poner su nombre en el código.</p>
         </div>
       ) : (
         <div className="ranking-table">
           <div className="ranking-row ranking-row--header">
             <span>#</span>
-            <span>Jugador</span>
-            <span>Rango</span>
-            <span>Mejor puntaje</span>
-            <span>Precisión</span>
-            <span>Partidas</span>
+            <span>Developer</span>
+            <span>Rango de Barrio</span>
+            <span>Máximo Botín</span>
+            <span>Precisión de Compilación</span>
+            <span>Quests Jugadas</span>
           </div>
 
           {rows.map((row, i) => {

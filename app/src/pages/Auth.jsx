@@ -79,13 +79,13 @@ export default function Auth({ onBack }) {
             className={`auth-tab ${tab === "login" ? "auth-tab--active" : ""}`}
             onClick={() => { setTab("login"); setError(null); }}
           >
-            Iniciar sesión
+            Identificarse
           </button>
           <button
             className={`auth-tab ${tab === "registro" ? "auth-tab--active" : ""}`}
             onClick={() => { setTab("registro"); setError(null); }}
           >
-            Registrarse
+            Crear Gremio (Registrarse)
           </button>
         </div>
 
@@ -97,10 +97,10 @@ export default function Auth({ onBack }) {
               animate={{ opacity: 1, height: "auto" }}
               transition={{ duration: 0.2 }}
             >
-              <label className="field-label" htmlFor="username">Usuario</label>
+              <label className="field-label" htmlFor="username">Usuario (Nickname)</label>
               <input
                 id="username" className="field-input" type="text"
-                placeholder="ej: dev_crack"
+                placeholder="ej: dev_crack99"
                 value={form.username}
                 onChange={(e) => updateField("username", e.target.value)}
                 autoComplete="username" maxLength={20}
@@ -112,7 +112,7 @@ export default function Auth({ onBack }) {
             <label className="field-label" htmlFor="email">Correo</label>
             <input
               id="email" className="field-input" type="email"
-              placeholder="tu@correo.com"
+              placeholder="tu_correo@sistemas.com"
               value={form.email}
               onChange={(e) => updateField("email", e.target.value)}
               autoComplete="email"
@@ -120,11 +120,11 @@ export default function Auth({ onBack }) {
           </div>
 
           <div className="field">
-            <label className="field-label" htmlFor="password">Contraseña</label>
+            <label className="field-label" htmlFor="password">Password de Encriptación</label>
             <div className="field-password">
               <input
                 id="password" className="field-input" type={showPassword ? "text" : "password"}
-                placeholder="Mínimo 8 caracteres"
+                placeholder="Mínimo 8 caracteres (No pongas 123456)"
                 value={form.password}
                 onChange={(e) => updateField("password", e.target.value)}
                 autoComplete={tab === "login" ? "current-password" : "new-password"}
@@ -155,7 +155,7 @@ export default function Auth({ onBack }) {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.97, y: 4 }}
           >
-            {loading ? "Cargando..." : tab === "login" ? "Iniciar sesión" : "Crear cuenta"}
+            {loading ? "Levantando credenciales..." : tab === "login" ? "Acceder al Sistema" : "Crear Cuenta"}
           </motion.button>
         </form>
       </motion.div>
