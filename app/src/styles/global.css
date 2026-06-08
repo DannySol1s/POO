@@ -557,6 +557,8 @@ h1, h2, h3 {
   border-radius: var(--radius-xs);
   padding: 14px 16px;
   overflow-x: auto;
+  overflow-y: auto;
+  max-height: 180px;
   font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
   font-size: .82rem;
   line-height: 1.75;
@@ -1509,7 +1511,7 @@ h1, h2, h3 {
   .challenge-card { padding: 22px 28px; gap: 20px; flex: 1; min-height: 0; justify-content: center; }
 
   .challenge-question { font-size: 1.05rem; }
-  .code-block { font-size: .84rem; padding: 12px 16px; line-height: 1.6; max-height: 210px; overflow-y: auto; }
+  .code-block { font-size: .84rem; padding: 12px 16px; line-height: 1.6; max-height: 210px; }
   .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .option { padding: 13px 16px; align-items: flex-start; }
   .option-letter { width: 28px; height: 28px; font-size: .72rem; flex-shrink: 0; margin-top: 1px; }
