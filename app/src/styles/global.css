@@ -1497,7 +1497,7 @@ h1, h2, h3 {
   .game {
     display: grid;
     grid-template-rows: auto auto auto 1fr auto;
-    flex: 1;
+    height: 100dvh;
     width: 100%;
     padding: 16px 0 20px;
     gap: 10px;
