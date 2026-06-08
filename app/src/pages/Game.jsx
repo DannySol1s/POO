@@ -190,6 +190,7 @@ export default function Game({ config, onFinish }) {
       <AnimatePresence mode="wait">
         <motion.div
           key={currentIndex}
+          className="challenge-wrap"
           initial={{ opacity: 0, x: 40 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -40 }}
