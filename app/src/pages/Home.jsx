@@ -42,6 +42,45 @@ const TOPICS = [
   { id: "encapsulamiento", label: "Encapsulamiento",  color: "#f43f5e" },
 ];
 
+const MODES = [
+  {
+    id: "facil",
+    label: "Fácil",
+    desc: "Solo teoría y código de 2 líneas. Pistas incluidas al fallar.",
+    chips: ["30 seg", "Pistas"],
+    color: "#10b981",
+    lives: null,
+    maxTime: 30,
+  },
+  {
+    id: "normal",
+    label: "Normal",
+    desc: "Mezcla de teoría y código. El modo estándar, sin excusas.",
+    chips: ["30 seg", "Sin pistas"],
+    color: "#6366f1",
+    lives: null,
+    maxTime: 30,
+  },
+  {
+    id: "heroico",
+    label: "Heroico",
+    desc: "Código con trampas. Tienes 3 vidas — úsalas bien.",
+    chips: ["30 seg", "3 vidas"],
+    color: "#f59e0b",
+    lives: 3,
+    maxTime: 30,
+  },
+  {
+    id: "legendario",
+    label: "Legendario",
+    desc: "Muerte súbita. 15 segundos. Un error y todo se acaba.",
+    chips: ["15 seg", "Muerte súbita"],
+    color: "#f43f5e",
+    lives: 1,
+    maxTime: 15,
+  },
+];
+
 const container = { animate: { transition: { staggerChildren: 0.06 } } };
 const item = {
   initial: { opacity: 0, y: 14 },
@@ -51,9 +90,12 @@ const item = {
 export default function Home({ onStart, onAuth, onRanking }) {
   const { user, logout } = useAuth();
   const [selectedTopic, setSelectedTopic] = useState("todos");
-  const [counts, setCounts] = useState({});
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [selectedMode, setSelectedMode]   = useState("normal");
+  const [counts, setCounts]               = useState({});
+  const [loading, setLoading]             = useState(false);
+  const [error, setError]                 = useState(null);
+
+  const mode = MODES.find((m) => m.id === selectedMode);
 
   useEffect(() => {
     fetch("/api/challenges/topics")
@@ -70,10 +112,18 @@ export default function Home({ onStart, onAuth, onRanking }) {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(`/api/challenges/random?topic=${selectedTopic}&count=10`);
+      const res = await fetch(
+        `/api/challenges/random?topic=${selectedTopic}&difficulty=${selectedMode}&count=10`
+      );
       const json = await res.json();
       if (!json.data?.length) throw new Error();
-      onStart({ topic: selectedTopic, challenges: json.data });
+      onStart({
+        topic: selectedTopic,
+        difficulty: selectedMode,
+        challenges: json.data,
+        lives: mode.lives,
+        maxTime: mode.maxTime,
+      });
     } catch {
       setError("No se pudo cargar el desafío. ¿Está corriendo la API?");
     } finally {
@@ -154,14 +204,31 @@ export default function Home({ onStart, onAuth, onRanking }) {
       </motion.section>
 
       <motion.section
-        className="home-info"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.4, duration: 0.3 }}
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3, duration: 0.3 }}
       >
-        <div className="info-chip">10 rondas</div>
-        <div className="info-chip">30 seg / ronda</div>
-        <div className="info-chip">JavaScript</div>
+        <h2 className="section-label">Modo de juego</h2>
+        <div className="modes-grid">
+          {MODES.map((m) => (
+            <motion.button
+              key={m.id}
+              className={`mode-card ${selectedMode === m.id ? "mode-card--active" : ""}`}
+              style={{ "--mode-color": m.color }}
+              onClick={() => setSelectedMode(m.id)}
+              whileHover={{ y: -2 }}
+              whileTap={{ y: 1, scale: 0.98 }}
+            >
+              <span className="mode-label">{m.label}</span>
+              <span className="mode-desc">{m.desc}</span>
+              <div className="mode-chips">
+                {m.chips.map((chip) => (
+                  <span key={chip} className="mode-chip">{chip}</span>
+                ))}
+              </div>
+            </motion.button>
+          ))}
+        </div>
       </motion.section>
 
       {error && <p className="error-msg">{error}</p>}
@@ -188,7 +255,8 @@ export default function Home({ onStart, onAuth, onRanking }) {
         <h2 className="section-label" style={{ marginBottom: 8 }}>Sistema de puntuación</h2>
         <div className="legend-item"><span className="legend-dot legend-dot--base"></span>100 pts por respuesta correcta</div>
         <div className="legend-item"><span className="legend-dot legend-dot--time"></span>+50 bonus por velocidad</div>
-        <div className="legend-item"><span className="legend-dot legend-dot--streak"></span>+10 pts por racha consecutiva</div>
+        <div className="legend-item"><span className="legend-dot legend-dot--streak"></span>+10~50 pts por racha consecutiva</div>
+        <div className="legend-item"><span className="legend-dot legend-dot--base"></span>Máximo posible: 1,900 pts</div>
       </motion.div>
     </motion.div>
   );

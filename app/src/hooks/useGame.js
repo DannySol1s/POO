@@ -1,16 +1,19 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 
-const TIME_PER_QUESTION = 30;
+export function useGame(challenges, config = {}) {
+  const { lives: initialLives = null, maxTime = 30 } = config;
 
-export function useGame(challenges) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [score, setScore] = useState(0);
-  const [streak, setStreak] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(TIME_PER_QUESTION);
+  const [currentIndex, setCurrentIndex]     = useState(0);
+  const [score, setScore]                   = useState(0);
+  const [streak, setStreak]                 = useState(0);
+  const [timeLeft, setTimeLeft]             = useState(maxTime);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
-  const [isAnswered, setIsAnswered] = useState(false);
-  const [answerHistory, setAnswerHistory] = useState([]);
-  const [isFinished, setIsFinished] = useState(false);
+  const [isAnswered, setIsAnswered]         = useState(false);
+  const [answerHistory, setAnswerHistory]   = useState([]);
+  const [isFinished, setIsFinished]         = useState(false);
+  const [lives, setLives]                   = useState(initialLives);
+  const [gameOver, setGameOver]             = useState(false);
+  const [gameOverReason, setGameOverReason] = useState(null);
   const timerRef = useRef(null);
 
   const currentChallenge = challenges[currentIndex] ?? null;
@@ -37,22 +40,22 @@ export function useGame(challenges) {
   }, [stopTimer]);
 
   useEffect(() => {
-    if (!isAnswered && currentChallenge) {
-      setTimeLeft(TIME_PER_QUESTION);
+    if (!isAnswered && !gameOver && currentChallenge) {
+      setTimeLeft(maxTime);
       startTimer();
     }
     return stopTimer;
-  }, [currentIndex, isAnswered, currentChallenge, startTimer, stopTimer]);
+  }, [currentIndex, isAnswered, gameOver, currentChallenge, startTimer, stopTimer, maxTime]);
 
-  // Auto-submit when time runs out
+  // Auto-submit cuando se acaba el tiempo
   useEffect(() => {
-    if (timeLeft === 0 && !isAnswered && currentChallenge) {
+    if (timeLeft === 0 && !isAnswered && currentChallenge && !gameOver) {
       processAnswer(-1);
     }
-  }, [timeLeft, isAnswered, currentChallenge]);
+  }, [timeLeft, isAnswered, currentChallenge, gameOver]);
 
   function processAnswer(optionIndex) {
-    if (isAnswered || !currentChallenge) return;
+    if (isAnswered || !currentChallenge || gameOver) return;
     stopTimer();
     setSelectedAnswer(optionIndex);
     setIsAnswered(true);
@@ -62,7 +65,7 @@ export function useGame(challenges) {
     let newStreak = streak;
 
     if (correct) {
-      const timeBonus = Math.floor((timeLeft / TIME_PER_QUESTION) * 50);
+      const timeBonus = Math.floor((timeLeft / maxTime) * 50);
       newStreak = streak + 1;
       const streakBonus = Math.min(newStreak * 10, 50);
       points = 100 + timeBonus + streakBonus;
@@ -70,6 +73,21 @@ export function useGame(challenges) {
     } else {
       newStreak = 0;
       setStreak(0);
+
+      // Descontar vida si el modo tiene vidas
+      if (initialLives !== null) {
+        setLives((prev) => {
+          const next = prev - 1;
+          if (next <= 0) {
+            // Game Over diferido para que la animación de respuesta se muestre
+            setTimeout(() => {
+              setGameOver(true);
+              setGameOverReason("lives");
+            }, 1200);
+          }
+          return next;
+        });
+      }
     }
 
     setScore((s) => s + points);
@@ -86,6 +104,7 @@ export function useGame(challenges) {
   }
 
   function nextQuestion() {
+    if (gameOver) return;
     const nextIndex = currentIndex + 1;
     if (nextIndex >= total) {
       setIsFinished(true);
@@ -108,12 +127,15 @@ export function useGame(challenges) {
     score,
     streak,
     timeLeft,
-    maxTime: TIME_PER_QUESTION,
+    maxTime,
     selectedAnswer,
     isAnswered,
     isCorrect,
     answerHistory,
     isFinished,
+    lives,
+    gameOver,
+    gameOverReason,
     selectAnswer: processAnswer,
     nextQuestion,
   };
