@@ -1029,21 +1029,19 @@ h1, h2, h3 {
   font-family: var(--font-heading);
   letter-spacing: .02em;
 }
-.arcade-save-row {
-  display: flex;
-  gap: 8px;
+.arcade-save-input-wrap {
+  position: relative;
   width: 100%;
 }
 .arcade-save-input {
-  flex: 1;
-  min-width: 0;
+  width: 100%;
   background: var(--bg);
   border: 1px solid color-mix(in srgb, var(--primary) 50%, transparent);
   border-radius: 8px;
   color: var(--text);
-  font-size: .9rem;
+  font-size: 1rem;
   font-family: var(--font-body);
-  padding: 9px 12px;
+  padding: 10px 44px 10px 14px;
   outline: none;
   transition: border-color .15s, box-shadow .15s;
 }
@@ -1052,13 +1050,7 @@ h1, h2, h3 {
   box-shadow: 0 0 0 3px rgba(99,102,241,.2);
 }
 .arcade-save-input::placeholder { color: var(--text-dim); }
-
-.arcade-save-input-wrap {
-  position: relative;
-  flex: 1;
-  min-width: 0;
-}
-.arcade-save-input-wrap .arcade-save-input { width: 100%; padding-right: 40px; }
+.arcade-save-btn { width: 100%; }
 .arcade-name-counter {
   position: absolute;
   right: 10px;

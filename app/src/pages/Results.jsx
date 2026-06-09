@@ -218,37 +218,37 @@ export default function Results({ result, config, onRestart, onRanking }) {
                 exit={{ opacity: 0, y: -6 }}
                 transition={{ duration: 0.25, delay: 0.4 }}
               >
-                <p className="arcade-save-label">¿Dejar tu marca en el ranking?</p>
-                <div className="arcade-save-row">
-                  <div className="arcade-save-input-wrap">
-                    <input
-                      className="arcade-save-input"
-                      type="text"
-                      placeholder="¿Cómo te llaman?"
-                      maxLength={15}
-                      value={arcadeName}
-                      onChange={(e) => {
-                        const val = e.target.value
-                          .replace(/[^a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]/g, "")
-                          .slice(0, 15);
-                        setArcadeName(val);
-                      }}
-                      onKeyDown={(e) => e.key === "Enter" && handleArcadeSave()}
-                      autoComplete="off"
-                    />
-                    <span className={`arcade-name-counter ${arcadeName.length >= 15 ? "arcade-name-counter--max" : ""}`}>
-                      {arcadeName.length}/15
-                    </span>
-                  </div>
-                  <motion.button
-                    className="btn btn--cta btn--sm"
-                    onClick={handleArcadeSave}
-                    disabled={!arcadeName.trim()}
-                    whileTap={{ scale: 0.97 }}
-                  >
-                    🏆 Dejar mi marca
-                  </motion.button>
+                <p className="arcade-save-label">🏆 ¿Dejar tu marca en el ranking?</p>
+                <div className="arcade-save-input-wrap">
+                  <input
+                    className="arcade-save-input"
+                    type="text"
+                    placeholder="¿Cómo te llaman?"
+                    maxLength={15}
+                    value={arcadeName}
+                    onChange={(e) => {
+                      const val = e.target.value
+                        .replace(/[^a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]/g, "")
+                        .slice(0, 15);
+                      setArcadeName(val);
+                    }}
+                    onKeyDown={(e) => e.key === "Enter" && handleArcadeSave()}
+                    autoComplete="off"
+                    autoFocus
+                  />
+                  <span className={`arcade-name-counter ${arcadeName.length >= 15 ? "arcade-name-counter--max" : ""}`}>
+                    {arcadeName.length}/15
+                  </span>
                 </div>
+                <motion.button
+                  className="btn btn--cta arcade-save-btn"
+                  onClick={handleArcadeSave}
+                  disabled={!arcadeName.trim()}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.97 }}
+                >
+                  Dejar mi marca
+                </motion.button>
                 <button className="btn-link btn-link--muted" onClick={() => setArcadeStatus("skipped")}>
                   Ahora no
                 </button>
