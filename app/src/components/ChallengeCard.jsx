@@ -31,18 +31,16 @@ export default function ChallengeCard({
         {challenge.question}
       </motion.p>
 
-      <div className="code-zone">
-        {challenge.code && (
-          <motion.pre
-            className="code-block"
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.3, delay: 0.1 }}
-          >
-            <code>{challenge.code}</code>
-          </motion.pre>
-        )}
-      </div>
+      {challenge.code && (
+        <motion.pre
+          className="code-block"
+          initial={{ opacity: 0, scale: 0.98 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
+        >
+          <code>{challenge.code}</code>
+        </motion.pre>
+      )}
 
       <div className="options-grid">
         {challenge.options.map((option, i) => (
