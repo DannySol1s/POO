@@ -178,9 +178,6 @@ export default function Home({ onStart, onAuth, onRanking }) {
               <div className="home-brand-text">
                 <h1 className="home-title">POO CHALLENGE: TVRG</h1>
                 <p className="home-subtitle">Demuestra tu lógica, supera las quests y ponte trucha con la POO... o catarreará tu código.</p>
-                <button className="btn-link home-ranking-link" onClick={onRanking}>
-                  <TrophyIcon /> Ranking Global
-                </button>
               </div>
             </div>
             <motion.div
@@ -189,12 +186,11 @@ export default function Home({ onStart, onAuth, onRanking }) {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2, duration: 0.3 }}
             >
+              <button className="btn-link" onClick={onRanking}><TrophyIcon /> Ranking Global</button>
               {user ? (
                 <>
                   <span className="user-greeting">Qué tranza, <strong>{user.username}</strong></span>
-                  <div className="user-actions">
-                    <button className="btn-link btn-link--muted" onClick={logout}>Cerrar Sesión</button>
-                  </div>
+                  <button className="btn-link btn-link--muted" onClick={logout}>Cerrar Sesión</button>
                 </>
               ) : (
                 <button className="btn btn--ghost btn--sm" onClick={onAuth}>Forjar Identidad (Log In / Sign Up)</button>
