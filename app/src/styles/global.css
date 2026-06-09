@@ -256,6 +256,11 @@ h1, h2, h3 {
   opacity: .8;
   background: var(--bg3);
 }
+.home-admin-icon--open {
+  opacity: .5;
+  color: #10b981;
+}
+.home-admin-icon--open:hover { opacity: 1; }
 
 .home-admin-corner--user {
   position: absolute;
