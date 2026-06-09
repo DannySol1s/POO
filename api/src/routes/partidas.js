@@ -1,13 +1,27 @@
 import { Hono } from "hono";
 import db from "../db/index.js";
 import { requireAuth } from "../middleware/auth.js";
+import { rateLimit } from "../middleware/rateLimit.js";
 
 export const partidasRouter = new Hono();
 
+const arcadeLimiter = rateLimit({ max: 20, windowMs: 15 * 60 * 1000, message: "Demasiados registros. Espera un momento." });
+
 const TEMAS_VALIDOS = ["todos", "clases", "objetos", "herencia", "polimorfismo", "encapsulamiento"];
 const DIFICULTADES_VALIDAS = ["facil", "normal", "heroico", "legendario"];
-// 160+170+180+190+(200×6) = 1,900 pts máximo real legítimo
-const MAX_PUNTUACION = 1900;
+
+// Puntaje máximo real por dificultad (base 1900 × multiplicador del modo)
+const MAX_POR_DIFICULTAD = { facil: 1330, normal: 1900, heroico: 2660, legendario: 3800 };
+
+function validarPartida(puntuacion, correctas, total, dificultad) {
+  const max = MAX_POR_DIFICULTAD[dificultad] ?? 1900;
+  return (
+    Number.isInteger(puntuacion) && puntuacion >= 0 && puntuacion <= max &&
+    Number.isInteger(correctas)  && correctas  >= 0 &&
+    Number.isInteger(total)      && total >= 1 && total <= 20 &&
+    correctas <= total
+  );
+}
 
 partidasRouter.post("/", requireAuth, async (c) => {
   const user = c.get("user");
@@ -16,18 +30,9 @@ partidasRouter.post("/", requireAuth, async (c) => {
 
   const { tema, puntuacion, correctas, total, dificultad = "normal" } = body;
 
-  if (!TEMAS_VALIDOS.includes(tema)) {
-    return c.json({ error: "Tema inválido" }, 400);
-  }
-  if (!DIFICULTADES_VALIDAS.includes(dificultad)) {
-    return c.json({ error: "Dificultad inválida" }, 400);
-  }
-  if (
-    !Number.isInteger(puntuacion) || puntuacion < 0 || puntuacion > MAX_PUNTUACION ||
-    !Number.isInteger(correctas) || correctas < 0 ||
-    !Number.isInteger(total)     || total < 1 || total > 20 ||
-    correctas > total
-  ) {
+  if (!TEMAS_VALIDOS.includes(tema))        return c.json({ error: "Tema inválido" }, 400);
+  if (!DIFICULTADES_VALIDAS.includes(dificultad)) return c.json({ error: "Dificultad inválida" }, 400);
+  if (!validarPartida(puntuacion, correctas, total, dificultad)) {
     return c.json({ error: "Datos de partida inválidos" }, 400);
   }
 
@@ -39,7 +44,7 @@ partidasRouter.post("/", requireAuth, async (c) => {
 });
 
 // Guardar partida sin cuenta (estilo arcade)
-partidasRouter.post("/arcade", async (c) => {
+partidasRouter.post("/arcade", arcadeLimiter, async (c) => {
   const body = await c.req.json().catch(() => null);
   if (!body) return c.json({ error: "Cuerpo de solicitud inválido" }, 400);
 
@@ -48,14 +53,11 @@ partidasRouter.post("/arcade", async (c) => {
   const nombreTrimmed = (nombre ?? "").trim().slice(0, 25);
   if (!nombreTrimmed) return c.json({ error: "Nombre requerido" }, 400);
 
-  if (!TEMAS_VALIDOS.includes(tema)) return c.json({ error: "Tema inválido" }, 400);
+  if (!TEMAS_VALIDOS.includes(tema))        return c.json({ error: "Tema inválido" }, 400);
   if (!DIFICULTADES_VALIDAS.includes(dificultad)) return c.json({ error: "Dificultad inválida" }, 400);
-  if (
-    !Number.isInteger(puntuacion) || puntuacion < 0 || puntuacion > MAX_PUNTUACION ||
-    !Number.isInteger(correctas)  || correctas  < 0 ||
-    !Number.isInteger(total)      || total < 1  || total > 20 ||
-    correctas > total
-  ) return c.json({ error: "Datos de partida inválidos" }, 400);
+  if (!validarPartida(puntuacion, correctas, total, dificultad)) {
+    return c.json({ error: "Datos de partida inválidos" }, 400);
+  }
 
   db.prepare(
     "INSERT INTO partidas_arcade (nombre, tema, puntuacion, correctas, total, dificultad) VALUES (?, ?, ?, ?, ?, ?)"
