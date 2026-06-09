@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 
 export function useGame(challenges, config = {}) {
-  const { lives: initialLives = null, maxTime = 30, multiplier = 1 } = config;
+  const { lives: initialLives = null, maxTime = 30, multiplier = 1, paused = false } = config;
 
   const [currentIndex, setCurrentIndex]     = useState(0);
   const [score, setScore]                   = useState(0);
@@ -40,12 +40,14 @@ export function useGame(challenges, config = {}) {
   }, [stopTimer]);
 
   useEffect(() => {
-    if (!isAnswered && !gameOver && currentChallenge) {
+    if (!isAnswered && !gameOver && currentChallenge && !paused) {
       setTimeLeft(maxTime);
       startTimer();
+    } else {
+      stopTimer();
     }
     return stopTimer;
-  }, [currentIndex, isAnswered, gameOver, currentChallenge, startTimer, stopTimer, maxTime]);
+  }, [currentIndex, isAnswered, gameOver, currentChallenge, startTimer, stopTimer, maxTime, paused]);
 
   // Auto-submit cuando se acaba el tiempo
   useEffect(() => {

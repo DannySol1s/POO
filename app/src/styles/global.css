@@ -2229,6 +2229,67 @@ h1, h2, h3 {
 }
 
 /* ═══════════════════════════════════════
+   COUNTDOWN OVERLAY
+═══════════════════════════════════════ */
+.kgame-countdown {
+  position: absolute;
+  inset: 0;
+  z-index: 15;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: var(--bg1, #09091a);
+}
+
+.countdown-badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.countdown-mode-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: .75rem;
+  font-weight: 700;
+  font-family: 'Chakra Petch', sans-serif;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  background: color-mix(in srgb, var(--mode-color, #6366f1) 18%, transparent);
+  color: var(--mode-color, #6366f1);
+  border: 1px solid color-mix(in srgb, var(--mode-color, #6366f1) 40%, transparent);
+}
+
+.countdown-label {
+  font-size: .85rem;
+  color: var(--text2, #94a3b8);
+  letter-spacing: .02em;
+}
+
+.countdown-num {
+  display: block;
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: clamp(5rem, 20vw, 8rem);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--primary, #6366f1);
+  text-shadow: 0 0 40px rgba(99,102,241,.6), 0 0 80px rgba(99,102,241,.3);
+}
+
+.countdown-sub {
+  font-size: .8rem;
+  color: var(--text2, #94a3b8);
+  font-family: 'Chakra Petch', sans-serif;
+  letter-spacing: .04em;
+}
+
+/* ═══════════════════════════════════════
    ACCESIBILIDAD
 ═══════════════════════════════════════ */
 @media (prefers-reduced-motion: reduce) {

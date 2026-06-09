@@ -4,6 +4,13 @@ import { useGame } from "../hooks/useGame.js";
 import ProgressBar from "../components/ProgressBar.jsx";
 import Timer from "../components/Timer.jsx";
 
+const MODE_META = {
+  facil:      { label: "Fácil",      color: "#10b981" },
+  normal:     { label: "Normal",     color: "#6366f1" },
+  heroico:    { label: "Heroico",    color: "#f59e0b" },
+  legendario: { label: "Legendario", color: "#f43f5e" },
+};
+
 const TOPIC_COLORS = {
   clases:          "#3b82f6",
   objetos:         "#f59e0b",
@@ -50,16 +57,17 @@ function optClass(i, selected, answered, correct, correctIndex) {
 }
 
 export default function Game({ config, onFinish }) {
+  const [countdown, setCountdown] = useState(3);
+  const [feedbackMsg, setFeedbackMsg] = useState("");
+  const [gameOverMsg] = useState(() => pick(MSG_GAMEOVER));
+  const [hintRevealed, setHintRevealed] = useState(false);
+
   const {
     currentChallenge, currentIndex, total, score, streak,
     timeLeft, maxTime, selectedAnswer, isAnswered, isCorrect,
     answerHistory, isFinished, lives, gameOver,
     selectAnswer, nextQuestion,
-  } = useGame(config.challenges, { lives: config.lives, maxTime: config.maxTime, multiplier: config.multiplier });
-
-  const [feedbackMsg, setFeedbackMsg] = useState("");
-  const [gameOverMsg] = useState(() => pick(MSG_GAMEOVER));
-  const [hintRevealed, setHintRevealed] = useState(false);
+  } = useGame(config.challenges, { lives: config.lives, maxTime: config.maxTime, multiplier: config.multiplier, paused: countdown > 0 });
 
   useEffect(() => {
     if (isFinished) {
@@ -73,6 +81,12 @@ export default function Game({ config, onFinish }) {
     else if (isCorrect) setFeedbackMsg(pick(MSG_CORRECT));
     else setFeedbackMsg(pick(MSG_WRONG));
   }, [isAnswered]);
+
+  useEffect(() => {
+    if (countdown <= 0) return;
+    const t = setTimeout(() => setCountdown(c => c - 1), 1000);
+    return () => clearTimeout(t);
+  }, [countdown]);
 
   useEffect(() => { setHintRevealed(false); }, [currentIndex]);
 
@@ -90,6 +104,48 @@ export default function Game({ config, onFinish }) {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
     >
+      {/* Countdown overlay */}
+      <AnimatePresence>
+        {countdown > 0 && (
+          <motion.div
+            className="kgame-countdown"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, scale: 0.96 }}
+            transition={{ duration: 0.25 }}
+          >
+            <div className="countdown-badges">
+              <span
+                className="topic-badge"
+                style={{ "--topic-color": TOPIC_COLORS[config.topic] ?? "#6366f1" }}
+              >
+                {config.topic}
+              </span>
+              <span
+                className="countdown-mode-badge"
+                style={{ "--mode-color": MODE_META[config.difficulty]?.color ?? "#6366f1" }}
+              >
+                {MODE_META[config.difficulty]?.label ?? config.difficulty}
+              </span>
+            </div>
+            <p className="countdown-label">El juego empieza en</p>
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={countdown}
+                className="countdown-num"
+                initial={{ scale: 1.5, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.4, opacity: 0 }}
+                transition={{ duration: 0.28, ease: "easeOut" }}
+              >
+                {countdown}
+              </motion.span>
+            </AnimatePresence>
+            <p className="countdown-sub">×{config.multiplier} pts por quest correcta</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Game Over overlay — cubre el kgame completo */}
       <AnimatePresence>
         {gameOver && (
