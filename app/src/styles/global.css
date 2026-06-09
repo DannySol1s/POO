@@ -571,6 +571,9 @@ h1, h2, h3 {
 .code-block::-webkit-scrollbar-thumb { background: #1e1e4a; border-radius: 4px; }
 .code-block::-webkit-scrollbar-thumb:hover { background: #3730a3; }
 
+/* code-zone vacío se oculta en mobile — en desktop ocupa siempre el mismo alto */
+.code-zone:empty { display: none; }
+
 .options-grid { display: flex; flex-direction: column; gap: 10px; }
 
 /* Opciones — barra izquierda indicadora */
@@ -1495,10 +1498,10 @@ h1, h2, h3 {
   .score-legend { padding: 18px; gap: 10px; }
   .legend-item { font-size: .88rem; }
 
-  /* GAME — grid que garantiza layout idéntico sin importar el contenido */
+  /* GAME — grid con fila de feedback pre-reservada para que el card tenga alto estable */
   .game {
     display: grid;
-    grid-template-rows: auto auto auto 1fr auto;
+    grid-template-rows: auto auto auto 1fr minmax(130px, auto);
     height: 100dvh;
     width: 100%;
     padding: 16px 0 20px;
@@ -1506,12 +1509,18 @@ h1, h2, h3 {
   }
   .game-header { padding: 10px 18px; }
 
-  /* challenge-wrap ocupa siempre la misma fila 1fr */
-  .challenge-wrap { display: flex; flex-direction: column; min-height: 0; }
-  .challenge-card { padding: 22px 28px; gap: 20px; flex: 1; min-height: 0; justify-content: center; }
+  /* challenge-wrap centra el card verticalmente en la fila 1fr */
+  .challenge-wrap { display: flex; flex-direction: column; min-height: 0; justify-content: center; }
+  /* card tiene alto natural (no rellena 1fr), misma estructura para todos los tipos */
+  .challenge-card { padding: 22px 28px; gap: 20px; }
 
   .challenge-question { font-size: 1.05rem; }
-  .code-block { font-size: .84rem; padding: 12px 16px; line-height: 1.6; max-height: 210px; }
+  /* code-zone siempre ocupa el mismo alto — placeholder invisible para preguntas sin código */
+  .code-zone, .code-zone:empty { height: 180px; display: flex; flex-direction: column; }
+  .code-zone .code-block {
+    flex: 1; height: 100%; font-size: .84rem; padding: 12px 16px;
+    line-height: 1.6; max-height: none; overflow-y: auto;
+  }
   .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .option { padding: 13px 16px; align-items: flex-start; }
   .option-letter { width: 28px; height: 28px; font-size: .72rem; flex-shrink: 0; margin-top: 1px; }
