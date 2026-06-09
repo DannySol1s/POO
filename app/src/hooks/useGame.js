@@ -112,6 +112,7 @@ export function useGame(challenges, config = {}) {
       setCurrentIndex(nextIndex);
       setSelectedAnswer(null);
       setIsAnswered(false);
+      setTimeLeft(maxTime);
     }
   }
 
