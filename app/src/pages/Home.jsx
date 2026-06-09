@@ -178,6 +178,9 @@ export default function Home({ onStart, onAuth, onRanking }) {
               <div className="home-brand-text">
                 <h1 className="home-title">POO CHALLENGE: TVRG</h1>
                 <p className="home-subtitle">Demuestra tu lógica, supera las quests y ponte trucha con la POO... o catarreará tu código.</p>
+                <button className="btn-link home-ranking-link" onClick={onRanking}>
+                  <TrophyIcon /> Ranking Global
+                </button>
               </div>
             </div>
             <motion.div
@@ -190,7 +193,6 @@ export default function Home({ onStart, onAuth, onRanking }) {
                 <>
                   <span className="user-greeting">Qué tranza, <strong>{user.username}</strong></span>
                   <div className="user-actions">
-                    <button className="btn-link" onClick={onRanking}><TrophyIcon /> Ranking Global</button>
                     <button className="btn-link btn-link--muted" onClick={logout}>Cerrar Sesión</button>
                   </div>
                 </>
