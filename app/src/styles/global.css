@@ -1557,10 +1557,12 @@ h1, h2, h3 {
 .life-heart--lost { opacity: .2; filter: grayscale(1); }
 
 .game--over {
+  display: flex;
+  flex-direction: column;
   min-height: 100dvh;
   align-items: center;
   justify-content: center;
-  padding-top: 0;
+  padding: 24px;
 }
 
 .gameover-card {
