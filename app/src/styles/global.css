@@ -1495,17 +1495,94 @@ h1, h2, h3 {
   .score-legend { padding: 18px; gap: 10px; }
   .legend-item { font-size: .88rem; }
 
-  /* GAME — compacto, alto natural por contenido */
-  .game { max-width: 820px; margin: 0 auto; width: 100%; padding-top: 16px; padding-bottom: 20px; gap: 10px; }
+  /* ── GAME: Kahoot-style — viewport fijo, zonas proporcionales estables ── */
+  .game {
+    height: 100dvh;
+    display: grid;
+    grid-template-rows: auto auto auto 1fr minmax(112px, auto);
+    max-width: 820px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 12px 0 14px;
+    gap: 8px;
+  }
   .game-header { padding: 10px 18px; }
-  .challenge-card { padding: 22px 28px; gap: 14px; }
+
+  /* challenge-wrap ocupa la fila 1fr y pasa el alto al card */
+  .challenge-wrap { display: flex; flex-direction: column; min-height: 0; }
+
+  /* card: grid interno — question-section arriba (1fr), opciones abajo (fijas) */
+  .challenge-card {
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    padding: 18px 24px 14px;
+    gap: 14px;
+    overflow: hidden;
+  }
+
+  /* question-section: scrollable si el contenido es muy largo */
+  .question-section {
+    min-height: 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
 
   .challenge-question { font-size: 1.05rem; }
-  .code-block { font-size: .84rem; padding: 12px 16px; line-height: 1.6; }
-  .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .option { padding: 13px 16px; align-items: flex-start; }
-  .option-letter { width: 28px; height: 28px; font-size: .72rem; flex-shrink: 0; margin-top: 1px; }
-  .option-text { font-size: .88rem; line-height: 1.45; }
+
+  /* código sin max-height en desktop — question-section scrollea si es necesario */
+  .code-block { font-size: .84rem; padding: 12px 16px; line-height: 1.6; max-height: none; flex-shrink: 0; }
+
+  /* Opciones: grid 2x2 con altura SIEMPRE fija — no se mueve nunca */
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 8px;
+    height: 176px;
+  }
+
+  /* Colores Kahoot por posición (CSS vars para reutilizar en hover) */
+  .options-grid > .option:nth-child(1) { --or:220; --og:53;  --ob:69;  }
+  .options-grid > .option:nth-child(2) { --or:26;  --og:115; --ob:196; }
+  .options-grid > .option:nth-child(3) { --or:230; --og:161; --ob:23;  }
+  .options-grid > .option:nth-child(4) { --or:30;  --og:132; --ob:73;  }
+
+  /* Fondo coloreado solo cuando no está en estado correcto/incorrecto */
+  .options-grid > .option:not(.option--correct):not(.option--wrong) {
+    background: rgba(var(--or,60), var(--og,60), var(--ob,90), 0.72);
+    border-color: rgba(var(--or,60), var(--og,60), var(--ob,90), 0.35);
+  }
+  .options-grid > .option:not(.option--correct):not(.option--wrong):hover:not(:disabled) {
+    background: rgba(var(--or,60), var(--og,60), var(--ob,90), 0.92);
+    border-color: rgba(var(--or,60), var(--og,60), var(--ob,90), 0.6);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0,0,0,.3);
+  }
+
+  /* Atenuar opciones sin seleccionar cuando se revela la respuesta */
+  .options-grid:has(.option--correct) > .option:not(.option--correct):not(.option--wrong) {
+    opacity: 0.38;
+    transform: none;
+  }
+
+  /* Letra-badge sobre tile de color: oscuro para contraste */
+  .options-grid > .option .option-letter {
+    background: rgba(0,0,0,.28);
+    border-color: rgba(255,255,255,.18);
+    color: #fff;
+  }
+  .options-grid > .option:not(.option--correct):not(.option--wrong) .option-text { color: #fff; font-weight: 600; }
+
+  /* Quitar la barra lateral izquierda (::before) en tiles Kahoot */
+  .options-grid > .option::before { display: none; }
+
+  .option { padding: 10px 14px; align-items: center; }
+  .option-letter { width: 28px; height: 28px; font-size: .72rem; flex-shrink: 0; }
+  .option-text { font-size: .88rem; line-height: 1.4; }
   .feedback-banner { padding: 12px 16px; }
   .answer-feedback { gap: 8px; }
 
