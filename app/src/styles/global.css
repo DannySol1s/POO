@@ -1462,13 +1462,15 @@ h1, h2, h3 {
    6 filas con altura definida: tamaño nunca cambia entre preguntas.
 ══════════════════════════════════════════ */
 .kgame {
-  height: 100dvh;
+  position: fixed;
+  inset: 0;
   display: grid;
   grid-template-rows: auto auto auto 1fr 160px 112px;
-  width: 100%;
-  padding: 10px 12px 10px;
+  padding: 10px 12px;
   gap: 6px;
   box-sizing: border-box;
+  background: var(--bg1);
+  z-index: 10;
 }
 
 .kgame-hdr {
@@ -1844,12 +1846,10 @@ h1, h2, h3 {
   .feedback-banner { padding: 12px 16px; }
   .answer-feedback { gap: 8px; }
 
-  /* KGAME — desktop */
+  /* KGAME — desktop: fijo al viewport, contenido centrado a 660px */
   .kgame {
-    max-width: 660px;
-    margin: 0 auto;
     grid-template-rows: auto auto auto 1fr 176px 120px;
-    padding: 12px 0 14px;
+    padding: 14px max(24px, calc((100vw - 660px) / 2));
     gap: 8px;
   }
   .kgame-board-inner { padding: 14px 18px; gap: 10px; }
@@ -1905,7 +1905,7 @@ h1, h2, h3 {
   .code-block { font-size: .74rem; }
   .challenge-question { font-size: .95rem; }
   .modeselect-title { font-size: 1.15rem; }
-  .kgame { grid-template-rows: auto auto auto 1fr 150px 108px; padding: 8px 10px; gap: 5px; }
+  .kgame { grid-template-rows: auto auto auto 1fr 150px 108px; padding: 8px 10px; gap: 5px; position: fixed; inset: 0; }
   .kgame-q { font-size: .82rem; }
   .kopt-text { font-size: .7rem; }
   .kgame-code { font-size: .66rem; max-height: 90px; }
