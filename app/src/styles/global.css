@@ -1107,14 +1107,18 @@ h1, h2, h3 {
 ═══════════════════════════════════════ */
 .auth {
   display: flex; flex-direction: column;
-  padding-top: 24px; padding-bottom: 32px;
-  gap: 20px; min-height: 100dvh;
+  align-items: center; justify-content: center;
+  padding: 24px 16px;
+  gap: 16px; min-height: 100dvh;
 }
+
+.auth-card { width: 100%; max-width: 400px; }
 
 .auth-back {
   background: none; border: none;
   color: var(--text-muted); font-size: .88rem;
-  cursor: pointer; padding: 0; align-self: flex-start;
+  cursor: pointer; padding: 0;
+  align-self: flex-start; width: 100%; max-width: 400px;
   font-family: var(--font-body); font-weight: 700;
   transition: color .15s;
   display: inline-flex; align-items: center; gap: 6px;
