@@ -47,45 +47,53 @@ const MODES = [
     id: "facil",
     label: "Fácil",
     tag: "MODO BÁSICO",
-    desc: "Arrancas con calma — preguntas de concepto y código cortito. Si la riegas, hay pista de compa. Ideal pa' ver si ya sabes para qué sirve un objeto sin que se te tronque el cerebro.",
-    chips: ["30 seg", "Pistas incluidas", "Nivel de entrada"],
+    desc: "Arrancas con calma — preguntas de concepto y código cortito. Si la riegas, hay pista de compa. Los puntos tienen descuento (×0.7) porque el modo lo pone más fácil — eso es honestidad, no crueldad.",
+    chips: ["30 seg", "Pistas incluidas", "×0.7 pts", "80% Teoría · 20% Código"],
     color: "#10b981",
     art: "</>",
     lives: null,
     maxTime: 30,
+    multiplier: 0.7,
+    maxScore: 1330,
   },
   {
     id: "normal",
     label: "Normal",
     tag: "MODO ESTÁNDAR",
-    desc: "Sin pistas, sin red de seguridad, sin excusas. Aquí se separa el que estudió del que confía en que 'algo de algo se le va a pegar'. El modo sin drama para el estudiante promedio.",
-    chips: ["30 seg", "Sin pistas", "Sin excusas"],
+    desc: "Sin pistas, sin red de seguridad, sin excusas. Aquí se separa el que estudió del que confía en que 'algo de algo se le va a pegar'. Puntuación base real: mitad teoría, mitad código.",
+    chips: ["30 seg", "Sin pistas", "×1.0 base", "50% Teoría · 50% Código"],
     color: "#6366f1",
     art: "{ }",
     lives: null,
     maxTime: 30,
+    multiplier: 1.0,
+    maxScore: 1900,
   },
   {
     id: "heroico",
     label: "Heroico",
     tag: "MODO ÉLITE",
-    desc: "Tres vidas en el server. Las preguntas ya no son amables — vienen con trampas y código que parece simple pero no lo es. Administra tus errores o se acabó la partida.",
-    chips: ["30 seg", "3 Vidas", "Preguntas con trampa"],
+    desc: "Tres vidas en el server y multiplicador de ×1.4. Las preguntas ya no son amables — vienen con trampas y código que parece simple pero no lo es. Administra tus errores o se acabó la partida.",
+    chips: ["30 seg", "3 Vidas", "×1.4 pts", "20% Teoría · 80% Código"],
     color: "#f59e0b",
     art: "❤️",
     lives: 3,
     maxTime: 30,
+    multiplier: 1.4,
+    maxScore: 2660,
   },
   {
     id: "legendario",
     label: "Legendario",
     tag: "MODO CRÍTICO",
-    desc: "15 segundos. Un solo fallo y game over. No hay vuelta atrás, no hay pistas, no hay piedad. Solo pa' los que de verdad se la saben — o los que son muy valientes pa' admitir que no.",
-    chips: ["15 seg", "Muerte Súbita", "Solo valientes"],
+    desc: "15 segundos. Un solo fallo y game over. Puntos al doble (×2.0), pero casi todo es código con trampa. No hay pistas, no hay piedad, no hay vuelta atrás.",
+    chips: ["15 seg", "Muerte Súbita", "×2.0 pts", "10% Teoría · 90% Código"],
     color: "#f43f5e",
     art: "null",
     lives: 1,
     maxTime: 15,
+    multiplier: 2.0,
+    maxScore: 3800,
   },
 ];
 
@@ -96,7 +104,7 @@ const topicItem = {
 
 export default function Home({ onStart, onAuth, onRanking }) {
   const { user, logout } = useAuth();
-  const [step, setStep]               = useState("topic");
+  const [step, setStep]                   = useState("topic");
   const [selectedTopic, setSelectedTopic] = useState("todos");
   const [selectedMode, setSelectedMode]   = useState("normal");
   const [counts, setCounts]               = useState({});
@@ -132,6 +140,7 @@ export default function Home({ onStart, onAuth, onRanking }) {
         challenges: json.data,
         lives: mode.lives,
         maxTime: mode.maxTime,
+        multiplier: mode.multiplier,
       });
     } catch {
       setError("Se cayó el server o no levantaste la API en Hono. Dale un pop al back, carnal.");
@@ -141,7 +150,9 @@ export default function Home({ onStart, onAuth, onRanking }) {
 
   return (
     <AnimatePresence mode="wait">
-      {step === "topic" ? (
+
+      {/* ── PANTALLA 1: Elegir tema ── */}
+      {step === "topic" && (
         <motion.div
           key="topic"
           className="home"
@@ -150,7 +161,6 @@ export default function Home({ onStart, onAuth, onRanking }) {
           exit={{ opacity: 0, x: -30 }}
           transition={{ duration: 0.3 }}
         >
-          {/* TOP ROW: brand (izquierda) + user bar (derecha en desktop) */}
           <motion.div
             className="home-top"
             initial={{ opacity: 0, y: -16 }}
@@ -170,7 +180,6 @@ export default function Home({ onStart, onAuth, onRanking }) {
                 <p className="home-subtitle">Demuestra tu lógica, supera las quests y ponte trucha con la POO... o catarreará tu código.</p>
               </div>
             </div>
-
             <motion.div
               className="home-user-bar"
               initial={{ opacity: 0 }}
@@ -181,21 +190,16 @@ export default function Home({ onStart, onAuth, onRanking }) {
                 <>
                   <span className="user-greeting">Qué tranza, <strong>{user.username}</strong></span>
                   <div className="user-actions">
-                    <button className="btn-link" onClick={onRanking}>
-                      <TrophyIcon /> Ranking Global
-                    </button>
+                    <button className="btn-link" onClick={onRanking}><TrophyIcon /> Ranking Global</button>
                     <button className="btn-link btn-link--muted" onClick={logout}>Cerrar Sesión</button>
                   </div>
                 </>
               ) : (
-                <button className="btn btn--ghost btn--sm" onClick={onAuth}>
-                  Forjar Identidad (Log In / Sign Up)
-                </button>
+                <button className="btn btn--ghost btn--sm" onClick={onAuth}>Forjar Identidad (Log In / Sign Up)</button>
               )}
             </motion.div>
           </motion.div>
 
-          {/* BODY: temas (izquierda) + sidebar (derecha) */}
           <div className="home-body">
             <motion.section
               className="home-topics"
@@ -231,27 +235,33 @@ export default function Home({ onStart, onAuth, onRanking }) {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.35, duration: 0.3 }}
             >
-              <div className="score-legend">
-                <h2 className="section-label" style={{ marginBottom: 10 }}>Reglas del Backend (Botín)</h2>
-                <div className="legend-item"><span className="legend-dot legend-dot--base"></span>100 pts por quest correcta</div>
-                <div className="legend-item"><span className="legend-dot legend-dot--time"></span>+50 pts si respondes rápido</div>
-                <div className="legend-item"><span className="legend-dot legend-dot--streak"></span>+10-50 pts por racha de aciertos</div>
-                <div className="legend-item legend-item--max"><span className="legend-dot legend-dot--base"></span>Techo del sistema: <strong>1,900 pts</strong></div>
+              <div className="home-next-hint">
+                <p className="home-next-hint-text">Elige tu tema y después selecciona el modo de dificultad.</p>
+                <span className="legend-ceiling-label">Puntuación máxima por modo</span>
+                <div className="legend-ceiling-badges">
+                  {MODES.map((m) => (
+                    <span key={m.id} className="legend-ceiling-badge" style={{ "--mode-color": m.color }}>
+                      <span className="legend-ceiling-badge-name">{m.label}</span>
+                      <span className="legend-ceiling-badge-score">{m.maxScore.toLocaleString()} pts</span>
+                    </span>
+                  ))}
+                </div>
               </div>
-
               <motion.button
                 className="btn btn--cta btn--lg"
                 onClick={() => setStep("mode")}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.97 }}
               >
-                Darle Con Todo →
+                Elegir Dificultad →
               </motion.button>
             </motion.aside>
           </div>
         </motion.div>
+      )}
 
-      ) : (
+      {/* ── PANTALLA 2: Elegir modo + ver reglas ── */}
+      {step === "mode" && (
         <motion.div
           key="mode"
           className="modeselect"
@@ -260,20 +270,16 @@ export default function Home({ onStart, onAuth, onRanking }) {
           exit={{ opacity: 0, x: 40 }}
           transition={{ duration: 0.3, ease: "easeOut" }}
         >
-          {/* Header */}
           <div className="modeselect-header">
-            <button className="modeselect-back" onClick={() => setStep("topic")}>
-              ← Volver
-            </button>
+            <button className="modeselect-back" onClick={() => setStep("topic")}>← Volver</button>
             <div className="modeselect-title-wrap">
               <p className="modeselect-subtitle">Tema: <strong style={{ color: topic.color }}>{topic.label}</strong></p>
               <h1 className="modeselect-title">ELEGIR DIFICULTAD</h1>
             </div>
           </div>
 
-          {/* Body: sidebar + preview */}
           <div className="modeselect-body">
-            {/* Sidebar — lista de modos */}
+            {/* Columna izq: lista de modos */}
             <nav className="modeselect-list">
               {MODES.map((m) => (
                 <motion.button
@@ -288,7 +294,7 @@ export default function Home({ onStart, onAuth, onRanking }) {
               ))}
             </nav>
 
-            {/* Preview panel */}
+            {/* Columna centro: preview del modo */}
             <AnimatePresence mode="wait">
               <motion.div
                 key={selectedMode}
@@ -299,7 +305,6 @@ export default function Home({ onStart, onAuth, onRanking }) {
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.2 }}
               >
-                {/* Decorative scan lines + corner frame via CSS */}
                 <motion.div
                   className="modeselect-art"
                   animate={{ scale: [1, 1.04, 1] }}
@@ -307,7 +312,6 @@ export default function Home({ onStart, onAuth, onRanking }) {
                 >
                   <span className="modeselect-art-glyph">{mode.art}</span>
                 </motion.div>
-
                 <div className="modeselect-info">
                   <p className="modeselect-tag">{mode.tag}</p>
                   <h2 className="modeselect-name">{mode.label}</h2>
@@ -320,9 +324,41 @@ export default function Home({ onStart, onAuth, onRanking }) {
                 </div>
               </motion.div>
             </AnimatePresence>
+
+            {/* Columna der: reglas del modo */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={`rules-${selectedMode}`}
+                className="modeselect-rules"
+                style={{ "--mode-color": mode.color }}
+                initial={{ opacity: 0, x: 10 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <h2 className="section-label" style={{ marginBottom: 10 }}>Reglas del Backend</h2>
+                <div className="legend-item"><span className="legend-dot legend-dot--base"></span>{Math.round(100 * mode.multiplier)} pts por quest correcta</div>
+                <div className="legend-item"><span className="legend-dot legend-dot--time"></span>+{Math.round(50 * mode.multiplier)} pts si respondes rápido</div>
+                <div className="legend-item"><span className="legend-dot legend-dot--streak"></span>+{Math.round(10 * mode.multiplier)}–{Math.round(50 * mode.multiplier)} pts por racha</div>
+                <div className="legend-ceiling" style={{ marginTop: 8 }}>
+                  <span className="legend-ceiling-label">Techo del sistema</span>
+                  <div className="legend-ceiling-badges">
+                    {MODES.map((m) => (
+                      <span
+                        key={m.id}
+                        className={`legend-ceiling-badge ${selectedMode === m.id ? "legend-ceiling-badge--active" : ""}`}
+                        style={{ "--mode-color": m.color }}
+                      >
+                        <span className="legend-ceiling-badge-name">{m.label}</span>
+                        <span className="legend-ceiling-badge-score">{m.maxScore.toLocaleString()}</span>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
           </div>
 
-          {/* Footer */}
           {error && <p className="error-msg">{error}</p>}
           <motion.button
             className="btn btn--cta btn--lg modeselect-accept"
@@ -331,10 +367,11 @@ export default function Home({ onStart, onAuth, onRanking }) {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.97 }}
           >
-            {loading ? "Cargando..." : "⚡ INICIAR MISIÓN"}
+            {loading ? "Cargando..." : "⚡ Iniciar Misión"}
           </motion.button>
         </motion.div>
       )}
+
     </AnimatePresence>
   );
 }
