@@ -1272,7 +1272,17 @@ h1, h2, h3 {
 ═══════════════════════════════════════ */
 .ranking { display: flex; flex-direction: column; gap: 20px; padding-top: 24px; padding-bottom: 32px; }
 
-.ranking-header { display: flex; align-items: center; gap: 12px; }
+.ranking-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+}
+.ranking-header .auth-back {
+  position: absolute;
+  left: 0;
+}
 .ranking-title {
   font-size: 1.6rem; font-weight: 700;
   font-family: var(--font-display);
@@ -1287,7 +1297,7 @@ h1, h2, h3 {
 
 .ranking-tab {
   display: flex; align-items: center; gap: 6px;
-  padding: 6px 14px;
+  padding: 5px 10px;
   background: var(--bg2); border: 1px solid var(--border);
   border-radius: 999px;
   color: var(--text-muted); font-size: .8rem; font-weight: 700;
@@ -1308,8 +1318,8 @@ h1, h2, h3 {
   background: var(--primary-soft);
   box-shadow: 0 2px 0 rgba(0,0,0,.2), 0 0 10px var(--primary-soft);
 }
-.ranking-tab-label { display: none; }
-@media (min-width: 420px) { .ranking-tab-label { display: inline; } }
+.ranking-tab-label { display: inline; font-size: .72rem; }
+@media (min-width: 480px) { .ranking-tab-label { font-size: .82rem; } }
 
 .ranking-table { display: flex; flex-direction: column; gap: 6px; }
 
