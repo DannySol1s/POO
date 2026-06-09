@@ -1048,6 +1048,24 @@ h1, h2, h3 {
 .arcade-save-input:focus  { border-color: var(--primary); }
 .arcade-save-input::placeholder { color: var(--text-dim); }
 
+.arcade-save-input-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+.arcade-save-input-wrap .arcade-save-input { width: 100%; padding-right: 40px; }
+.arcade-name-counter {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: .68rem;
+  color: var(--text-dim);
+  pointer-events: none;
+  font-family: var(--font-heading);
+}
+.arcade-name-counter--max { color: #f59e0b; }
+
 .arcade-status {
   margin-top: 4px;
   font-size: .82rem;

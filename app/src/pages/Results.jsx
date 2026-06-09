@@ -220,16 +220,26 @@ export default function Results({ result, config, onRestart, onRanking }) {
               >
                 <p className="arcade-save-label">¿Dejar tu marca en el ranking?</p>
                 <div className="arcade-save-row">
-                  <input
-                    className="arcade-save-input"
-                    type="text"
-                    placeholder="¿Cómo te llaman?"
-                    maxLength={25}
-                    value={arcadeName}
-                    onChange={(e) => setArcadeName(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && handleArcadeSave()}
-                    autoComplete="off"
-                  />
+                  <div className="arcade-save-input-wrap">
+                    <input
+                      className="arcade-save-input"
+                      type="text"
+                      placeholder="¿Cómo te llaman?"
+                      maxLength={15}
+                      value={arcadeName}
+                      onChange={(e) => {
+                        const val = e.target.value
+                          .replace(/[^a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]/g, "")
+                          .slice(0, 15);
+                        setArcadeName(val);
+                      }}
+                      onKeyDown={(e) => e.key === "Enter" && handleArcadeSave()}
+                      autoComplete="off"
+                    />
+                    <span className={`arcade-name-counter ${arcadeName.length >= 15 ? "arcade-name-counter--max" : ""}`}>
+                      {arcadeName.length}/15
+                    </span>
+                  </div>
                   <motion.button
                     className="btn btn--cta btn--sm"
                     onClick={handleArcadeSave}
