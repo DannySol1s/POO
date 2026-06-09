@@ -1010,22 +1010,24 @@ h1, h2, h3 {
 /* Arcade save block */
 .arcade-save {
   margin-top: 8px;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 16px 20px;
+  background: color-mix(in srgb, var(--primary) 8%, var(--bg2));
+  border: 2px solid var(--primary);
+  border-radius: 14px;
+  padding: 20px 20px 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   width: 100%;
   max-width: 440px;
+  box-shadow: 0 0 28px rgba(99,102,241,.25), 0 4px 0 rgba(0,0,0,.4);
 }
 .arcade-save-label {
-  font-size: .88rem;
+  font-size: 1rem;
   font-weight: 700;
-  color: var(--text1);
+  color: var(--text);
   font-family: var(--font-heading);
+  letter-spacing: .02em;
 }
 .arcade-save-row {
   display: flex;
@@ -1035,17 +1037,20 @@ h1, h2, h3 {
 .arcade-save-input {
   flex: 1;
   min-width: 0;
-  background: var(--bg2);
-  border: 1px solid var(--border);
+  background: var(--bg);
+  border: 1px solid color-mix(in srgb, var(--primary) 50%, transparent);
   border-radius: 8px;
-  color: var(--text1);
-  font-size: .88rem;
+  color: var(--text);
+  font-size: .9rem;
   font-family: var(--font-body);
-  padding: 7px 12px;
+  padding: 9px 12px;
   outline: none;
-  transition: border-color .15s;
+  transition: border-color .15s, box-shadow .15s;
 }
-.arcade-save-input:focus  { border-color: var(--primary); }
+.arcade-save-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(99,102,241,.2);
+}
 .arcade-save-input::placeholder { color: var(--text-dim); }
 
 .arcade-save-input-wrap {
