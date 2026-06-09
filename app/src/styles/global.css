@@ -570,6 +570,10 @@ h1, h2, h3 {
   font-family: var(--font-heading);
   letter-spacing: .06em;
   text-transform: capitalize;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
 }
 
 .difficulty-badge {
@@ -1733,10 +1737,11 @@ h1, h2, h3 {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 6px;
-  flex-wrap: wrap;
+  gap: 8px;
+  overflow: hidden;
 }
-.kgame-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.kgame-meta { display: flex; align-items: center; gap: 6px; flex: 1; min-width: 0; overflow: hidden; }
+.kgame-score { flex-shrink: 0; }
 .kgame-score { display: flex; align-items: baseline; gap: 4px; }
 .kgame-pts {
   font-size: 1.25rem;
