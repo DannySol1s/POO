@@ -76,47 +76,6 @@ export default function Game({ config, onFinish }) {
 
   useEffect(() => { setHintRevealed(false); }, [currentIndex]);
 
-  if (gameOver) {
-    return (
-      <motion.div
-        className="game game--over"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.4 }}
-      >
-        <motion.div
-          className="gameover-card"
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.45, ease: "easeOut", delay: 0.1 }}
-        >
-          <motion.div
-            className="gameover-icon"
-            animate={{ rotate: [0, -10, 10, -5, 5, 0] }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-          >
-            💥
-          </motion.div>
-          <h1 className="gameover-title">GAME OVER</h1>
-          <p className="gameover-msg">{gameOverMsg}</p>
-          <div className="gameover-score">
-            <span className="gameover-score-pts">{score.toLocaleString()}</span>
-            <span className="gameover-score-label"> pts acumulados</span>
-          </div>
-          <div className="gameover-actions">
-            <motion.button
-              className="btn btn--cta"
-              onClick={() => onFinish({ score, answerHistory, topic: config.topic, difficulty: config.difficulty, gameOver: true })}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.97 }}
-            >
-              Ver Daño Parcial (Resultados)
-            </motion.button>
-          </div>
-        </motion.div>
-      </motion.div>
-    );
-  }
 
   if (!currentChallenge) return null;
 
@@ -131,6 +90,50 @@ export default function Game({ config, onFinish }) {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
     >
+      {/* Game Over overlay — cubre el kgame completo */}
+      <AnimatePresence>
+        {gameOver && (
+          <motion.div
+            className="gameover-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <motion.div
+              className="gameover-card"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.45, ease: "easeOut", delay: 0.1 }}
+            >
+              <motion.div
+                className="gameover-icon"
+                animate={{ rotate: [0, -10, 10, -5, 5, 0] }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+              >
+                💥
+              </motion.div>
+              <h1 className="gameover-title">GAME OVER</h1>
+              <p className="gameover-msg">{gameOverMsg}</p>
+              <div className="gameover-score">
+                <span className="gameover-score-pts">{score.toLocaleString()}</span>
+                <span className="gameover-score-label"> pts acumulados</span>
+              </div>
+              <div className="gameover-actions">
+                <motion.button
+                  className="btn btn--cta"
+                  onClick={() => onFinish({ score, answerHistory, topic: config.topic, difficulty: config.difficulty, gameOver: true })}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.97 }}
+                >
+                  Ver Daño Parcial (Resultados)
+                </motion.button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Fila 1: Header */}
       <div className="kgame-hdr">
         <div className="kgame-meta">
