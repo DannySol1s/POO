@@ -237,7 +237,7 @@ export default function Home({ onStart, onAuth, onRanking }) {
             >
               <div className="home-next-hint">
                 <p className="home-next-hint-text">Elige tu tema y después selecciona el modo de dificultad.</p>
-                <span className="legend-ceiling-label">Puntuación máxima por modo</span>
+                <span className="legend-ceiling-label">Puntuación Máxima por Modo</span>
                 <div className="legend-ceiling-badges">
                   {MODES.map((m) => (
                     <span key={m.id} className="legend-ceiling-badge" style={{ "--mode-color": m.color }}>
@@ -367,7 +367,7 @@ export default function Home({ onStart, onAuth, onRanking }) {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.97 }}
           >
-            {loading ? "Cargando..." : "⚡ Iniciar Misión"}
+            {loading ? "Cargando..." : "⚡ Iniciar Desafío ⚡"}
           </motion.button>
         </motion.div>
       )}
