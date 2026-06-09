@@ -55,10 +55,11 @@ export default function Game({ config, onFinish }) {
     timeLeft, maxTime, selectedAnswer, isAnswered, isCorrect,
     answerHistory, isFinished, lives, gameOver,
     selectAnswer, nextQuestion,
-  } = useGame(config.challenges, { lives: config.lives, maxTime: config.maxTime });
+  } = useGame(config.challenges, { lives: config.lives, maxTime: config.maxTime, multiplier: config.multiplier });
 
   const [feedbackMsg, setFeedbackMsg] = useState("");
   const [gameOverMsg] = useState(() => pick(MSG_GAMEOVER));
+  const [hintRevealed, setHintRevealed] = useState(false);
 
   useEffect(() => {
     if (isFinished) {
@@ -72,6 +73,8 @@ export default function Game({ config, onFinish }) {
     else if (isCorrect) setFeedbackMsg(pick(MSG_CORRECT));
     else setFeedbackMsg(pick(MSG_WRONG));
   }, [isAnswered]);
+
+  useEffect(() => { setHintRevealed(false); }, [currentIndex]);
 
   if (gameOver) {
     return (
@@ -119,7 +122,7 @@ export default function Game({ config, onFinish }) {
 
   const topicColor = TOPIC_COLORS[currentChallenge.topic] ?? "#4f46e5";
   const isLast = currentIndex === total - 1;
-  const showHint = isAnswered && !isCorrect && currentChallenge.hint && config.difficulty === "facil";
+  const canShowHint = !isAnswered && currentChallenge.hint && config.difficulty === "facil";
 
   return (
     <motion.div
@@ -149,6 +152,9 @@ export default function Game({ config, onFinish }) {
             {score.toLocaleString()}
           </motion.span>
           <span className="kgame-pts-label">pts</span>
+          {config.multiplier !== 1 && (
+            <span className="kgame-multiplier">×{config.multiplier}</span>
+          )}
           <AnimatePresence>
             {streak >= 2 && (
               <motion.span
@@ -201,15 +207,33 @@ export default function Game({ config, onFinish }) {
             {currentChallenge.code && (
               <pre className="kgame-code"><code>{currentChallenge.code}</code></pre>
             )}
-            {showHint && (
-              <motion.p
-                className="kgame-hint"
-                initial={{ opacity: 0, y: 5 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.25, delay: 0.15 }}
-              >
-                💡 {currentChallenge.hint}
-              </motion.p>
+            {canShowHint && (
+              <AnimatePresence mode="wait">
+                {!hintRevealed ? (
+                  <motion.button
+                    key="hint-btn"
+                    className="kgame-hint-btn"
+                    onClick={() => setHintRevealed(true)}
+                    initial={{ opacity: 0, y: 4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -4 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    💡 Ver pista
+                  </motion.button>
+                ) : (
+                  <motion.p
+                    key="hint-text"
+                    className="kgame-hint"
+                    initial={{ opacity: 0, y: 4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    💡 {currentChallenge.hint}
+                  </motion.p>
+                )}
+              </AnimatePresence>
             )}
           </div>
         </motion.div>

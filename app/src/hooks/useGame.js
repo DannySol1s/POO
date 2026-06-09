@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 
 export function useGame(challenges, config = {}) {
-  const { lives: initialLives = null, maxTime = 30 } = config;
+  const { lives: initialLives = null, maxTime = 30, multiplier = 1 } = config;
 
   const [currentIndex, setCurrentIndex]     = useState(0);
   const [score, setScore]                   = useState(0);
@@ -68,7 +68,7 @@ export function useGame(challenges, config = {}) {
       const timeBonus = Math.floor((timeLeft / maxTime) * 50);
       newStreak = streak + 1;
       const streakBonus = Math.min(newStreak * 10, 50);
-      points = 100 + timeBonus + streakBonus;
+      points = Math.round((100 + timeBonus + streakBonus) * multiplier);
       setStreak(newStreak);
     } else {
       newStreak = 0;
