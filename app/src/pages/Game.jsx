@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { useGame } from "../hooks/useGame.js";
-import ChallengeCard from "../components/ChallengeCard.jsx";
 import ProgressBar from "../components/ProgressBar.jsx";
 import Timer from "../components/Timer.jsx";
 
@@ -43,6 +42,13 @@ function pick(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
+function optClass(i, selected, answered, correct, correctIndex) {
+  if (!answered) return "kopt";
+  if (i === correctIndex) return "kopt kopt--correct";
+  if (i === selected && !correct) return "kopt kopt--wrong";
+  return "kopt";
+}
+
 export default function Game({ config, onFinish }) {
   const {
     currentChallenge, currentIndex, total, score, streak,
@@ -62,13 +68,9 @@ export default function Game({ config, onFinish }) {
 
   useEffect(() => {
     if (!isAnswered) return;
-    if (selectedAnswer === -1) {
-      setFeedbackMsg(pick(MSG_TIMEOUT));
-    } else if (isCorrect) {
-      setFeedbackMsg(pick(MSG_CORRECT));
-    } else {
-      setFeedbackMsg(pick(MSG_WRONG));
-    }
+    if (selectedAnswer === -1) setFeedbackMsg(pick(MSG_TIMEOUT));
+    else if (isCorrect) setFeedbackMsg(pick(MSG_CORRECT));
+    else setFeedbackMsg(pick(MSG_WRONG));
   }, [isAnswered]);
 
   if (gameOver) {
@@ -101,15 +103,7 @@ export default function Game({ config, onFinish }) {
           <div className="gameover-actions">
             <motion.button
               className="btn btn--cta"
-              onClick={() =>
-                onFinish({
-                  score,
-                  answerHistory,
-                  topic: config.topic,
-                  difficulty: config.difficulty,
-                  gameOver: true,
-                })
-              }
+              onClick={() => onFinish({ score, answerHistory, topic: config.topic, difficulty: config.difficulty, gameOver: true })}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.97 }}
             >
@@ -125,16 +119,18 @@ export default function Game({ config, onFinish }) {
 
   const topicColor = TOPIC_COLORS[currentChallenge.topic] ?? "#4f46e5";
   const isLast = currentIndex === total - 1;
+  const showHint = isAnswered && !isCorrect && currentChallenge.hint && config.difficulty === "facil";
 
   return (
     <motion.div
-      className="game"
+      className="kgame"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
     >
-      <div className="game-header">
-        <div className="game-meta">
+      {/* Fila 1: Header */}
+      <div className="kgame-hdr">
+        <div className="kgame-meta">
           <span className="topic-badge" style={{ "--topic-color": topicColor }}>
             {currentChallenge.topic}
           </span>
@@ -143,20 +139,20 @@ export default function Game({ config, onFinish }) {
           </span>
         </div>
 
-        <div className="game-score">
+        <div className="kgame-score">
           <motion.span
-            className="score-value"
+            className="kgame-pts"
             key={score}
-            animate={{ scale: [1, 1.18, 1] }}
-            transition={{ duration: 0.35 }}
+            animate={{ scale: [1, 1.2, 1] }}
+            transition={{ duration: 0.32 }}
           >
-            {score}
+            {score.toLocaleString()}
           </motion.span>
-          <span className="score-label">pts</span>
+          <span className="kgame-pts-label">pts</span>
           <AnimatePresence>
             {streak >= 2 && (
               <motion.span
-                className="streak-badge"
+                className="kgame-streak"
                 initial={{ scale: 0, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0, opacity: 0 }}
@@ -169,11 +165,11 @@ export default function Game({ config, onFinish }) {
         </div>
 
         {lives !== null && (
-          <div className="game-lives">
+          <div className="kgame-lives">
             {Array.from({ length: config.lives }).map((_, i) => (
               <motion.span
                 key={i}
-                className={`life-heart ${i >= lives ? "life-heart--lost" : ""}`}
+                className={`klife ${i >= lives ? "klife--lost" : ""}`}
                 animate={i >= lives ? { scale: [1, 1.3, 0.8], opacity: [1, 1, 0.25] } : {}}
                 transition={{ duration: 0.35 }}
               >
@@ -184,61 +180,107 @@ export default function Game({ config, onFinish }) {
         )}
       </div>
 
+      {/* Fila 2: Progreso */}
       <ProgressBar current={currentIndex + 1} total={total} color={topicColor} />
+
+      {/* Fila 3: Temporizador */}
       <Timer timeLeft={timeLeft} maxTime={maxTime} isAnswered={isAnswered} color={topicColor} />
 
+      {/* Fila 4: Zona de pregunta — scroll interno, tamaño fijo por 1fr */}
       <AnimatePresence mode="wait">
         <motion.div
           key={currentIndex}
-          className="challenge-wrap"
-          initial={{ opacity: 0, x: 40 }}
+          className="kgame-board"
+          initial={{ opacity: 0, x: 28 }}
           animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -40 }}
-          transition={{ duration: 0.28, ease: "easeOut" }}
+          exit={{ opacity: 0, x: -28 }}
+          transition={{ duration: 0.22, ease: "easeOut" }}
         >
-          <ChallengeCard
-            challenge={currentChallenge}
-            selectedAnswer={selectedAnswer}
-            isAnswered={isAnswered}
-            isCorrect={isCorrect}
-            onSelect={selectAnswer}
-            difficulty={config.difficulty}
-            hint={currentChallenge.hint ?? null}
-          />
+          <div className="kgame-board-inner">
+            <p className="kgame-q">{currentChallenge.question}</p>
+            {currentChallenge.code && (
+              <pre className="kgame-code"><code>{currentChallenge.code}</code></pre>
+            )}
+            {showHint && (
+              <motion.p
+                className="kgame-hint"
+                initial={{ opacity: 0, y: 5 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.25, delay: 0.15 }}
+              >
+                💡 {currentChallenge.hint}
+              </motion.p>
+            )}
+          </div>
         </motion.div>
       </AnimatePresence>
 
-      <AnimatePresence>
-        {isAnswered && (
-          <motion.div
-            className="answer-feedback"
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 8 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
+      {/* Fila 5: Opciones — altura fija, nunca cambia */}
+      <div className="kgame-opts">
+        {currentChallenge.options.map((opt, i) => (
+          <motion.button
+            key={`${currentIndex}-${i}`}
+            className={optClass(i, selectedAnswer, isAnswered, isCorrect, currentChallenge.correctIndex)}
+            initial={{ opacity: 0, x: -10 }}
+            animate={
+              isAnswered && i === currentChallenge.correctIndex
+                ? { opacity: 1, x: 0, scale: [1, 1.03, 1], transition: { duration: 0.3, delay: 0.08 } }
+                : isAnswered && i === selectedAnswer && !isCorrect
+                ? { opacity: 1, x: [-7, 7, -5, 5, -2, 2, 0], transition: { duration: 0.38 } }
+                : { opacity: 1, x: 0, transition: { delay: i * 0.06, duration: 0.22, ease: "easeOut" } }
+            }
+            onClick={() => !isAnswered && selectAnswer(i)}
+            disabled={isAnswered}
+            whileTap={!isAnswered ? { scale: 0.97, y: 2 } : {}}
           >
-            <div className={`feedback-banner ${isCorrect ? "feedback-banner--correct" : "feedback-banner--wrong"}`}>
-              <span className="feedback-icon">{isCorrect ? "✓" : "✗"}</span>
-              <div className="feedback-content">
-                <strong className="feedback-msg">{feedbackMsg}</strong>
-                <p className="feedback-explanation">{currentChallenge.explanation}</p>
-              </div>
-            </div>
+            <span className="kopt-key">{String.fromCharCode(65 + i)}</span>
+            <span className="kopt-text">{opt}</span>
+            {isAnswered && i === currentChallenge.correctIndex && (
+              <span className="kopt-mark">✓</span>
+            )}
+            {isAnswered && i === selectedAnswer && !isCorrect && (
+              <span className="kopt-mark">✗</span>
+            )}
+          </motion.button>
+        ))}
+      </div>
 
+      {/* Fila 6: Feedback + botón siguiente — espacio siempre reservado */}
+      <div className="kgame-foot">
+        <AnimatePresence>
+          {isAnswered && (
+            <motion.div
+              className={`kgame-fb ${isCorrect ? "kgame-fb--correct" : "kgame-fb--wrong"}`}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+            >
+              <span className="kgame-fb-icon">{isCorrect ? "✓" : "✗"}</span>
+              <div className="kgame-fb-body">
+                <strong className="kgame-fb-msg">{feedbackMsg}</strong>
+                <p className="kgame-fb-expl">{currentChallenge.explanation}</p>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+        <AnimatePresence>
+          {isAnswered && (
             <motion.button
-              className="btn btn--primary"
+              className="btn btn--primary kgame-next-btn"
               onClick={nextQuestion}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.15 }}
+              exit={{ opacity: 0 }}
+              transition={{ delay: 0.1, duration: 0.18 }}
               whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.97, y: 4 }}
+              whileTap={{ scale: 0.97, y: 3 }}
             >
               {isLast ? "Ver Botín Final" : "Siguiente Quest →"}
             </motion.button>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>
+      </div>
     </motion.div>
   );
 }

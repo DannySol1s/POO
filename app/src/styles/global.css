@@ -387,12 +387,19 @@ h1, h2, h3 {
    GAME — HUD
 ═══════════════════════════════════════ */
 .game {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: auto auto auto 1fr;
   gap: 12px;
   padding-top: 20px;
   padding-bottom: 32px;
   min-height: 100dvh;
+  height: 100dvh;
+}
+
+.challenge-wrap {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 .game-header {
@@ -537,12 +544,12 @@ h1, h2, h3 {
   border-top: 3px solid var(--primary);
   border-radius: var(--radius);
   padding: 22px;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto auto;
   gap: 18px;
   box-shadow: 0 4px 0 rgba(0,0,0,.3), 0 16px 40px rgba(0,0,0,.4);
-  overflow: auto;
-  max-height: 90dvh;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .challenge-question {
@@ -553,6 +560,20 @@ h1, h2, h3 {
   font-family: var(--font-body);
 }
 
+.question-section {
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-right: 4px;
+}
+.question-section::-webkit-scrollbar { width: 6px; }
+.question-section::-webkit-scrollbar-track { background: transparent; }
+.question-section::-webkit-scrollbar-thumb { background: rgba(99,102,241,.3); border-radius: 3px; }
+.question-section::-webkit-scrollbar-thumb:hover { background: rgba(99,102,241,.5); }
+
 .code-block {
   background: #04040e;
   border: 1px solid #0d0d28;
@@ -561,20 +582,21 @@ h1, h2, h3 {
   padding: 14px 16px;
   overflow-x: auto;
   overflow-y: auto;
-  max-height: 180px;
+  max-height: 220px;
   font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
   font-size: .82rem;
   line-height: 1.75;
   color: #a5b4fc;
   white-space: pre;
   box-shadow: inset 0 2px 12px rgba(0,0,0,.5);
+  flex-shrink: 0;
 }
 .code-block::-webkit-scrollbar { width: 5px; height: 5px; }
 .code-block::-webkit-scrollbar-track { background: transparent; }
 .code-block::-webkit-scrollbar-thumb { background: #1e1e4a; border-radius: 4px; }
 .code-block::-webkit-scrollbar-thumb:hover { background: #3730a3; }
 
-.options-grid { display: flex; flex-direction: column; gap: 10px; }
+.options-grid { display: flex; flex-direction: column; gap: 10px; flex-shrink: 0; }
 
 /* Opciones — barra izquierda indicadora */
 .option {
@@ -674,7 +696,10 @@ h1, h2, h3 {
 .option--wrong   .option-marker { color: var(--danger);  }
 
 /* Feedback */
-.answer-feedback { display: flex; flex-direction: column; gap: 10px; }
+.answer-feedback { display: flex; flex-direction: column; gap: 10px; flex-shrink: 0; max-height: 160px; overflow-y: auto; }
+.answer-feedback::-webkit-scrollbar { width: 5px; }
+.answer-feedback::-webkit-scrollbar-track { background: transparent; }
+.answer-feedback::-webkit-scrollbar-thumb { background: rgba(99,102,241,.3); border-radius: 3px; }
 
 .feedback-banner {
   display: flex;
@@ -1431,6 +1456,226 @@ h1, h2, h3 {
   }
 }
 
+/* ══════════════════════════════════════════
+   KGAME — Vista de quest (Kahoot-style, layout fijo)
+   Reemplaza .game + ChallengeCard para la pantalla de juego.
+   6 filas con altura definida: tamaño nunca cambia entre preguntas.
+══════════════════════════════════════════ */
+.kgame {
+  height: 100dvh;
+  display: grid;
+  grid-template-rows: auto auto auto 1fr 160px 112px;
+  width: 100%;
+  padding: 10px 12px 10px;
+  gap: 6px;
+  box-sizing: border-box;
+}
+
+.kgame-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.kgame-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.kgame-score { display: flex; align-items: baseline; gap: 4px; }
+.kgame-pts {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+}
+.kgame-pts-label {
+  font-size: .7rem;
+  color: rgba(255,255,255,.52);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+.kgame-streak {
+  font-size: .74rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 20px;
+  background: rgba(251,191,36,.18);
+  color: #fbbf24;
+  border: 1px solid rgba(251,191,36,.28);
+}
+.kgame-lives { display: flex; gap: 2px; align-items: center; }
+.klife { font-size: .9rem; }
+.klife--lost { opacity: 0.2; filter: grayscale(1); }
+
+/* Fila 4: Zona de pregunta — scroll interno */
+.kgame-board {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+.kgame-board-inner {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 13px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 11px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.kgame-board-inner::-webkit-scrollbar { width: 3px; }
+.kgame-board-inner::-webkit-scrollbar-track { background: transparent; }
+.kgame-board-inner::-webkit-scrollbar-thumb { background: rgba(99,102,241,.3); border-radius: 2px; }
+
+.kgame-q {
+  margin: 0;
+  font-size: .88rem;
+  font-weight: 600;
+  line-height: 1.55;
+  color: #f1f5f9;
+}
+.kgame-code {
+  margin: 0;
+  padding: 8px 12px;
+  background: rgba(0,0,0,.45);
+  border: 1px solid rgba(99,102,241,.18);
+  border-radius: 7px;
+  font-family: "Fira Code", "Cascadia Code", "Consolas", monospace;
+  font-size: .72rem;
+  line-height: 1.58;
+  color: #c4b5fd;
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: 110px;
+  flex-shrink: 0;
+}
+.kgame-hint {
+  margin: 0;
+  font-size: .76rem;
+  color: rgba(251,191,36,.88);
+  font-style: italic;
+}
+
+/* Fila 5: Grid 2×2 de opciones — SIEMPRE 160px, nunca se mueve */
+.kgame-opts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 6px;
+}
+
+.kopt {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 10px;
+  border-radius: 9px;
+  border: 1px solid rgba(255,255,255,.1);
+  background: rgba(255,255,255,.05);
+  cursor: pointer;
+  text-align: left;
+  transition: transform .14s, box-shadow .14s, opacity .18s;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* Colores Kahoot por posición */
+.kopt:nth-child(1) { --or:220; --og:53;  --ob:69;  }
+.kopt:nth-child(2) { --or:26;  --og:115; --ob:196; }
+.kopt:nth-child(3) { --or:230; --og:161; --ob:23;  }
+.kopt:nth-child(4) { --or:30;  --og:132; --ob:73;  }
+
+.kopt:not(.kopt--correct):not(.kopt--wrong):not(:disabled) {
+  background: rgba(var(--or,60), var(--og,60), var(--ob,90), 0.72);
+  border-color: rgba(var(--or,60), var(--og,60), var(--ob,90), 0.32);
+}
+.kopt:not(.kopt--correct):not(.kopt--wrong):not(:disabled):hover {
+  background: rgba(var(--or,60), var(--og,60), var(--ob,90), 0.92);
+  border-color: rgba(var(--or,60), var(--og,60), var(--ob,90), 0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 14px rgba(0,0,0,.28);
+}
+.kgame-opts:has(.kopt--correct) .kopt:not(.kopt--correct):not(.kopt--wrong) {
+  opacity: 0.32;
+}
+.kopt--correct {
+  background: rgba(34,197,94,.22) !important;
+  border-color: rgba(34,197,94,.55) !important;
+}
+.kopt--wrong {
+  background: rgba(239,68,68,.22) !important;
+  border-color: rgba(239,68,68,.55) !important;
+}
+.kopt:disabled { cursor: default; }
+
+.kopt-key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 21px;
+  height: 21px;
+  border-radius: 5px;
+  background: rgba(0,0,0,.28);
+  border: 1px solid rgba(255,255,255,.16);
+  font-size: .6rem;
+  font-weight: 800;
+  color: #fff;
+  flex-shrink: 0;
+}
+.kopt-text {
+  font-size: .76rem;
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.3;
+}
+.kopt-mark {
+  margin-left: auto;
+  font-size: .82rem;
+  flex-shrink: 0;
+}
+
+/* Fila 6: Feedback + botón siguiente — 112px fijos, nunca cambia */
+.kgame-foot {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  overflow: hidden;
+}
+.kgame-fb {
+  padding: 7px 11px;
+  border-radius: 9px;
+  border: 1px solid rgba(255,255,255,.07);
+  background: rgba(255,255,255,.04);
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.kgame-fb--correct { background: rgba(34,197,94,.1);  border-color: rgba(34,197,94,.28); }
+.kgame-fb--wrong   { background: rgba(239,68,68,.1);   border-color: rgba(239,68,68,.28); }
+.kgame-fb-icon { font-size: .95rem; flex-shrink: 0; line-height: 1.4; }
+.kgame-fb-body { flex: 1; min-width: 0; }
+.kgame-fb-msg {
+  display: block;
+  font-size: .76rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin-bottom: 1px;
+}
+.kgame-fb-expl {
+  margin: 0;
+  font-size: .7rem;
+  color: rgba(255,255,255,.56);
+  line-height: 1.4;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.kgame-next-btn { flex-shrink: 0; }
+
 /* ═══════════════════════════════════════
    RESPONSIVE — mobile first
 ═══════════════════════════════════════ */
@@ -1514,12 +1759,12 @@ h1, h2, h3 {
   /* challenge-wrap ocupa la fila 1fr y pasa el alto al card */
   .challenge-wrap { display: flex; flex-direction: column; min-height: 0; }
 
-  /* card: grid interno — question-section arriba (1fr), opciones abajo (fijas) */
+  /* card: grid interno — question-section arriba (1fr), opciones abajo (fijas), feedback abajo */
   .challenge-card {
     flex: 1;
     min-height: 0;
     display: grid;
-    grid-template-rows: 1fr auto;
+    grid-template-rows: minmax(0, 1fr) auto auto;
     padding: 18px 24px 14px;
     gap: 14px;
     overflow: hidden;
@@ -1537,7 +1782,7 @@ h1, h2, h3 {
   .challenge-question { font-size: 1.05rem; }
 
   /* código sin max-height en desktop — question-section scrollea si es necesario */
-  .code-block { font-size: .84rem; padding: 12px 16px; line-height: 1.6; max-height: none; flex-shrink: 0; }
+  .code-block { font-size: .84rem; padding: 12px 16px; line-height: 1.6; max-height: 220px; flex-shrink: 0; overflow-y: auto; }
 
   /* Opciones: grid 2x2 con altura SIEMPRE fija — no se mueve nunca */
   .options-grid {
@@ -1583,11 +1828,40 @@ h1, h2, h3 {
   /* Quitar la barra lateral izquierda (::before) en tiles Kahoot */
   .options-grid > .option::before { display: none; }
 
+  /* Feedback controlado en desktop */
+  .answer-feedback {
+    max-height: 140px;
+    overflow-y: auto;
+    flex-shrink: 0;
+  }
+  .answer-feedback::-webkit-scrollbar { width: 5px; }
+  .answer-feedback::-webkit-scrollbar-track { background: transparent; }
+  .answer-feedback::-webkit-scrollbar-thumb { background: rgba(99,102,241,.3); border-radius: 3px; }
+
   .option { padding: 10px 14px; align-items: center; }
   .option-letter { width: 28px; height: 28px; font-size: .72rem; flex-shrink: 0; }
   .option-text { font-size: .88rem; line-height: 1.4; }
   .feedback-banner { padding: 12px 16px; }
   .answer-feedback { gap: 8px; }
+
+  /* KGAME — desktop */
+  .kgame {
+    max-width: 660px;
+    margin: 0 auto;
+    grid-template-rows: auto auto auto 1fr 176px 120px;
+    padding: 12px 0 14px;
+    gap: 8px;
+  }
+  .kgame-board-inner { padding: 14px 18px; gap: 10px; }
+  .kgame-q { font-size: 1rem; }
+  .kgame-code { font-size: .79rem; max-height: 160px; padding: 10px 16px; }
+  .kgame-opts { gap: 8px; }
+  .kopt { padding: 8px 14px; gap: 10px; border-radius: 10px; }
+  .kopt-key { min-width: 26px; height: 26px; font-size: .66rem; border-radius: 6px; }
+  .kopt-text { font-size: .84rem; }
+  .kgame-fb { padding: 9px 14px; }
+  .kgame-fb-msg { font-size: .8rem; }
+  .kgame-fb-expl { font-size: .74rem; -webkit-line-clamp: 3; }
 
   /* RESULTS */
   .results { padding-top: 48px; gap: 28px; }
@@ -1631,6 +1905,10 @@ h1, h2, h3 {
   .code-block { font-size: .74rem; }
   .challenge-question { font-size: .95rem; }
   .modeselect-title { font-size: 1.15rem; }
+  .kgame { grid-template-rows: auto auto auto 1fr 150px 108px; padding: 8px 10px; gap: 5px; }
+  .kgame-q { font-size: .82rem; }
+  .kopt-text { font-size: .7rem; }
+  .kgame-code { font-size: .66rem; max-height: 90px; }
 }
 
 /* ═══════════════════════════════════════
