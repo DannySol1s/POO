@@ -222,7 +222,7 @@ export default function Home({ onStart, onAuth, onRanking }) {
                     <span className="topic-icon"><TopicIcon id={t.id} size={28} /></span>
                     <span className="topic-label">{t.label}</span>
                     {counts[t.id] != null && (
-                      <span className="topic-count">{counts[t.id]} misiones</span>
+                      <span className="topic-count">{counts[t.id]} desafíos</span>
                     )}
                   </motion.button>
                 ))}
