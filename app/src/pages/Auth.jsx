@@ -18,10 +18,9 @@ const EyeIcon = ({ open }) =>
 
 export default function Auth({ onBack }) {
   const { login } = useAuth();
-  const [tab, setTab] = useState("login");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [form, setForm] = useState({ username: "", email: "", password: "" });
+  const [form, setForm] = useState({ username: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
 
   function updateField(field, value) {
@@ -33,20 +32,14 @@ export default function Auth({ onBack }) {
     e.preventDefault();
     setError(null);
     setLoading(true);
-
-    const endpoint = tab === "login" ? "/api/auth/login" : "/api/auth/registro";
-    const body = tab === "login"
-      ? { email: form.email, password: form.password }
-      : { username: form.username, email: form.email, password: form.password };
-
     try {
-      const res  = await fetch(endpoint, {
+      const res  = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
+        body: JSON.stringify({ username: form.username, password: form.password }),
       });
       const json = await res.json();
-      if (!res.ok) { setError(json.error ?? "Error desconocido"); return; }
+      if (!res.ok) { setError(json.error ?? "Credenciales incorrectas"); return; }
       login(json.username, json.token);
       onBack();
     } catch {
@@ -72,62 +65,30 @@ export default function Auth({ onBack }) {
         transition={{ delay: 0.1, duration: 0.3 }}
       >
         <div className="auth-logo">&lt;/&gt;</div>
-        <h1 className="auth-title">POO Challenge</h1>
-
-        <div className="auth-tabs">
-          <button
-            className={`auth-tab ${tab === "login" ? "auth-tab--active" : ""}`}
-            onClick={() => { setTab("login"); setError(null); }}
-          >
-            Identificarse
-          </button>
-          <button
-            className={`auth-tab ${tab === "registro" ? "auth-tab--active" : ""}`}
-            onClick={() => { setTab("registro"); setError(null); }}
-          >
-            Crear Gremio (Registrarse)
-          </button>
-        </div>
+        <h1 className="auth-title">Acceso Admin</h1>
+        <p className="auth-subtitle">Panel de administración</p>
 
         <form className="auth-form" onSubmit={handleSubmit} noValidate>
-          {tab === "registro" && (
-            <motion.div
-              className="field"
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              transition={{ duration: 0.2 }}
-            >
-              <label className="field-label" htmlFor="username">Usuario (Nickname)</label>
-              <input
-                id="username" className="field-input" type="text"
-                placeholder="ej: dev_crack99"
-                value={form.username}
-                onChange={(e) => updateField("username", e.target.value)}
-                autoComplete="username" maxLength={20}
-              />
-            </motion.div>
-          )}
-
           <div className="field">
-            <label className="field-label" htmlFor="email">Correo</label>
+            <label className="field-label" htmlFor="username">Usuario</label>
             <input
-              id="email" className="field-input" type="email"
-              placeholder="tu_correo@sistemas.com"
-              value={form.email}
-              onChange={(e) => updateField("email", e.target.value)}
-              autoComplete="email"
+              id="username" className="field-input" type="text"
+              placeholder="nombre de admin"
+              value={form.username}
+              onChange={(e) => updateField("username", e.target.value)}
+              autoComplete="username"
             />
           </div>
 
           <div className="field">
-            <label className="field-label" htmlFor="password">Password de Encriptación</label>
+            <label className="field-label" htmlFor="password">Contraseña</label>
             <div className="field-password">
               <input
                 id="password" className="field-input" type={showPassword ? "text" : "password"}
-                placeholder="Mínimo 8 caracteres (No pongas 123456)"
+                placeholder="••••••••"
                 value={form.password}
                 onChange={(e) => updateField("password", e.target.value)}
-                autoComplete={tab === "login" ? "current-password" : "new-password"}
+                autoComplete="current-password"
               />
               <button
                 type="button"
@@ -155,7 +116,7 @@ export default function Auth({ onBack }) {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.97, y: 4 }}
           >
-            {loading ? "Levantando credenciales..." : tab === "login" ? "Acceder al Sistema" : "Crear Cuenta"}
+            {loading ? "Verificando..." : "Entrar"}
           </motion.button>
         </form>
       </motion.div>

@@ -5,6 +5,9 @@ import { secureHeaders } from "hono/secure-headers";
 import { challengesRouter } from "./routes/challenges.js";
 import { authRouter } from "./routes/auth.js";
 import { partidasRouter } from "./routes/partidas.js";
+import { seedAdmin } from "./db/index.js";
+
+await seedAdmin();
 
 // Orígenes permitidos: siempre localhost en dev + dominios de producción vía env
 const ALLOWED_ORIGINS = [

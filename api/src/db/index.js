@@ -55,3 +55,22 @@ db.exec(`
 db.exec("CREATE INDEX IF NOT EXISTS idx_arcade_puntuacion ON partidas_arcade(puntuacion DESC)");
 
 export default db;
+
+// Crea el usuario admin desde variables de entorno si no existe
+export async function seedAdmin() {
+  const username = process.env.ADMIN_USERNAME?.trim();
+  const password = process.env.ADMIN_PASSWORD?.trim();
+
+  if (!username || !password) {
+    console.warn("[seed] ADMIN_USERNAME / ADMIN_PASSWORD no definidos — omitiendo seed de admin");
+    return;
+  }
+
+  const exists = db.prepare("SELECT id FROM usuarios WHERE username = ?").get(username);
+  if (exists) return;
+
+  const hash = await Bun.password.hash(password);
+  db.prepare("INSERT INTO usuarios (username, email, password_hash) VALUES (?, ?, ?)")
+    .run(username, `${username}@admin.local`, hash);
+  console.log(`[seed] Admin '${username}' creado.`);
+}

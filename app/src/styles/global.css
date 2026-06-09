@@ -1167,6 +1167,15 @@ h1, h2, h3 {
   position: relative;
 }
 
+.auth-subtitle {
+  font-size: .78rem;
+  color: var(--text-dim);
+  text-align: center;
+  margin-top: -6px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
 .auth-tabs {
   display: grid; grid-template-columns: 1fr 1fr;
   background: var(--bg3); border-radius: var(--radius-xs);
