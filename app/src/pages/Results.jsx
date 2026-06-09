@@ -224,21 +224,21 @@ export default function Results({ result, config, onRestart, onRanking }) {
                     className="arcade-save-input"
                     type="text"
                     placeholder="AAA"
-                    maxLength={15}
+                    maxLength={5}
                     value={arcadeName}
                     onChange={(e) => {
                       const val = e.target.value
                         .toUpperCase()
                         .replace(/[^A-Z0-9]/g, "")
-                        .slice(0, 15);
+                        .slice(0, 5);
                       setArcadeName(val);
                     }}
                     onKeyDown={(e) => e.key === "Enter" && handleArcadeSave()}
                     autoComplete="off"
                     autoFocus
                   />
-                  <span className={`arcade-name-counter ${arcadeName.length >= 15 ? "arcade-name-counter--max" : ""}`}>
-                    {arcadeName.length}/15
+                  <span className={`arcade-name-counter ${arcadeName.length >= 5 ? "arcade-name-counter--max" : ""}`}>
+                    {arcadeName.length}/5
                   </span>
                 </div>
                 <motion.button
