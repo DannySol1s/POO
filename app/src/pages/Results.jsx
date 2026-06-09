@@ -72,7 +72,8 @@ export default function Results({ result, config, onRestart, onRanking }) {
   const [saveStatus, setSaveStatus]     = useState(null);
   const [displayScore, setDisplayScore] = useState(0);
   const [arcadeName, setArcadeName]     = useState("");
-  const [arcadeStatus, setArcadeStatus] = useState(null); // null | "saving" | "saved" | "error" | "skipped"
+  const [arcadeStatus, setArcadeStatus] = useState(null); // null | "saving" | "saved" | "no-record" | "error" | "skipped"
+  const [arcadeResult, setArcadeResult] = useState(null); // { firstTime, newRecord, prevBest }
 
   const handleArcadeSave = useCallback(async () => {
     const nombre = arcadeName.trim();
@@ -84,7 +85,13 @@ export default function Results({ result, config, onRestart, onRanking }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nombre, tema: topic, puntuacion: score, correctas: correct, total, dificultad: difficulty }),
       });
-      setArcadeStatus(res.ok ? "saved" : "error");
+      if (res.ok) {
+        const data = await res.json();
+        setArcadeResult(data);
+        setArcadeStatus(data.newRecord ? "saved" : "no-record");
+      } else {
+        setArcadeStatus("error");
+      }
     } catch {
       setArcadeStatus("error");
     }
@@ -219,6 +226,7 @@ export default function Results({ result, config, onRestart, onRanking }) {
                 transition={{ duration: 0.25, delay: 0.4 }}
               >
                 <p className="arcade-save-label">🏆 ¿Dejar tu marca en el ranking?</p>
+                <p className="arcade-save-hint">Mismo nombre = solo se guarda tu mejor score.</p>
                 <div className="arcade-save-input-wrap">
                   <input
                     className="arcade-save-input"
@@ -261,9 +269,18 @@ export default function Results({ result, config, onRestart, onRanking }) {
               </motion.p>
             )}
             {arcadeStatus === "saved" && (
-              <motion.p key="saved" className="arcade-status arcade-status--ok" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}>
-                ✓ ¡{arcadeName} quedó en el ranking!
-              </motion.p>
+              <motion.div key="saved" className="arcade-status arcade-status--ok" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}>
+                {arcadeResult?.firstTime
+                  ? <p>✓ ¡<strong>{arcadeName}</strong> ya está en el ranking!</p>
+                  : <p>✓ ¡Nuevo récord para <strong>{arcadeName}</strong>! Score actualizado.</p>
+                }
+              </motion.div>
+            )}
+            {arcadeStatus === "no-record" && (
+              <motion.div key="no-record" className="arcade-status arcade-status--muted" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}>
+                <p>Tu récord anterior con <strong>{arcadeName}</strong> ({arcadeResult?.prevBest?.toLocaleString()} pts) sigue siendo mejor.</p>
+                <p className="arcade-status-sub">¡Sigue intentando y vuelve a poner tu nombre si lo superas!</p>
+              </motion.div>
             )}
             {arcadeStatus === "error" && (
               <motion.p key="error" className="arcade-status arcade-status--err" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>

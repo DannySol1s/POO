@@ -1074,7 +1074,12 @@ h1, h2, h3 {
   font-style: italic;
 }
 .arcade-status--ok  { color: #34d399; font-style: normal; font-weight: 700; font-size: .88rem; }
+.arcade-status--ok p  { margin: 0; }
 .arcade-status--err { color: #f87171; font-style: normal; }
+.arcade-status--muted { color: var(--text-muted); font-style: normal; font-size: .82rem; }
+.arcade-status--muted p { margin: 0 0 4px; }
+.arcade-status-sub { font-size: .78rem; color: #6366f1; font-style: italic; }
+.arcade-save-hint { font-size: .74rem; color: var(--text-muted); margin: -6px 0 8px; opacity: .75; }
 
 
 .breakdown-list { display: flex; flex-direction: column; gap: 8px; }

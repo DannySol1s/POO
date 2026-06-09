@@ -62,11 +62,18 @@ partidasRouter.post("/arcade", arcadeLimiter, async (c) => {
     return c.json({ error: "Datos de partida inválidos" }, 400);
   }
 
+  const existing = db
+    .prepare("SELECT MAX(puntuacion) AS prev FROM partidas_arcade WHERE nombre = ?")
+    .get(nombreTrimmed);
+  const prevBest = existing?.prev ?? null;
+  const firstTime = prevBest === null;
+  const newRecord = firstTime || puntuacion > prevBest;
+
   db.prepare(
     "INSERT INTO partidas_arcade (nombre, tema, puntuacion, correctas, total, dificultad) VALUES (?, ?, ?, ?, ?, ?)"
   ).run(nombreTrimmed, tema, puntuacion, correctas, total, dificultad);
 
-  return c.json({ ok: true }, 201);
+  return c.json({ ok: true, firstTime, newRecord, prevBest }, 201);
 });
 
 // Mejor puntuación + total acumulado (usuarios registrados + arcade)

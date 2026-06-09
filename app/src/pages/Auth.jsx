@@ -66,14 +66,14 @@ export default function Auth({ onBack }) {
       >
         <div className="auth-logo">&lt;/&gt;</div>
         <h1 className="auth-title">Acceso Admin</h1>
-        <p className="auth-subtitle">Panel de administración</p>
+        <p className="auth-subtitle">Panel de Administración</p>
 
         <form className="auth-form" onSubmit={handleSubmit} noValidate>
           <div className="field">
             <label className="field-label" htmlFor="username">Usuario</label>
             <input
               id="username" className="field-input" type="text"
-              placeholder="nombre de admin"
+              placeholder="Nombre de Admin"
               value={form.username}
               onChange={(e) => updateField("username", e.target.value)}
               autoComplete="username"
