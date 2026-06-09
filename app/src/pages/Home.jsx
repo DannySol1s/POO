@@ -161,6 +161,19 @@ export default function Home({ onStart, onAuth, onRanking }) {
           exit={{ opacity: 0, x: -30 }}
           transition={{ duration: 0.3 }}
         >
+          {/* Admin esquina superior derecha */}
+          {!user && (
+            <button className="btn btn--ghost btn--sm home-admin-corner" onClick={onAuth}>
+              Admin
+            </button>
+          )}
+          {user && (
+            <div className="home-admin-corner home-admin-corner--user">
+              <span className="user-greeting">Qué tranza, <strong>{user.username}</strong></span>
+              <button className="btn-link btn-link--muted" onClick={logout}>Salir</button>
+            </div>
+          )}
+
           <motion.div
             className="home-top"
             initial={{ opacity: 0, y: -16 }}
@@ -178,28 +191,11 @@ export default function Home({ onStart, onAuth, onRanking }) {
               <div className="home-brand-text">
                 <h1 className="home-title">POO CHALLENGE: TVRG</h1>
                 <p className="home-subtitle">Demuestra tu lógica, supera las quests y ponte trucha con la POO... o catarreará tu código.</p>
-                <button className="btn-link home-ranking-link" onClick={onRanking}>
+                <button className="btn btn--ghost btn--sm home-ranking-btn" onClick={onRanking}>
                   <TrophyIcon /> Ranking Global
                 </button>
               </div>
             </div>
-            <motion.div
-              className="home-user-bar"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2, duration: 0.3 }}
-            >
-              {user ? (
-                <>
-                  <span className="user-greeting">Qué tranza, <strong>{user.username}</strong></span>
-                  <div className="user-actions">
-                    <button className="btn-link btn-link--muted" onClick={logout}>Cerrar Sesión</button>
-                  </div>
-                </>
-              ) : (
-                <button className="btn-link home-admin-link" onClick={onAuth}>Admin</button>
-              )}
-            </motion.div>
           </motion.div>
 
           <div className="home-body">
