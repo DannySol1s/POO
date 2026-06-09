@@ -1039,8 +1039,12 @@ h1, h2, h3 {
   border: 1px solid color-mix(in srgb, var(--primary) 50%, transparent);
   border-radius: 8px;
   color: var(--text);
-  font-size: 1rem;
-  font-family: var(--font-body);
+  font-size: 1.1rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  text-align: center;
   padding: 10px 44px 10px 14px;
   outline: none;
   transition: border-color .15s, box-shadow .15s;

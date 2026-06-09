@@ -50,10 +50,10 @@ partidasRouter.post("/arcade", arcadeLimiter, async (c) => {
 
   const { nombre, tema, puntuacion, correctas, total, dificultad = "normal" } = body;
 
-  const nombreTrimmed = (nombre ?? "").trim().slice(0, 15);
+  const nombreTrimmed = (nombre ?? "").trim().toUpperCase().slice(0, 15);
   if (!nombreTrimmed) return c.json({ error: "Nombre requerido" }, 400);
-  if (!/^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]+$/.test(nombreTrimmed)) {
-    return c.json({ error: "El nombre solo puede contener letras" }, 400);
+  if (!/^[A-Z0-9]+$/.test(nombreTrimmed)) {
+    return c.json({ error: "El nombre solo puede contener letras y números" }, 400);
   }
 
   if (!TEMAS_VALIDOS.includes(tema))        return c.json({ error: "Tema inválido" }, 400);

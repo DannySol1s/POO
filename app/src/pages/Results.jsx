@@ -223,12 +223,13 @@ export default function Results({ result, config, onRestart, onRanking }) {
                   <input
                     className="arcade-save-input"
                     type="text"
-                    placeholder="¿Cómo te llaman?"
+                    placeholder="AAA"
                     maxLength={15}
                     value={arcadeName}
                     onChange={(e) => {
                       const val = e.target.value
-                        .replace(/[^a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]/g, "")
+                        .toUpperCase()
+                        .replace(/[^A-Z0-9]/g, "")
                         .slice(0, 15);
                       setArcadeName(val);
                     }}
