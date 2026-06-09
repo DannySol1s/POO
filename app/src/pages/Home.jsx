@@ -33,6 +33,13 @@ const TrophyIcon = () => (
   </svg>
 );
 
+const LockIcon = () => (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+  </svg>
+);
+
 const TOPICS = [
   { id: "todos",           label: "Todos",           color: "#6366f1" },
   { id: "clases",          label: "Clases",           color: "#3b82f6" },
@@ -161,15 +168,15 @@ export default function Home({ onStart, onAuth, onRanking }) {
           exit={{ opacity: 0, x: -30 }}
           transition={{ duration: 0.3 }}
         >
-          {/* Admin esquina superior derecha */}
+          {/* Admin — icono candado esquina superior derecha */}
           {!user && (
-            <button className="btn btn--ghost btn--sm home-admin-corner" onClick={onAuth}>
-              Admin
+            <button className="home-admin-icon" onClick={onAuth} title="Admin">
+              <LockIcon />
             </button>
           )}
           {user && (
             <div className="home-admin-corner home-admin-corner--user">
-              <span className="user-greeting">Qué tranza, <strong>{user.username}</strong></span>
+              <span className="user-greeting"><strong>{user.username}</strong></span>
               <button className="btn-link btn-link--muted" onClick={logout}>Salir</button>
             </div>
           )}

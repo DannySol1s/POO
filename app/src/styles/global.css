@@ -234,20 +234,41 @@ h1, h2, h3 {
 
 .home-ranking-btn { margin-top: 12px; }
 
-.home-admin-corner {
+.home-admin-icon {
   position: absolute;
   top: 14px;
   right: 16px;
   z-index: 5;
-}
-.home-admin-corner--user {
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  opacity: .35;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: opacity .15s, background .15s;
+}
+.home-admin-icon:hover {
+  opacity: .8;
+  background: var(--bg3);
+}
+
+.home-admin-corner--user {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  padding: 6px 12px;
+  padding: 5px 10px;
 }
 
 .home-title {
