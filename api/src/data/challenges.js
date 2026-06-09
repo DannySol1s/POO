@@ -8,34 +8,39 @@ export const challenges = [
     id: "cls_001",
     topic: "clases",
     difficulty: "facil",
-    question: "¿Qué función especial se ejecuta automáticamente al crear una instancia con 'new'?",
+    question: "¿Qué función especial se ejecuta automáticamente al crear una instancia con 'nuevo'?",
     code: null,
     options: ["constructor", "init", "create", "start"],
     correctIndex: 0,
-    explanation: "El método 'constructor' es el único que se invoca automáticamente al usar 'new'. Aquí se inicializan las propiedades del nuevo objeto.",
+    explanation: "El método 'constructor' es el único que se invoca automáticamente al usar 'nuevo'. Aquí se inicializan las propiedades del nuevo objeto.",
     hint: "Este método tiene el mismo nombre en todos los lenguajes OOP modernos — y en inglés significa exactamente lo que hace.",
   },
   {
     id: "cls_002",
     topic: "clases",
     difficulty: "facil",
-    question: "¿Qué imprime este código?",
-    code: `class Coche {\n  constructor(marca) {\n    this.marca = marca;\n  }\n}\nconst c = new Coche("Toyota");\nconsole.log(c.marca);`,
-    options: ['"Toyota"', '"marca"', "undefined", '"Coche"'],
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Coche:
+  CONSTRUCTOR(marca):
+    yo.marca = marca
+
+c = NUEVO Coche("Toyota")
+IMPRIMIR c.marca`,
+    options: ['"Toyota"', '"marca"', "indefinido", '"Coche"'],
     correctIndex: 0,
-    explanation: "En el constructor, 'this.marca = marca' asigna el argumento al objeto. Al acceder a c.marca obtenemos \"Toyota\".",
-    hint: "Dentro del constructor, 'this' representa el objeto que se está creando — la propiedad queda guardada en él.",
+    explanation: "En el constructor, 'yo.marca = marca' asigna el argumento al objeto. Al acceder a c.marca obtenemos \"Toyota\".",
+    hint: "Dentro del constructor, 'yo' representa el objeto que se está creando — la propiedad queda guardada en él.",
   },
   {
     id: "cls_008",
     topic: "clases",
     difficulty: "facil",
-    question: "¿Qué palabra clave se usa en JavaScript para declarar una clase?",
+    question: "¿Qué palabra clave se usa para declarar una clase en POO?",
     code: null,
-    options: ["class", "struct", "object", "type"],
+    options: ["clase / class", "estructura", "objeto", "tipo"],
     correctIndex: 0,
-    explanation: "La palabra clave 'class' (ES6+) introduce una definición de clase en JS. Es azúcar sintáctica sobre la función constructora de prototipos.",
-    hint: "Es la misma palabra en inglés que la traducción directa de 'clase' en programación.",
+    explanation: "La palabra clave 'class' (o 'clase' en pseudocódigo) introduce una definición de clase. Es el bloque base de la POO.",
+    hint: "La misma palabra en inglés que la traducción directa de 'clase' en programación.",
   },
   {
     id: "cls_009",
@@ -44,25 +49,28 @@ export const challenges = [
     question: "¿Qué ocurre si no defines un constructor en una clase?",
     code: null,
     options: [
-      "JavaScript usa un constructor vacío por defecto",
+      "Se usa un constructor vacío por defecto",
       "La clase no puede instanciarse",
-      "Se genera un error al usar 'new'",
+      "Se genera un error al usar 'nuevo'",
       "El constructor se hereda del Object global",
     ],
     correctIndex: 0,
-    explanation: "Si no declaras constructor, JS usa implícitamente constructor() {}. La clase funciona normalmente y el objeto se crea sin inicialización adicional.",
-    hint: "JavaScript siempre tiene un plan B cuando falta el constructor — nunca deja al objeto sin nacer.",
+    explanation: "Si no declaras constructor, el lenguaje usa implícitamente uno vacío. La clase funciona normalmente y el objeto se crea sin inicialización adicional.",
+    hint: "El lenguaje siempre tiene un plan B cuando falta el constructor — nunca deja al objeto sin nacer.",
   },
   {
     id: "cls_010",
     topic: "clases",
     difficulty: "facil",
-    question: "¿Qué imprime este código?",
-    code: `class Persona {\n  static especie = "Homo sapiens";\n}\nconsole.log(Persona.especie);`,
-    options: ['"Homo sapiens"', "undefined", "Error", "null"],
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Persona:
+  ESTATICO especie = "Homo sapiens"
+
+IMPRIMIR Persona.especie`,
+    options: ['"Homo sapiens"', "indefinido", "Error", "nulo"],
     correctIndex: 0,
-    explanation: "Los campos estáticos (static) pertenecen a la clase, no a las instancias. Se acceden con NombreClase.campo, sin crear ningún objeto.",
-    hint: "Los campos 'static' son de la clase misma, no de los objetos — se acceden directamente desde el nombre de la clase.",
+    explanation: "Los campos estáticos pertenecen a la clase, no a las instancias. Se acceden con NombreClase.campo, sin crear ningún objeto.",
+    hint: "Los campos 'estáticos' son de la clase misma — se acceden directamente desde el nombre de la clase.",
   },
 
   // --- MEDIO ---
@@ -70,11 +78,20 @@ export const challenges = [
     id: "cls_003",
     topic: "clases",
     difficulty: "medio",
-    question: "¿Qué imprime este código?",
-    code: `class Contador {\n  count = 0;\n  incrementar() { this.count++; }\n  valor() { return this.count; }\n}\nconst c = new Contador();\nc.incrementar();\nc.incrementar();\nc.incrementar();\nconsole.log(c.valor());`,
-    options: ["3", "0", "1", "undefined"],
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Contador:
+  count = 0
+  METODO subir():
+    yo.count = yo.count + 1
+
+c = NUEVO Contador()
+c.subir()
+c.subir()
+c.subir()
+IMPRIMIR c.count`,
+    options: ["3", "0", "1", "indefinido"],
     correctIndex: 0,
-    explanation: "El campo 'count = 0' se inicializa por instancia. Cada llamada a incrementar() lo sube en 1. Tras tres llamadas, valor() retorna 3.",
+    explanation: "El campo 'count = 0' se inicializa por instancia. Cada llamada a subir() lo incrementa en 1. Tras tres llamadas, count vale 3.",
     hint: null,
   },
   {
@@ -85,45 +102,67 @@ export const challenges = [
     code: null,
     options: [
       "El estático se llama con la clase, sin instancia",
-      "El estático puede acceder a 'this' de instancia",
+      "El estático puede acceder a 'yo' de instancia",
       "Los de instancia son más rápidos",
-      "No hay diferencia en JavaScript",
+      "No hay diferencia en POO",
     ],
     correctIndex: 0,
-    explanation: "Los métodos estáticos se invocan sobre la clase (Clase.metodo()) y no tienen 'this' de instancia. Los de instancia requieren un objeto creado con 'new'.",
+    explanation: "Los métodos estáticos se invocan sobre la clase (Clase.metodo()) y no tienen acceso a 'yo' de instancia. Los de instancia requieren un objeto creado con 'nuevo'.",
     hint: null,
   },
   {
     id: "cls_005",
     topic: "clases",
     difficulty: "medio",
-    question: "¿Qué imprime este código?",
-    code: `class Animal {\n  constructor(nombre) {\n    this.nombre = nombre;\n  }\n  presentarse() {\n    return \`Soy \${this.nombre}\`;\n  }\n}\nconst a = new Animal("León");\nconsole.log(a.presentarse());`,
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Animal:
+  CONSTRUCTOR(nombre):
+    yo.nombre = nombre
+  METODO presentarse():
+    RETORNA "Soy " + yo.nombre
+
+a = NUEVO Animal("León")
+IMPRIMIR a.presentarse()`,
     options: ['"Soy León"', '"Soy nombre"', "Error", '"León"'],
     correctIndex: 0,
-    explanation: "El template literal interpola this.nombre (que es \"León\") dentro del string retornado por presentarse().",
+    explanation: "El método concatena 'Soy ' con yo.nombre (que es \"León\"). El resultado retornado es \"Soy León\".",
     hint: null,
   },
   {
     id: "cls_011",
     topic: "clases",
     difficulty: "medio",
-    question: "¿Qué imprime este código?",
-    code: `class Calculadora {\n  static PI = 3.14159;\n  static circunferencia(r) {\n    return 2 * this.PI * r;\n  }\n}\nconsole.log(Calculadora.circunferencia(5).toFixed(2));`,
-    options: ['"31.42"', '"3.14"', "Error", '"15.71"'],
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Geometria:
+  ESTATICO METODO area(b, h):
+    RETORNA b * h
+  ESTATICO METODO perimetro(b, h):
+    RETORNA 2 * (b + h)
+
+IMPRIMIR Geometria.area(3, 4) + Geometria.perimetro(3, 4)`,
+    options: ["26", "12", "14", "Error"],
     correctIndex: 0,
-    explanation: "circunferencia(5) = 2 × 3.14159 × 5 = 31.4159. toFixed(2) redondea a dos decimales: \"31.42\". Dentro de un método estático, 'this' se refiere a la clase misma.",
+    explanation: "area(3,4) = 3×4 = 12. perimetro(3,4) = 2×(3+4) = 14. La suma es 26. Ambos son métodos estáticos — se llaman con el nombre de la clase.",
     hint: null,
   },
   {
     id: "cls_012",
     topic: "clases",
     difficulty: "medio",
-    question: "¿Qué imprime este código?",
-    code: `class Jugador {\n  nombre;\n  puntaje = 0;\n  nivel = 1;\n  constructor(nombre) { this.nombre = nombre; }\n  subir() { this.nivel++; this.puntaje += 100; }\n}\nconst j = new Jugador("Ada");\nj.subir();\nj.subir();\nconsole.log(\`\${j.nombre} Nv.\${j.nivel} — \${j.puntaje}pts\`);`,
-    options: ['"Ada Nv.3 — 200pts"', '"Ada Nv.2 — 100pts"', '"Ada Nv.1 — 0pts"', "Error"],
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Jugador:
+  nivel = 1
+  puntaje = 0
+  METODO subir():
+    yo.nivel = yo.nivel + 1
+    yo.puntaje = yo.puntaje + 100
+
+j = NUEVO Jugador()
+j.subir(); j.subir()
+IMPRIMIR j.nivel + "-" + j.puntaje`,
+    options: ['"3-200"', '"2-100"', '"1-0"', "Error"],
     correctIndex: 0,
-    explanation: "Los campos de clase (puntaje=0, nivel=1) se inicializan en la instancia. Dos llamadas a subir(): nivel 1→2→3, puntaje 0→100→200.",
+    explanation: "Los campos nivel=1 y puntaje=0 se inicializan por instancia. Dos llamadas a subir(): nivel 1→2→3, puntaje 0→100→200.",
     hint: null,
   },
 
@@ -132,24 +171,31 @@ export const challenges = [
     id: "cls_006",
     topic: "clases",
     difficulty: "dificil",
-    question: "¿Puede una clase en JavaScript tener más de un método constructor?",
+    question: "¿Puede una clase tener más de un método constructor?",
     code: null,
     options: [
-      "No, lanza SyntaxError",
+      "No, solo se permite un constructor por clase",
       "Sí, hasta dos",
       "Sí, con distintos parámetros",
       "Sí, si uno es estático",
     ],
     correctIndex: 0,
-    explanation: "JavaScript solo permite un único 'constructor' por clase. Definir más de uno lanza SyntaxError. Para múltiples formas de inicialización se usan parámetros por defecto o factory methods.",
+    explanation: "En la mayoría de lenguajes OOP solo se permite un único 'constructor' por clase. Para múltiples formas de inicialización se usan parámetros por defecto o métodos fábrica.",
     hint: null,
   },
   {
     id: "cls_007",
     topic: "clases",
     difficulty: "dificil",
-    question: "¿Qué imprime este código?",
-    code: `class Rectangulo {\n  constructor(w, h) {\n    this.w = w;\n    this.h = h;\n  }\n  area() { return this.w * this.h; }\n  perimetro() { return 2 * (this.w + this.h); }\n}\nconst r = new Rectangulo(4, 5);\nconsole.log(r.area() + r.perimetro());`,
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Rectangulo:
+  CONSTRUCTOR(w, h):
+    yo.w = w; yo.h = h
+  METODO area(): RETORNA yo.w * yo.h
+  METODO perimetro(): RETORNA 2 * (yo.w + yo.h)
+
+r = NUEVO Rectangulo(4, 5)
+IMPRIMIR r.area() + r.perimetro()`,
     options: ["38", "20", "18", "40"],
     correctIndex: 0,
     explanation: "area() = 4 × 5 = 20. perimetro() = 2 × (4 + 5) = 18. La suma es 38.",
@@ -159,38 +205,58 @@ export const challenges = [
     id: "cls_013",
     topic: "clases",
     difficulty: "dificil",
-    question: "¿Qué imprime este código?",
-    code: `class Token {\n  #valor;\n  #usos = 0;\n  constructor(v) { this.#valor = v; }\n  consumir() { this.#usos++; return this.#valor; }\n  get info() { return \`\${this.#valor}:\${this.#usos}\`; }\n}\nconst t = new Token("abc");\nt.consumir();\nt.consumir();\nconsole.log(t.info);`,
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Token:
+  privado valor
+  privado usos = 0
+  CONSTRUCTOR(v): yo.valor = v
+  METODO consumir():
+    yo.usos = yo.usos + 1
+    RETORNA yo.valor
+  PROPIEDAD info: RETORNA yo.valor + ":" + yo.usos
+
+t = NUEVO Token("abc")
+t.consumir(); t.consumir()
+IMPRIMIR t.info`,
     options: ['"abc:2"', '"abc:0"', '"abc:1"', "Error"],
     correctIndex: 0,
-    explanation: "consumir() incrementa #usos en cada llamada. Tras dos llamadas, #usos = 2. El getter info retorna \"${#valor}:${#usos}\" = \"abc:2\".",
+    explanation: "consumir() incrementa 'usos' privado en cada llamada. Tras dos llamadas, usos = 2. La propiedad 'info' retorna \"abc:2\".",
     hint: null,
   },
   {
     id: "cls_014",
     topic: "clases",
     difficulty: "dificil",
-    question: "¿Cuál es el resultado de intentar instanciar directamente una 'clase abstracta' en JavaScript?",
+    question: "¿Cuál es la forma correcta de simular una clase abstracta en POO?",
     code: null,
     options: [
-      "JS no tiene clases abstractas nativas — 'new' siempre funciona",
-      "SyntaxError al definirla",
-      "TypeError automático en tiempo de ejecución",
-      "Retorna undefined",
+      "Lanzar un error en el constructor si se intenta instanciar directamente",
+      "Declarar la clase con la palabra clave 'abstract'",
+      "Usar solo métodos estáticos",
+      "No definir constructor",
     ],
     correctIndex: 0,
-    explanation: "JS no tiene la palabra clave 'abstract'. Para simularlas se lanza un error manual en el constructor: if (new.target === ClaseAbstracta) throw new Error(). Sin eso, 'new' funciona siempre.",
+    explanation: "Muchos lenguajes tienen 'abstract', pero donde no existe (como JS) se simula lanzando un error en el constructor: si se intenta instanciar la clase base directamente, falla.",
     hint: null,
   },
   {
     id: "cls_015",
     topic: "clases",
     difficulty: "dificil",
-    question: "¿Qué imprime este código?",
-    code: `class Cache {\n  #datos = new Map();\n  set(k, v) { this.#datos.set(k, v); return this; }\n  get(k) { return this.#datos.get(k); }\n}\nconst c = new Cache();\nc.set("x", 10).set("y", 20);\nconsole.log(c.get("x") + c.get("y"));`,
-    options: ["30", "undefined", "Error", '"1020"'],
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Cache:
+  privado datos = {}
+  METODO guardar(k, v):
+    yo.datos[k] = v
+    RETORNA yo
+  METODO leer(k): RETORNA yo.datos[k]
+
+c = NUEVO Cache()
+c.guardar("x", 10).guardar("y", 20)
+IMPRIMIR c.leer("x") + c.leer("y")`,
+    options: ["30", "indefinido", "Error", '"1020"'],
     correctIndex: 0,
-    explanation: "set() retorna 'this', permitiendo encadenamiento de métodos (method chaining). Se guardan x=10 e y=20. c.get(\"x\") + c.get(\"y\") = 10 + 20 = 30.",
+    explanation: "guardar() retorna 'yo', permitiendo encadenamiento de métodos. Se guardan x=10 e y=20. leer(\"x\") + leer(\"y\") = 10 + 20 = 30.",
     hint: null,
   },
 
@@ -203,29 +269,38 @@ export const challenges = [
     id: "obj_001",
     topic: "objetos",
     difficulty: "facil",
-    question: "¿Qué imprime este código?",
-    code: `class Libro {}\nconst l = new Libro();\nconsole.log(typeof l);`,
-    options: ['"object"', '"class"', '"Libro"', '"function"'],
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Libro
+
+l = NUEVO Libro()
+IMPRIMIR tipoDe(l)`,
+    options: ['"objeto"', '"clase"', '"Libro"', '"función"'],
     correctIndex: 0,
-    explanation: "En JavaScript, typeof siempre retorna 'object' para instancias de clases. Las clases en sí retornarían 'function'.",
-    hint: "typeof devuelve el tipo primitivo — los objetos (instancias de clase) tienen un solo tipo posible en JS.",
+    explanation: "En POO, tipoDe() sobre una instancia de clase siempre retorna 'objeto'. Las clases en sí son de tipo 'función' (en implementaciones como JS), pero sus instancias son objetos.",
+    hint: "Los objetos (instancias de clase) tienen un solo tipo posible: objeto.",
   },
   {
     id: "obj_002",
     topic: "objetos",
     difficulty: "facil",
-    question: "¿Qué imprime este código?",
-    code: `class Punto {\n  constructor(x, y) {\n    this.x = x;\n    this.y = y;\n  }\n}\nconst p1 = new Punto(1, 2);\nconst p2 = new Punto(3, 4);\nconsole.log(p1.x + p2.x);`,
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Punto:
+  CONSTRUCTOR(x, y):
+    yo.x = x; yo.y = y
+
+p1 = NUEVO Punto(1, 2)
+p2 = NUEVO Punto(3, 4)
+IMPRIMIR p1.x + p2.x`,
     options: ["4", "2", "3", "6"],
     correctIndex: 0,
     explanation: "Cada instancia tiene sus propias propiedades independientes. p1.x = 1, p2.x = 3. La suma es 4.",
-    hint: "Cada objeto creado con 'new' tiene sus propias copias de las propiedades — son independientes entre sí.",
+    hint: "Cada objeto creado con 'nuevo' tiene sus propias copias de las propiedades — son independientes entre sí.",
   },
   {
     id: "obj_008",
     topic: "objetos",
     difficulty: "facil",
-    question: "¿Cuántas instancias se pueden crear de una clase en JavaScript?",
+    question: "¿Cuántas instancias se pueden crear de una clase?",
     code: null,
     options: [
       "Sin límite (limitado solo por memoria)",
@@ -234,18 +309,24 @@ export const challenges = [
       "Las que defina el constructor",
     ],
     correctIndex: 0,
-    explanation: "Puedes crear tantas instancias como permita la memoria. El patrón Singleton es una restricción manual, no un comportamiento por defecto de JS.",
+    explanation: "Puedes crear tantas instancias como permita la memoria. El patrón Singleton es una restricción manual, no un comportamiento por defecto.",
     hint: "El lenguaje no impone ningún límite — piensa en cuántos objetos puede haber en un videojuego.",
   },
   {
     id: "obj_009",
     topic: "objetos",
     difficulty: "facil",
-    question: "¿Qué imprime este código?",
-    code: `class Caja {\n  constructor(v) { this.v = v; }\n}\nconst a = new Caja(5);\nconst b = a;\nb.v = 99;\nconsole.log(a.v);`,
-    options: ["99", "5", "undefined", "Error"],
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Caja:
+  CONSTRUCTOR(v): yo.v = v
+
+a = NUEVO Caja(5)
+b = a
+b.v = 99
+IMPRIMIR a.v`,
+    options: ["99", "5", "indefinido", "Error"],
     correctIndex: 0,
-    explanation: "'const b = a' no clona el objeto, copia la referencia. Ambas variables apuntan al mismo objeto. Al modificar b.v, también cambia a.v.",
+    explanation: "'b = a' no clona el objeto, copia la referencia. Ambas variables apuntan al mismo objeto. Al modificar b.v, también cambia a.v.",
     hint: "Asignar un objeto a otra variable no lo copia — ambas variables comparten la misma dirección en memoria.",
   },
   {
@@ -255,13 +336,13 @@ export const challenges = [
     question: "¿Qué método permite verificar si un objeto tiene una propiedad propia (no heredada)?",
     code: null,
     options: [
-      "hasOwnProperty()",
-      "hasProperty()",
-      "owns()",
-      "in operator",
+      "tienePropiaPropiedad() / hasOwnProperty()",
+      "tienePropiedad()",
+      "posee()",
+      "operador 'en'",
     ],
     correctIndex: 0,
-    explanation: "obj.hasOwnProperty('prop') retorna true solo si la propiedad está directamente en el objeto, no en su cadena de prototipos. El operador 'in' incluye propiedades heredadas.",
+    explanation: "obj.hasOwnProperty('prop') retorna verdadero solo si la propiedad está directamente en el objeto, no en su cadena de prototipos. El operador 'in' incluye propiedades heredadas.",
     hint: "'Own' en inglés significa 'propio' — el método pregunta si la propiedad es del objeto, no heredada.",
   },
 
@@ -270,42 +351,64 @@ export const challenges = [
     id: "obj_003",
     topic: "objetos",
     difficulty: "medio",
-    question: "¿Qué imprime este código?",
-    code: `class Config {}\nconst a = new Config();\nconst b = new Config();\nconsole.log(a === b);`,
-    options: ["false", "true", "undefined", "Error"],
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Config
+
+a = NUEVO Config()
+b = NUEVO Config()
+IMPRIMIR (a == b)`,
+    options: ["falso", "verdadero", "indefinido", "Error"],
     correctIndex: 0,
-    explanation: "=== compara referencias, no contenido. Aunque a y b son de la misma clase, son objetos distintos en memoria. La comparación retorna false.",
+    explanation: "La comparación de objetos verifica referencias, no contenido. Aunque 'a' y 'b' son de la misma clase, son objetos distintos en memoria. Retorna falso.",
     hint: null,
   },
   {
     id: "obj_004",
     topic: "objetos",
     difficulty: "medio",
-    question: "¿Qué imprime este código?",
-    code: `class Config {\n  constructor() { this.debug = true; }\n  toggle() { this.debug = !this.debug; }\n}\nconst a = new Config();\nconst b = a;\na.toggle();\nconsole.log(b.debug);`,
-    options: ["false", "true", "undefined", "Error"],
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Config:
+  debug = verdadero
+  METODO toggle(): yo.debug = NO yo.debug
+
+a = NUEVO Config()
+b = a
+a.toggle()
+IMPRIMIR b.debug`,
+    options: ["falso", "verdadero", "indefinido", "Error"],
     correctIndex: 0,
-    explanation: "'const b = a' copia la referencia, no el objeto. Ambas apuntan al mismo objeto. Al llamar a.toggle(), b.debug también cambia.",
+    explanation: "'b = a' copia la referencia, no el objeto. Ambas apuntan al mismo objeto. Al llamar a.toggle(), b.debug también cambia de verdadero a falso.",
     hint: null,
   },
   {
     id: "obj_005",
     topic: "objetos",
     difficulty: "medio",
-    question: "¿Qué imprime este código?",
-    code: `class Vehiculo {}\nclass Moto extends Vehiculo {}\nconst m = new Moto();\nconsole.log(m instanceof Vehiculo);`,
-    options: ["true", "false", "Error", "undefined"],
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Vehiculo
+CLASE Moto HEREDA Vehiculo
+
+m = NUEVO Moto()
+IMPRIMIR (m ES_INSTANCIA_DE Vehiculo)`,
+    options: ["verdadero", "falso", "Error", "indefinido"],
     correctIndex: 0,
-    explanation: "instanceof recorre la cadena de prototipos. Como Moto extiende Vehiculo, las instancias de Moto también son instancias de Vehiculo.",
+    explanation: "ES_INSTANCIA_DE recorre la cadena de herencia. Como Moto hereda de Vehiculo, las instancias de Moto también son instancias de Vehiculo.",
     hint: null,
   },
   {
     id: "obj_011",
     topic: "objetos",
     difficulty: "medio",
-    question: "¿Qué imprime este código?",
-    code: `class Punto {\n  constructor(x, y) { this.x = x; this.y = y; }\n  clonar() { return new Punto(this.x, this.y); }\n}\nconst p1 = new Punto(3, 4);\nconst p2 = p1.clonar();\np2.x = 99;\nconsole.log(p1.x);`,
-    options: ["3", "99", "undefined", "Error"],
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Punto:
+  CONSTRUCTOR(x, y): yo.x = x; yo.y = y
+  METODO clonar(): RETORNA NUEVO Punto(yo.x, yo.y)
+
+p1 = NUEVO Punto(3, 4)
+p2 = p1.clonar()
+p2.x = 99
+IMPRIMIR p1.x`,
+    options: ["3", "99", "indefinido", "Error"],
     correctIndex: 0,
     explanation: "clonar() crea una instancia nueva con los mismos valores. p2 es un objeto independiente. Modificar p2.x no afecta p1.x, que mantiene su valor de 3.",
     hint: null,
@@ -314,11 +417,20 @@ export const challenges = [
     id: "obj_012",
     topic: "objetos",
     difficulty: "medio",
-    question: "¿Qué imprime este código?",
-    code: `class Sensor {\n  constructor(tipo) {\n    this.tipo = tipo;\n    this.lecturas = [];\n  }\n  registrar(v) { this.lecturas.push(v); }\n}\nconst s1 = new Sensor("temp");\nconst s2 = new Sensor("temp");\ns1.registrar(25);\nconsole.log(s2.lecturas.length);`,
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Sensor:
+  CONSTRUCTOR(tipo):
+    yo.tipo = tipo
+    yo.lecturas = []
+  METODO registrar(v): yo.lecturas.agregar(v)
+
+s1 = NUEVO Sensor("temp")
+s2 = NUEVO Sensor("temp")
+s1.registrar(25)
+IMPRIMIR s2.lecturas.tamaño`,
     options: ["0", "1", "25", "Error"],
     correctIndex: 0,
-    explanation: "Cada instancia tiene su propio array 'lecturas' (inicializado en el constructor). s1 y s2 son objetos independientes. Agregar a s1 no afecta s2.",
+    explanation: "Cada instancia tiene su propio arreglo 'lecturas' (inicializado en el constructor). s1 y s2 son independientes. Agregar a s1 no afecta a s2.",
     hint: null,
   },
 
@@ -327,9 +439,14 @@ export const challenges = [
     id: "obj_006",
     topic: "objetos",
     difficulty: "dificil",
-    question: "¿Qué imprime este código?",
-    code: `class Animal {\n  constructor(nombre) { this.nombre = nombre; }\n}\nconst gato = new Animal("Gato");\ngato.velocidad = 50;\nconsole.log(gato.velocidad);`,
-    options: ["50", "undefined", "Error", "null"],
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Animal:
+  CONSTRUCTOR(nombre): yo.nombre = nombre
+
+gato = NUEVO Animal("Gato")
+gato.velocidad = 50
+IMPRIMIR gato.velocidad`,
+    options: ["50", "indefinido", "Error", "nulo"],
     correctIndex: 0,
     explanation: "Se puede añadir propiedades a una instancia después de crearla. 'gato.velocidad = 50' crea una propiedad propia solo en ese objeto, sin afectar a Animal ni otras instancias.",
     hint: null,
@@ -338,20 +455,30 @@ export const challenges = [
     id: "obj_007",
     topic: "objetos",
     difficulty: "dificil",
-    question: "¿Qué imprime este código?",
-    code: `class Persona {\n  constructor(nombre) { this.nombre = nombre; }\n  saludar() { return "Hola"; }\n}\nconst p = new Persona("Ana");\nconsole.log("nombre" in p);`,
-    options: ["true", "false", "Error", '"nombre"'],
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Persona:
+  CONSTRUCTOR(nombre): yo.nombre = nombre
+  METODO saludar(): RETORNA "Hola"
+
+p = NUEVO Persona("Ana")
+IMPRIMIR tiene_propiedad(p, "nombre")`,
+    options: ["verdadero", "falso", "Error", '"nombre"'],
     correctIndex: 0,
-    explanation: "El operador 'in' verifica si una propiedad existe en el objeto o en su cadena de prototipos. 'nombre' es una propiedad propia de p, por lo que retorna true.",
+    explanation: "La función tiene_propiedad verifica si la propiedad existe en el objeto. 'nombre' fue asignado en el constructor, por lo que es una propiedad propia de p: verdadero.",
     hint: null,
   },
   {
     id: "obj_013",
     topic: "objetos",
     difficulty: "dificil",
-    question: "¿Qué imprime este código?",
-    code: `class Nodo {\n  constructor(valor) {\n    this.valor = valor;\n    this.siguiente = null;\n  }\n}\nconst n1 = new Nodo(1);\nconst n2 = new Nodo(2);\nconst n3 = new Nodo(3);\nn1.siguiente = n2;\nn2.siguiente = n3;\nconsole.log(n1.siguiente.siguiente.valor);`,
-    options: ["3", "2", "1", "null"],
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Nodo:
+  CONSTRUCTOR(v): yo.valor = v; yo.siguiente = nulo
+
+n1 = NUEVO Nodo(1); n2 = NUEVO Nodo(2); n3 = NUEVO Nodo(3)
+n1.siguiente = n2; n2.siguiente = n3
+IMPRIMIR n1.siguiente.siguiente.valor`,
+    options: ["3", "2", "1", "nulo"],
     correctIndex: 0,
     explanation: "n1.siguiente → n2, n2.siguiente → n3. n1.siguiente.siguiente.valor = n3.valor = 3. Este patrón es el de una lista enlazada simple.",
     hint: null,
@@ -360,22 +487,37 @@ export const challenges = [
     id: "obj_014",
     topic: "objetos",
     difficulty: "dificil",
-    question: "¿Qué imprime este código?",
-    code: `class Registro {\n  constructor() { this.items = {}; }\n  agregar(k, v) { this.items[k] = v; }\n  obtener(k) { return this.items[k] ?? "no existe"; }\n}\nconst r = new Registro();\nr.agregar("a", 1);\nconsole.log(r.obtener("b"));`,
-    options: ['"no existe"', "undefined", "null", '"1"'],
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Registro:
+  CONSTRUCTOR(): yo.items = {}
+  METODO agregar(k, v): yo.items[k] = v
+  METODO obtener(k):
+    SI yo.items[k] EXISTE: RETORNA yo.items[k]
+    SINO: RETORNA "no existe"
+
+r = NUEVO Registro()
+r.agregar("a", 1)
+IMPRIMIR r.obtener("b")`,
+    options: ['"no existe"', "indefinido", "nulo", '"1"'],
     correctIndex: 0,
-    explanation: "El operador ?? (nullish coalescing) retorna el operando derecho cuando el izquierdo es null o undefined. Como \"b\" no existe en items, el resultado es \"no existe\".",
+    explanation: "Al buscar la clave \"b\" que no fue agregada, el SI comprueba que no existe y el SINO retorna \"no existe\".",
     hint: null,
   },
   {
     id: "obj_015",
     topic: "objetos",
     difficulty: "dificil",
-    question: "¿Qué imprime este código?",
-    code: `class Config {\n  constructor(opts) {\n    Object.assign(this, opts);\n  }\n}\nconst c = new Config({ debug: true, version: "2.0", timeout: 30 });\nconsole.log(Object.keys(c).length);`,
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Config:
+  CONSTRUCTOR(opciones):
+    PARA CADA (k, v) EN opciones:
+      yo[k] = v
+
+c = NUEVO Config({debug: verdadero, version: "2.0", timeout: 30})
+IMPRIMIR cantidadPropiedades(c)`,
     options: ["3", "1", "0", "Error"],
     correctIndex: 0,
-    explanation: "Object.assign(this, opts) copia todas las propiedades enumerables de opts directamente en la instancia. El objeto resultante tiene 3 propiedades propias: debug, version, timeout.",
+    explanation: "El constructor itera sobre las opciones y copia cada par clave-valor directamente al objeto. Se copian 3 propiedades: debug, version y timeout.",
     hint: null,
   },
 
@@ -388,23 +530,29 @@ export const challenges = [
     id: "her_001",
     topic: "herencia",
     difficulty: "facil",
-    question: "¿Qué palabra clave se usa en JavaScript para que una clase herede de otra?",
+    question: "¿Qué palabra clave se usa para que una clase herede de otra?",
     code: null,
-    options: ["extends", "inherits", "super", "implements"],
+    options: ["extends / HEREDA", "inherits", "super", "implements"],
     correctIndex: 0,
-    explanation: "'extends' establece la relación de herencia: class Hijo extends Padre. El hijo hereda todos los métodos y propiedades del padre.",
+    explanation: "'extends' (o 'HEREDA' en pseudocódigo) establece la relación de herencia: class Hijo extends Padre. El hijo hereda todos los métodos y propiedades del padre.",
     hint: "La misma palabra en inglés que usas para 'extender' algo — hace que la clase hija amplíe a la padre.",
   },
   {
     id: "her_002",
     topic: "herencia",
     difficulty: "facil",
-    question: "¿Qué imprime este código?",
-    code: `class Vehiculo {\n  tipo() { return "vehículo"; }\n}\nclass Coche extends Vehiculo {}\nconst c = new Coche();\nconsole.log(c.tipo());`,
-    options: ['"vehículo"', "undefined", '"Coche"', "Error"],
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Vehiculo:
+  METODO tipo(): RETORNA "vehículo"
+
+CLASE Coche HEREDA Vehiculo
+
+c = NUEVO Coche()
+IMPRIMIR c.tipo()`,
+    options: ['"vehículo"', "indefinido", '"Coche"', "Error"],
     correctIndex: 0,
-    explanation: "Coche hereda tipo() de Vehiculo. Al no definir su propio tipo(), JS lo busca en la cadena de prototipos y ejecuta el del padre.",
-    hint: "Si la clase hija no define el método, JS lo busca en el padre automáticamente.",
+    explanation: "Coche hereda tipo() de Vehiculo. Al no definir su propio tipo(), el sistema lo busca en la cadena de herencia y ejecuta el del padre.",
+    hint: "Si la clase hija no define el método, se busca automáticamente en el padre.",
   },
   {
     id: "her_008",
@@ -419,34 +567,40 @@ export const challenges = [
       "Un método puede retornar distintos tipos",
     ],
     correctIndex: 0,
-    explanation: "La herencia permite que una clase (hija/subclase) reutilice el código de otra (padre/superclase). En JS se usa 'extends' para establecer esta relación.",
+    explanation: "La herencia permite que una clase (hija/subclase) reutilice el código de otra (padre/superclase). Se usa 'extends' o 'HEREDA' para establecer esta relación.",
     hint: "En la vida real, heredar significa recibir algo de quien viene antes — en POO es exactamente lo mismo.",
   },
   {
     id: "her_009",
     topic: "herencia",
     difficulty: "facil",
-    question: "¿Qué ocurre si la clase hija define un constructor sin llamar a super()?",
+    question: "¿Qué ocurre si la clase hija define un constructor sin llamar a SUPER()?",
     code: null,
     options: [
-      "ReferenceError: 'this' no está disponible hasta llamar super()",
+      "Error: 'yo' no está disponible hasta llamar SUPER()",
       "Se ignora el constructor del padre",
       "El constructor del padre se llama automáticamente",
-      "SyntaxError al definir la clase",
+      "Error de sintaxis al definir la clase",
     ],
     correctIndex: 0,
-    explanation: "Si una clase hereda y define constructor, debe llamar a super() antes de usar 'this'. De lo contrario, JS lanza ReferenceError porque el objeto aún no ha sido inicializado.",
-    hint: "Antes de usar 'this' en la clase hija, el padre debe haber preparado el objeto — eso es exactamente lo que hace super().",
+    explanation: "Si una clase hereda y define constructor, debe llamar a SUPER() antes de usar 'yo'. De lo contrario, el objeto aún no ha sido inicializado por el padre.",
+    hint: "Antes de usar 'yo' en la clase hija, el padre debe haber preparado el objeto — eso es exactamente lo que hace SUPER().",
   },
   {
     id: "her_010",
     topic: "herencia",
     difficulty: "facil",
-    question: "¿Qué imprime este código?",
-    code: `class Animal {\n  constructor(nombre) { this.nombre = nombre; }\n}\nclass Perro extends Animal {}\nconst p = new Perro("Rex");\nconsole.log(p.nombre);`,
-    options: ['"Rex"', "undefined", "Error", '"Perro"'],
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Animal:
+  CONSTRUCTOR(nombre): yo.nombre = nombre
+
+CLASE Perro HEREDA Animal
+
+p = NUEVO Perro("Rex")
+IMPRIMIR p.nombre`,
+    options: ['"Rex"', "indefinido", "Error", '"Perro"'],
     correctIndex: 0,
-    explanation: "Si Perro no define constructor, JS usa automáticamente constructor(...args) { super(...args) }. El argumento \"Rex\" pasa al constructor de Animal.",
+    explanation: "Si Perro no define constructor, usa automáticamente el del padre. El argumento \"Rex\" pasa al constructor de Animal que asigna yo.nombre.",
     hint: "Si no hay constructor en la clase hija, el padre se encarga de todo — automáticamente.",
   },
 
@@ -455,49 +609,76 @@ export const challenges = [
     id: "her_003",
     topic: "herencia",
     difficulty: "medio",
-    question: "¿Qué imprime este código?",
-    code: `class Figura {\n  constructor(color) { this.color = color; }\n}\nclass Circulo extends Figura {\n  constructor(color, radio) {\n    super(color);\n    this.radio = radio;\n  }\n}\nconst c = new Circulo("rojo", 5);\nconsole.log(c.color + " " + c.radio);`,
-    options: ['"rojo 5"', '"undefined undefined"', "Error", '"5 rojo"'],
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Figura:
+  CONSTRUCTOR(color): yo.color = color
+
+CLASE Circulo HEREDA Figura:
+  CONSTRUCTOR(color, radio):
+    SUPER(color)
+    yo.radio = radio
+
+c = NUEVO Circulo("rojo", 5)
+IMPRIMIR c.color + " " + c.radio`,
+    options: ['"rojo 5"', '"indefinido indefinido"', "Error", '"5 rojo"'],
     correctIndex: 0,
-    explanation: "super(color) invoca el constructor de Figura, que asigna this.color = 'rojo'. Luego this.radio = 5. Ambas propiedades quedan en la instancia.",
+    explanation: "SUPER(color) invoca el constructor de Figura, que asigna yo.color = 'rojo'. Luego yo.radio = 5. Ambas propiedades quedan en la instancia.",
     hint: null,
   },
   {
     id: "her_004",
     topic: "herencia",
     difficulty: "medio",
-    question: "¿Puede una clase de JavaScript heredar de múltiples clases a la vez?",
+    question: "¿Puede una clase heredar de múltiples clases a la vez en POO clásica?",
     code: null,
     options: [
-      "No, solo herencia simple con 'extends'",
-      "Sí, con 'extends Clase1, Clase2'",
+      "Depende del lenguaje — muchos solo permiten herencia simple",
+      "Sí, siempre con 'extends Clase1, Clase2'",
       "Sí, automáticamente con mixins",
       "Sí, con 'implements'",
     ],
     correctIndex: 0,
-    explanation: "JavaScript solo soporta herencia simple: una clase puede extender de una sola clase padre. Para reutilizar múltiples comportamientos se usan mixins o composición manual.",
+    explanation: "Lenguajes como Java y JavaScript solo soportan herencia simple (una clase padre). Python y C++ permiten herencia múltiple. Para reutilizar múltiples comportamientos se usan mixins o composición.",
     hint: null,
   },
   {
     id: "her_005",
     topic: "herencia",
     difficulty: "medio",
-    question: "¿Qué imprime este código?",
-    code: `class A {\n  saludo() { return "Hola desde A"; }\n}\nclass B extends A {\n  saludo() { return "Hola desde B"; }\n}\nconst b = new B();\nconsole.log(b.saludo());`,
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE A:
+  METODO saludo(): RETORNA "Hola desde A"
+
+CLASE B HEREDA A:
+  METODO saludo(): RETORNA "Hola desde B"
+
+b = NUEVO B()
+IMPRIMIR b.saludo()`,
     options: ['"Hola desde B"', '"Hola desde A"', "Error", '"Hola desde A y B"'],
     correctIndex: 0,
-    explanation: "La clase hija sobreescribe el método del padre. JS busca primero en la clase hija antes de subir al padre. El método de B tiene prioridad.",
+    explanation: "La clase hija sobreescribe el método del padre. El sistema busca primero en la clase hija antes de subir al padre. El método de B tiene prioridad.",
     hint: null,
   },
   {
     id: "her_011",
     topic: "herencia",
     difficulty: "medio",
-    question: "¿Qué imprime este código?",
-    code: `class Empleado {\n  constructor(nombre, salario) {\n    this.nombre = nombre;\n    this.salario = salario;\n  }\n  descripcion() { return \`\${this.nombre} gana $\${this.salario}\`; }\n}\nclass Gerente extends Empleado {\n  constructor(nombre, salario, dpto) {\n    super(nombre, salario);\n    this.dpto = dpto;\n  }\n  descripcion() { return super.descripcion() + \` — Dpto: \${this.dpto}\`; }\n}\nconst g = new Gerente("Luis", 5000, "TI");\nconsole.log(g.descripcion());`,
-    options: ['"Luis gana $5000 — Dpto: TI"', '"Luis gana $5000"', '"Dpto: TI"', "Error"],
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Empleado:
+  CONSTRUCTOR(nombre, salario):
+    yo.nombre = nombre; yo.salario = salario
+  METODO info(): RETORNA yo.nombre + " $" + yo.salario
+
+CLASE Gerente HEREDA Empleado:
+  CONSTRUCTOR(nombre, salario, area):
+    SUPER(nombre, salario); yo.area = area
+  METODO info(): RETORNA SUPER.info() + " - " + yo.area
+
+g = NUEVO Gerente("Luis", 5000, "TI")
+IMPRIMIR g.info()`,
+    options: ['"Luis $5000 - TI"', '"Luis $5000"', '"-TI"', "Error"],
     correctIndex: 0,
-    explanation: "Gerente.descripcion() llama super.descripcion() (\"Luis gana $5000\") y concatena \" — Dpto: TI\". Extensión perfecta del comportamiento del padre.",
+    explanation: "Gerente.info() llama SUPER.info() (\"Luis $5000\") y concatena \" - TI\". Extensión perfecta del comportamiento del padre.",
     hint: null,
   },
   {
@@ -507,13 +688,13 @@ export const challenges = [
     question: "¿Puede una clase hija acceder a métodos del padre que sobreescribió?",
     code: null,
     options: [
-      "Sí, usando super.metodo()",
+      "Sí, usando SUPER.metodo()",
       "No, el método padre queda inaccesible",
       "Sí, pero solo dentro del constructor",
       "No, se debe copiar el código manualmente",
     ],
     correctIndex: 0,
-    explanation: "super.metodo() permite a la clase hija invocar la versión del padre incluso si lo ha sobreescrito. Esto es clave para extender comportamiento sin duplicar código.",
+    explanation: "SUPER.metodo() permite a la clase hija invocar la versión del padre incluso si lo ha sobreescrito. Esto es clave para extender comportamiento sin duplicar código.",
     hint: null,
   },
 
@@ -522,55 +703,99 @@ export const challenges = [
     id: "her_006",
     topic: "herencia",
     difficulty: "dificil",
-    question: "¿Qué imprime este código?",
-    code: `class A {\n  m() { return "A"; }\n}\nclass B extends A {\n  m() { return super.m() + "B"; }\n}\nclass C extends B {\n  m() { return super.m() + "C"; }\n}\nconst c = new C();\nconsole.log(c.m());`,
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE A:
+  METODO m(): RETORNA "A"
+CLASE B HEREDA A:
+  METODO m(): RETORNA SUPER.m() + "B"
+CLASE C HEREDA B:
+  METODO m(): RETORNA SUPER.m() + "C"
+
+c = NUEVO C()
+IMPRIMIR c.m()`,
     options: ['"ABC"', '"CBA"', '"AB"', '"CB"'],
     correctIndex: 0,
-    explanation: "C.m() llama super.m() (B) + 'C'. B.m() llama super.m() (A) + 'B'. A.m() retorna 'A'. Se construye de adentro hacia afuera: 'A' + 'B' + 'C' = 'ABC'.",
+    explanation: "C.m() llama SUPER.m() (B) + 'C'. B.m() llama SUPER.m() (A) + 'B'. A.m() retorna 'A'. Se construye de adentro hacia afuera: 'A'+'B'+'C' = 'ABC'.",
     hint: null,
   },
   {
     id: "her_007",
     topic: "herencia",
     difficulty: "dificil",
-    question: "¿Qué imprime este código?",
-    code: `class Base {\n  constructor(x) { this.x = x; }\n  doble() { return this.x * 2; }\n}\nclass Derivada extends Base {\n  constructor(x, y) {\n    super(x);\n    this.y = y;\n  }\n  suma() { return this.doble() + this.y; }\n}\nconst d = new Derivada(5, 3);\nconsole.log(d.suma());`,
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Base:
+  CONSTRUCTOR(x): yo.x = x
+  METODO doble(): RETORNA yo.x * 2
+
+CLASE Derivada HEREDA Base:
+  CONSTRUCTOR(x, y):
+    SUPER(x); yo.y = y
+  METODO suma(): RETORNA yo.doble() + yo.y
+
+d = NUEVO Derivada(5, 3)
+IMPRIMIR d.suma()`,
     options: ["13", "10", "8", "15"],
     correctIndex: 0,
-    explanation: "super(5) asigna this.x = 5. this.y = 3. doble() retorna 5 × 2 = 10. suma() retorna 10 + 3 = 13.",
+    explanation: "SUPER(5) asigna yo.x = 5. yo.y = 3. doble() retorna 5 × 2 = 10. suma() retorna 10 + 3 = 13.",
     hint: null,
   },
   {
     id: "her_013",
     topic: "herencia",
     difficulty: "dificil",
-    question: "¿Qué imprime este código?",
-    code: `class Shape {\n  constructor(color = "negro") { this.color = color; }\n  toString() { return \`[\${this.color}]\`; }\n}\nclass Circle extends Shape {\n  constructor(r, color) {\n    super(color);\n    this.r = r;\n  }\n  toString() { return \`Circle\${super.toString()} r=\${this.r}\`; }\n}\nconst c = new Circle(7, "rojo");\nconsole.log(c.toString());`,
-    options: ['"Circle[rojo] r=7"', '"Circle r=7"', '"[rojo]"', "Error"],
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Forma:
+  CONSTRUCTOR(color): yo.color = color
+  METODO toString(): RETORNA "[" + yo.color + "]"
+
+CLASE Circulo HEREDA Forma:
+  CONSTRUCTOR(r, color):
+    SUPER(color); yo.r = r
+  METODO toString():
+    RETORNA "Circulo" + SUPER.toString() + " r=" + yo.r
+
+c = NUEVO Circulo(7, "rojo")
+IMPRIMIR c.toString()`,
+    options: ['"Circulo[rojo] r=7"', '"Circulo r=7"', '"[rojo]"', "Error"],
     correctIndex: 0,
-    explanation: "super.toString() retorna \"[rojo]\". Circle.toString() concatena \"Circle\" + \"[rojo]\" + \" r=7\" = \"Circle[rojo] r=7\".",
+    explanation: "SUPER.toString() retorna \"[rojo]\". Circulo.toString() concatena \"Circulo\" + \"[rojo]\" + \" r=7\" = \"Circulo[rojo] r=7\".",
     hint: null,
   },
   {
     id: "her_014",
     topic: "herencia",
     difficulty: "dificil",
-    question: "¿Qué imprime este código?",
-    code: `class A { constructor() { this.tipo = "A"; } }\nclass B extends A { constructor() { super(); this.tipo = "B"; } }\nclass C extends B { constructor() { super(); this.tipo = "C"; } }\nconst c = new C();\nconsole.log(c instanceof A, c instanceof B, c instanceof C);`,
-    options: ["true true true", "false false true", "false true true", "true false true"],
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE A: CONSTRUCTOR(): yo.tipo = "A"
+CLASE B HEREDA A: CONSTRUCTOR(): SUPER(); yo.tipo = "B"
+CLASE C HEREDA B: CONSTRUCTOR(): SUPER(); yo.tipo = "C"
+
+c = NUEVO C()
+IMPRIMIR (c ES_INSTANCIA_DE A), (c ES_INSTANCIA_DE B), (c ES_INSTANCIA_DE C)`,
+    options: ["verdadero verdadero verdadero", "falso falso verdadero", "falso verdadero verdadero", "verdadero falso verdadero"],
     correctIndex: 0,
-    explanation: "instanceof recorre la cadena de prototipos completa. C extiende B que extiende A, por lo que una instancia de C también es instancia de B y de A.",
+    explanation: "ES_INSTANCIA_DE recorre la cadena de herencia completa. C hereda de B que hereda de A, por lo que una instancia de C también es instancia de B y de A.",
     hint: null,
   },
   {
     id: "her_015",
     topic: "herencia",
     difficulty: "dificil",
-    question: "¿Qué imprime este código?",
-    code: `class Vehicle {\n  #speed = 0;\n  accelerate(n) { this.#speed += n; }\n  get speed() { return this.#speed; }\n}\nclass Car extends Vehicle {\n  turbo() { this.accelerate(50); }\n}\nconst car = new Car();\ncar.accelerate(30);\ncar.turbo();\nconsole.log(car.speed);`,
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Vehiculo:
+  privado velocidad = 0
+  METODO acelerar(n): yo.velocidad = yo.velocidad + n
+  PROPIEDAD speed: RETORNA yo.velocidad
+
+CLASE Auto HEREDA Vehiculo:
+  METODO turbo(): yo.acelerar(50)
+
+a = NUEVO Auto()
+a.acelerar(30); a.turbo()
+IMPRIMIR a.speed`,
     options: ["80", "50", "30", "Error"],
     correctIndex: 0,
-    explanation: "Car hereda accelerate() y el getter speed de Vehicle, incluyendo el campo privado #speed. accelerate(30) → #speed=30, turbo() llama accelerate(50) → #speed=80.",
+    explanation: "Auto hereda acelerar() y la propiedad speed de Vehiculo. acelerar(30) → velocidad=30, turbo() llama acelerar(50) → velocidad=80.",
     hint: null,
   },
 
@@ -599,12 +824,20 @@ export const challenges = [
     id: "pol_002",
     topic: "polimorfismo",
     difficulty: "facil",
-    question: "¿Qué imprime este código?",
-    code: `class Animal {\n  hablar() { return "..."; }\n}\nclass Perro extends Animal {\n  hablar() { return "¡Guau!"; }\n}\nclass Gato extends Animal {\n  hablar() { return "¡Miau!"; }\n}\nconst g = new Gato();\nconsole.log(g.hablar());`,
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Animal:
+  METODO hablar(): RETORNA "..."
+CLASE Perro HEREDA Animal:
+  METODO hablar(): RETORNA "¡Guau!"
+CLASE Gato HEREDA Animal:
+  METODO hablar(): RETORNA "¡Miau!"
+
+g = NUEVO Gato()
+IMPRIMIR g.hablar()`,
     options: ['"¡Miau!"', '"..."', '"¡Guau!"', "Error"],
     correctIndex: 0,
-    explanation: "Gato sobreescribe hablar() de Animal. JS ejecuta la versión de Gato, retornando '¡Miau!'.",
-    hint: "JS busca el método primero en la clase del objeto — si lo tiene, lo usa sin subir al padre.",
+    explanation: "Gato sobreescribe hablar() de Animal. El sistema ejecuta la versión de Gato, retornando '¡Miau!'.",
+    hint: "El sistema busca el método primero en la clase del objeto — si lo tiene, lo usa sin subir al padre.",
   },
   {
     id: "pol_008",
@@ -619,16 +852,21 @@ export const challenges = [
       "Eliminar un método heredado",
     ],
     correctIndex: 0,
-    explanation: "La sobreescritura (override) permite que una clase hija proporcione su propia implementación de un método heredado. En JS no se requiere anotación especial — simplemente se redefine.",
+    explanation: "La sobreescritura (override) permite que una clase hija proporcione su propia implementación de un método heredado. Simplemente se redefine en la clase hija.",
     hint: "'Sobreescribir' = escribir encima. La clase hija escribe su propia versión encima del método del padre.",
   },
   {
     id: "pol_009",
     topic: "polimorfismo",
     difficulty: "facil",
-    question: "¿Qué imprime este código?",
-    code: `class Figura {\n  nombre() { return "Figura"; }\n}\nclass Circulo extends Figura {\n  nombre() { return "Circulo"; }\n}\nclass Cuadrado extends Figura {\n  nombre() { return "Cuadrado"; }\n}\nconst formas = [new Figura(), new Circulo(), new Cuadrado()];\nconsole.log(formas.map(f => f.nombre()).join(", "));`,
-    options: ['"Figura, Circulo, Cuadrado"', '"Figura, Figura, Figura"', '"Circulo, Cuadrado, Figura"', "Error"],
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Forma: METODO nombre(): RETORNA "Forma"
+CLASE Circulo HEREDA Forma: METODO nombre(): RETORNA "Circulo"
+CLASE Cuadrado HEREDA Forma: METODO nombre(): RETORNA "Cuadrado"
+
+formas = [NUEVO Forma(), NUEVO Circulo(), NUEVO Cuadrado()]
+IMPRIMIR formas[0].nombre() + ", " + formas[1].nombre() + ", " + formas[2].nombre()`,
+    options: ['"Forma, Circulo, Cuadrado"', '"Forma, Forma, Forma"', '"Circulo, Cuadrado, Forma"', "Error"],
     correctIndex: 0,
     explanation: "Cada objeto responde con su propia versión de nombre(). El mismo método produce resultados distintos según el tipo. Eso es polimorfismo en su expresión más directa.",
     hint: "Cada clase tiene su propia versión del método — todas se llaman igual pero hacen cosas distintas.",
@@ -646,7 +884,7 @@ export const challenges = [
       "Aumenta automáticamente el rendimiento",
     ],
     correctIndex: 0,
-    explanation: "Con polimorfismo puedes iterar un array con objetos de tipos distintos y llamar el mismo método en todos. Cada objeto responde según su implementación. Código genérico, comportamiento específico.",
+    explanation: "Con polimorfismo puedes iterar un arreglo con objetos de tipos distintos y llamar el mismo método en todos. Cada objeto responde según su implementación.",
     hint: "Imagina una función que llama .hablar() en cualquier Animal — sin importar si es Perro, Gato o Pájaro.",
   },
 
@@ -655,11 +893,20 @@ export const challenges = [
     id: "pol_003",
     topic: "polimorfismo",
     difficulty: "medio",
-    question: "¿Qué imprime este código?",
-    code: `class Forma {\n  area() { return 0; }\n}\nclass Cuadrado extends Forma {\n  constructor(l) { super(); this.l = l; }\n  area() { return this.l ** 2; }\n}\nclass Triangulo extends Forma {\n  constructor(b, h) { super(); this.b = b; this.h = h; }\n  area() { return (this.b * this.h) / 2; }\n}\nconst formas = [new Cuadrado(3), new Triangulo(4, 6)];\nconsole.log(formas.map(f => f.area()).join(", "));`,
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Forma: METODO area(): RETORNA 0
+CLASE Cuadrado HEREDA Forma:
+  CONSTRUCTOR(l): yo.l = l
+  METODO area(): RETORNA yo.l * yo.l
+CLASE Triangulo HEREDA Forma:
+  CONSTRUCTOR(b, h): yo.b = b; yo.h = h
+  METODO area(): RETORNA (yo.b * yo.h) / 2
+
+formas = [NUEVO Cuadrado(3), NUEVO Triangulo(4, 6)]
+IMPRIMIR formas[0].area() + ", " + formas[1].area()`,
     options: ['"9, 12"', '"0, 0"', '"9, 24"', "Error"],
     correctIndex: 0,
-    explanation: "Cuadrado.area() = 3² = 9. Triangulo.area() = (4×6)/2 = 12. El mismo método area() produce resultados distintos según el tipo. Eso es polimorfismo.",
+    explanation: "Cuadrado.area() = 3² = 9. Triangulo.area() = (4×6)/2 = 12. El mismo método area() produce resultados distintos según el tipo — eso es polimorfismo.",
     hint: null,
   },
   {
@@ -675,40 +922,62 @@ export const challenges = [
       "Sobrecarga de métodos",
     ],
     correctIndex: 0,
-    explanation: "Duck typing: 'Si camina como pato y hace cuac como pato, es un pato'. JS no requiere herencia formal; basta que los objetos tengan los métodos esperados.",
+    explanation: "Duck typing: 'Si camina como pato y hace cuac como pato, es un pato'. No se requiere herencia formal; basta que los objetos tengan los métodos esperados.",
     hint: null,
   },
   {
     id: "pol_005",
     topic: "polimorfismo",
     difficulty: "medio",
-    question: "¿Qué imprime este código?",
-    code: `class Notificacion {\n  enviar() { return "notificación"; }\n}\nclass Email extends Notificacion {\n  enviar() { return "email: " + super.enviar(); }\n}\nconst e = new Email();\nconsole.log(e.enviar());`,
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Notificacion:
+  METODO enviar(): RETORNA "notificación"
+
+CLASE Email HEREDA Notificacion:
+  METODO enviar(): RETORNA "email: " + SUPER.enviar()
+
+e = NUEVO Email()
+IMPRIMIR e.enviar()`,
     options: ['"email: notificación"', '"notificación"', '"email: email: notificación"', "Error"],
     correctIndex: 0,
-    explanation: "Email.enviar() llama super.enviar() (retorna 'notificación') y lo concatena. Resultado: 'email: notificación'. Extiende el comportamiento sin reemplazarlo.",
+    explanation: "Email.enviar() llama SUPER.enviar() (retorna 'notificación') y lo concatena. Resultado: 'email: notificación'. Extiende el comportamiento sin reemplazarlo.",
     hint: null,
   },
   {
     id: "pol_011",
     topic: "polimorfismo",
     difficulty: "medio",
-    question: "¿Qué imprime este código?",
-    code: `class Impuesto {\n  calcular(base) { return base * 0.16; }\n}\nclass ImpuestoReducido extends Impuesto {\n  calcular(base) { return base * 0.08; }\n}\nclass ImpuestoEspecial extends Impuesto {\n  calcular(base) { return super.calcular(base) + 50; }\n}\nconst tipos = [new Impuesto(), new ImpuestoReducido(), new ImpuestoEspecial()];\nconsole.log(tipos.map(t => t.calcular(1000)).join(", "));`,
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Impuesto:
+  METODO calcular(base): RETORNA base * 0.16
+CLASE Reducido HEREDA Impuesto:
+  METODO calcular(base): RETORNA base * 0.08
+CLASE Especial HEREDA Impuesto:
+  METODO calcular(base): RETORNA SUPER.calcular(base) + 50
+
+t1 = NUEVO Impuesto(); t2 = NUEVO Reducido(); t3 = NUEVO Especial()
+IMPRIMIR t1.calcular(1000) + ", " + t2.calcular(1000) + ", " + t3.calcular(1000)`,
     options: ['"160, 80, 210"', '"160, 160, 160"', '"160, 80, 160"', "Error"],
     correctIndex: 0,
-    explanation: "Impuesto: 1000×0.16=160. ImpuestoReducido: 1000×0.08=80. ImpuestoEspecial: super.calcular(1000)+50 = 160+50=210.",
+    explanation: "Impuesto: 1000×0.16=160. Reducido: 1000×0.08=80. Especial: SUPER.calcular(1000)+50 = 160+50=210.",
     hint: null,
   },
   {
     id: "pol_012",
     topic: "polimorfismo",
     difficulty: "medio",
-    question: "¿Qué imprime este código?",
-    code: `function procesar(obj) {\n  if (typeof obj.ejecutar === "function") return obj.ejecutar();\n  return "no soportado";\n}\nconst tarea = { ejecutar: () => "tarea hecha" };\nconst script = { ejecutar: () => "script corrido" };\nconst dato = { valor: 42 };\nconsole.log([tarea, script, dato].map(procesar).join(" | "));`,
-    options: ['"tarea hecha | script corrido | no soportado"', '"no soportado | no soportado | no soportado"', "Error", '"tarea hecha | script corrido | 42"'],
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `METODO procesar(obj):
+  SI obj TIENE_METODO ejecutar:
+    RETORNA obj.ejecutar()
+  SINO: RETORNA "no soportado"
+
+tarea = { ejecutar: () => "tarea hecha" }
+dato  = { valor: 42 }
+IMPRIMIR procesar(tarea) + " | " + procesar(dato)`,
+    options: ['"tarea hecha | no soportado"', '"no soportado | no soportado"', "Error", '"tarea hecha | 42"'],
     correctIndex: 0,
-    explanation: "Duck typing: procesar() verifica si el objeto tiene ejecutar como función. tarea y script lo tienen; dato no. El tercero retorna \"no soportado\". Polimorfismo sin herencia.",
+    explanation: "Duck typing: procesar() verifica si el objeto tiene el método ejecutar. 'tarea' lo tiene; 'dato' no. El segundo retorna 'no soportado'. Polimorfismo sin herencia.",
     hint: null,
   },
 
@@ -717,44 +986,72 @@ export const challenges = [
     id: "pol_006",
     topic: "polimorfismo",
     difficulty: "dificil",
-    question: "¿Qué imprime este código?",
-    code: `function reproducir(media) {\n  return media.play();\n}\nconst video = { play: () => "▶ video" };\nconst audio = { play: () => "♪ audio" };\nconsole.log(reproducir(video) + " | " + reproducir(audio));`,
-    options: ['"▶ video | ♪ audio"', '"♪ audio | ▶ video"', "Error", '"undefined | undefined"'],
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `METODO reproducir(media):
+  RETORNA media.play()
+
+video = { play: () => "▶ video" }
+audio = { play: () => "♪ audio" }
+IMPRIMIR reproducir(video) + " | " + reproducir(audio)`,
+    options: ['"▶ video | ♪ audio"', '"♪ audio | ▶ video"', "Error", '"indefinido | indefinido"'],
     correctIndex: 0,
-    explanation: "Duck typing en acción: reproducir() no requiere que los objetos hereden de nada, solo que tengan play(). Ambos objetos literales lo cumplen: polimorfismo sin clases.",
+    explanation: "Duck typing en acción: reproducir() no requiere herencia, solo que los objetos tengan play(). Ambos objetos lo cumplen — polimorfismo sin clases formales.",
     hint: null,
   },
   {
     id: "pol_007",
     topic: "polimorfismo",
     difficulty: "dificil",
-    question: "¿Qué imprime este código?",
-    code: `class Logger {\n  log(msg) { return \`[LOG] \${msg}\`; }\n}\nclass ErrorLogger extends Logger {\n  log(msg) { return \`[ERROR] \${super.log(msg)}\`; }\n}\nconst el = new ErrorLogger();\nconsole.log(el.log("fallo"));`,
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Logger:
+  METODO log(msg): RETORNA "[LOG] " + msg
+
+CLASE ErrorLogger HEREDA Logger:
+  METODO log(msg): RETORNA "[ERROR] " + SUPER.log(msg)
+
+el = NUEVO ErrorLogger()
+IMPRIMIR el.log("fallo")`,
     options: ['"[ERROR] [LOG] fallo"', '"[LOG] fallo"', '"[ERROR] fallo"', '"[LOG] [ERROR] fallo"'],
     correctIndex: 0,
-    explanation: "ErrorLogger.log() invoca super.log('fallo') → '[LOG] fallo', luego envuelve: '[ERROR] [LOG] fallo'. Polimorfismo con decoración del comportamiento padre.",
+    explanation: "ErrorLogger.log() invoca SUPER.log('fallo') → '[LOG] fallo', luego envuelve: '[ERROR] [LOG] fallo'. Decoración del comportamiento padre.",
     hint: null,
   },
   {
     id: "pol_013",
     topic: "polimorfismo",
     difficulty: "dificil",
-    question: "¿Qué imprime este código?",
-    code: `class Renderer {\n  render(items) { return items.map(i => i.draw()).join(" "); }\n}\nclass Square { draw() { return "■"; } }\nclass Circle { draw() { return "●"; } }\nclass Triangle { draw() { return "▲"; } }\nconst r = new Renderer();\nconsole.log(r.render([new Square(), new Circle(), new Triangle(), new Square()]));`,
-    options: ['"■ ● ▲ ■"', '"Square Circle Triangle Square"', "Error", '"draw draw draw draw"'],
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Cuadrado: METODO dibujar(): RETORNA "■"
+CLASE Circulo:  METODO dibujar(): RETORNA "●"
+CLASE Triangulo: METODO dibujar(): RETORNA "▲"
+
+figuras = [NUEVO Cuadrado(), NUEVO Circulo(), NUEVO Triangulo(), NUEVO Cuadrado()]
+resultado = ""
+PARA CADA f EN figuras: resultado = resultado + f.dibujar() + " "
+IMPRIMIR resultado`,
+    options: ['"■ ● ▲ ■ "', '"Cuadrado Circulo Triangulo Cuadrado"', "Error", '"dibujar dibujar dibujar dibujar"'],
     correctIndex: 0,
-    explanation: "Renderer.render() no conoce los tipos concretos — solo llama draw() en cada uno. Cada clase implementa draw() a su manera. Eso es diseño orientado a interfaces.",
+    explanation: "El bucle no conoce los tipos concretos — solo llama dibujar() en cada uno. Cada clase lo implementa a su manera. Polimorfismo orientado a interfaz.",
     hint: null,
   },
   {
     id: "pol_014",
     topic: "polimorfismo",
     difficulty: "dificil",
-    question: "¿Qué imprime este código?",
-    code: `class EventEmitter {\n  #handlers = {};\n  on(event, fn) { this.#handlers[event] = fn; }\n  emit(event, ...args) { return this.#handlers[event]?.(...args); }\n}\nconst ee = new EventEmitter();\nee.on("suma", (a, b) => a + b);\nee.on("texto", (s) => s.toUpperCase());\nconsole.log(ee.emit("suma", 3, 4), ee.emit("texto", "hola"));`,
-    options: ["7 'HOLA'", "undefined undefined", "Error", "NaN undefined"],
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Despachador:
+  privado manejadores = {}
+  METODO on(evento, fn): yo.manejadores[evento] = fn
+  METODO emitir(evento, arg):
+    SI yo.manejadores[evento] EXISTE: RETORNA yo.manejadores[evento](arg)
+
+d = NUEVO Despachador()
+d.on("doble", (x) => x * 2)
+d.on("texto", (s) => MAYUSCULAS(s))
+IMPRIMIR d.emitir("doble", 5) + " " + d.emitir("texto", "hola")`,
+    options: ['"10 HOLA"', '"indefinido indefinido"', "Error", '"5 hola"'],
     correctIndex: 0,
-    explanation: "emit() llama el handler con optional chaining (?.). emit(\"suma\", 3, 4) → 3+4=7. emit(\"texto\", \"hola\") → \"HOLA\". Dos comportamientos distintos bajo la misma interfaz.",
+    explanation: "emitir() busca el manejador por nombre y lo llama con el argumento. 'doble' retorna 5×2=10. 'texto' retorna 'hola' en mayúsculas = 'HOLA'. Mismo dispatch, distintos comportamientos.",
     hint: null,
   },
   {
@@ -764,13 +1061,13 @@ export const challenges = [
     question: "¿Cuál es la diferencia principal entre sobrecarga y sobreescritura?",
     code: null,
     options: [
-      "Sobrecarga: mismo nombre, distintos parámetros (no nativa en JS). Sobreescritura: la hija redefine el método del padre",
+      "Sobrecarga: mismo nombre, distintos parámetros. Sobreescritura: la hija redefine el método del padre",
       "Sobrecarga es para clases, sobreescritura para funciones sueltas",
-      "Son sinónimos en JavaScript",
-      "Sobrecarga usa 'super', sobreescritura no",
+      "Son sinónimos en POO",
+      "Sobrecarga usa SUPER, sobreescritura no",
     ],
     correctIndex: 0,
-    explanation: "JavaScript no soporta sobrecarga de métodos nativa (sin tipos). La sobreescritura sí existe: la clase hija redefine el método heredado. Para simular sobrecarga se usan parámetros opcionales.",
+    explanation: "Sobrecarga (overloading): mismo nombre, distintas firmas de parámetros — no todos los lenguajes la soportan nativamente. Sobreescritura (override): la clase hija redefine el método heredado.",
     hint: null,
   },
 
@@ -787,35 +1084,41 @@ export const challenges = [
     code: null,
     options: ["Encapsulamiento", "Herencia", "Polimorfismo", "Abstracción"],
     correctIndex: 0,
-    explanation: "El encapsulamiento protege el estado interno de un objeto. En JS se logra con campos privados (#) y getters/setters que controlan el acceso.",
+    explanation: "El encapsulamiento protege el estado interno de un objeto. Se logra con campos privados y getters/setters que controlan el acceso desde el exterior.",
     hint: "Este principio 'encapsula' los datos dentro del objeto — como una cápsula que protege su contenido.",
   },
   {
     id: "enc_002",
     topic: "encapsulamiento",
     difficulty: "facil",
-    question: "¿Qué imprime este código?",
-    code: `class Caja {\n  #contenido;\n  constructor(item) { this.#contenido = item; }\n  abrir() { return this.#contenido; }\n}\nconst c = new Caja("regalo");\nconsole.log(c.abrir());`,
-    options: ['"regalo"', "undefined", "Error", '"#contenido"'],
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Caja:
+  privado contenido
+  CONSTRUCTOR(item): yo.contenido = item
+  METODO abrir(): RETORNA yo.contenido
+
+c = NUEVO Caja("regalo")
+IMPRIMIR c.abrir()`,
+    options: ['"regalo"', "indefinido", "Error", '"contenido"'],
     correctIndex: 0,
-    explanation: "#contenido es privado, solo accesible dentro de la clase. abrir() actúa como interfaz pública controlada para leer el valor interno.",
+    explanation: "'contenido' es privado, solo accesible dentro de la clase. abrir() actúa como interfaz pública controlada para leer el valor interno.",
     hint: "abrir() es la única puerta de acceso al campo privado — sin ella, el contenido es inaccesible desde fuera.",
   },
   {
     id: "enc_007",
     topic: "encapsulamiento",
     difficulty: "facil",
-    question: "En JavaScript moderno, ¿cómo se marca un campo como privado?",
+    question: "En POO moderna, ¿cómo se marca un campo como privado?",
     code: null,
     options: [
-      "Con el prefijo # (hash)",
-      "Con la palabra clave 'private'",
-      "Con guión bajo _ por convención",
+      "Con el prefijo # o la palabra clave 'privado'",
       "Con la palabra clave 'protected'",
+      "Con guión bajo _ por convención",
+      "Con la palabra clave 'internal'",
     ],
     correctIndex: 0,
-    explanation: "El prefijo # (campos privados de clase, ES2022) hace que el campo sea inaccesible fuera de la clase a nivel de lenguaje. Es la única forma nativa de privacidad real en JS.",
-    hint: "Es un símbolo especial que va pegado al nombre del campo — solo una tecla del teclado, pero muy poderosa.",
+    explanation: "El prefijo # (en JS/C#) o la palabra clave 'private' (en Java/C++) marcan un campo como inaccesible fuera de la clase. Es la única forma nativa de privacidad real.",
+    hint: "Es un modificador especial que va pegado al nombre del campo — muy poderoso aunque parezca pequeño.",
   },
   {
     id: "enc_008",
@@ -830,18 +1133,23 @@ export const challenges = [
       "Retorna una copia del objeto",
     ],
     correctIndex: 0,
-    explanation: "Un getter (get nombrePropiedad()) se accede como propiedad (sin paréntesis) pero ejecuta una función. Controla cómo se lee un dato interno.",
+    explanation: "Un getter (PROPIEDAD en pseudocódigo) se accede como propiedad pero ejecuta lógica interna. Controla cómo se lee un dato interno — puede validar, calcular o transformar.",
     hint: "'Get' = obtener. Un getter te permite leer un valor — posiblemente transformado o protegido.",
   },
   {
     id: "enc_009",
     topic: "encapsulamiento",
     difficulty: "facil",
-    question: "¿Qué imprime este código?",
-    code: `class Circulo {\n  constructor(r) { this.r = r; }\n  get area() {\n    return Math.PI * this.r ** 2;\n  }\n}\nconst c = new Circulo(1);\nconsole.log(c.area.toFixed(4));`,
-    options: ['"3.1416"', '"1.0000"', "Error", '"6.2832"'],
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Circulo:
+  CONSTRUCTOR(r): yo.r = r
+  PROPIEDAD area: RETORNA 3.14 * yo.r * yo.r
+
+c = NUEVO Circulo(2)
+IMPRIMIR c.area`,
+    options: ["12.56", "6.28", "3.14", "Error"],
     correctIndex: 0,
-    explanation: "El getter area calcula π × 1² = π ≈ 3.14159. toFixed(4) redondea a 4 decimales. Se accede como propiedad (c.area, sin paréntesis), aunque ejecuta código interno.",
+    explanation: "La propiedad 'area' calcula 3.14 × 2² = 3.14 × 4 = 12.56. Se accede como propiedad (c.area, sin paréntesis), aunque ejecuta código interno.",
     hint: "Los getters se usan como propiedades, no como métodos — sin paréntesis al accederlos.",
   },
 
@@ -851,32 +1159,52 @@ export const challenges = [
     topic: "encapsulamiento",
     difficulty: "medio",
     question: "¿Qué ocurre al intentar acceder a un campo privado desde fuera de la clase?",
-    code: `class Secreto {\n  #clave = "abc123";\n}\nconst s = new Secreto();\nconsole.log(s.#clave);`,
-    options: ["SyntaxError", '"abc123"', "undefined", '"#clave"'],
+    code: `CLASE Secreto:
+  privado clave = "abc123"
+
+s = NUEVO Secreto()
+IMPRIMIR s.clave`,
+    options: ["Error de acceso", '"abc123"', "indefinido", '"clave"'],
     correctIndex: 0,
-    explanation: "Acceder a un campo privado (#) fuera de la clase es un SyntaxError. La restricción es a nivel de lenguaje, no solo de convención.",
+    explanation: "Acceder a un campo privado desde fuera de la clase produce un error. La restricción es a nivel de lenguaje, no solo de convención.",
     hint: null,
   },
   {
     id: "enc_004",
     topic: "encapsulamiento",
     difficulty: "medio",
-    question: "¿Qué imprime este código?",
-    code: `class Temperatura {\n  #celsius;\n  constructor(c) { this.#celsius = c; }\n  get fahrenheit() {\n    return this.#celsius * 9 / 5 + 32;\n  }\n}\nconst t = new Temperatura(100);\nconsole.log(t.fahrenheit);`,
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Temperatura:
+  privado celsius
+  CONSTRUCTOR(c): yo.celsius = c
+  PROPIEDAD fahrenheit:
+    RETORNA yo.celsius * 9 / 5 + 32
+
+t = NUEVO Temperatura(100)
+IMPRIMIR t.fahrenheit`,
     options: ["212", "100", "373", "Error"],
     correctIndex: 0,
-    explanation: "El getter fahrenheit convierte #celsius a Fahrenheit: 100 × 9/5 + 32 = 212. Los getters permiten acceso de solo lectura de forma controlada.",
+    explanation: "El getter fahrenheit convierte celsius a Fahrenheit: 100 × 9/5 + 32 = 212. Los getters permiten acceso de solo lectura de forma controlada.",
     hint: null,
   },
   {
     id: "enc_010",
     topic: "encapsulamiento",
     difficulty: "medio",
-    question: "¿Qué imprime este código?",
-    code: `class Usuario {\n  #nombre;\n  constructor(nombre) { this.#nombre = nombre.trim(); }\n  get nombre() { return this.#nombre; }\n  set nombre(v) {\n    if (v.trim().length < 3) throw new Error("Demasiado corto");\n    this.#nombre = v.trim();\n  }\n}\nconst u = new Usuario("  Ana  ");\nconsole.log(u.nombre);`,
-    options: ['"Ana"', '"  Ana  "', "Error", "undefined"],
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Usuario:
+  privado nombre
+  CONSTRUCTOR(n): yo.nombre = RECORTAR(n)
+  PROPIEDAD nombre: RETORNA yo.nombre
+  SETTER nombre(v):
+    SI LARGO(RECORTAR(v)) < 3: LANZAR "Demasiado corto"
+    yo.nombre = RECORTAR(v)
+
+u = NUEVO Usuario("  Ana  ")
+IMPRIMIR u.nombre`,
+    options: ['"Ana"', '"  Ana  "', "Error", "indefinido"],
     correctIndex: 0,
-    explanation: "El constructor pasa el nombre por trim() antes de asignarlo al campo privado. \"  Ana  \".trim() = \"Ana\". El getter devuelve el valor limpio.",
+    explanation: "El constructor pasa el nombre por RECORTAR() antes de asignarlo. \"  Ana  \" recortado = \"Ana\". La propiedad devuelve el valor limpio.",
     hint: null,
   },
   {
@@ -899,11 +1227,21 @@ export const challenges = [
     id: "enc_012",
     topic: "encapsulamiento",
     difficulty: "medio",
-    question: "¿Qué imprime este código?",
-    code: `class Contador {\n  #min; #max; #valor;\n  constructor(min, max) {\n    this.#min = min; this.#max = max; this.#valor = min;\n  }\n  incrementar() { if (this.#valor < this.#max) this.#valor++; }\n  get valor() { return this.#valor; }\n}\nconst c = new Contador(0, 3);\nc.incrementar(); c.incrementar(); c.incrementar(); c.incrementar();\nconsole.log(c.valor);`,
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Contador:
+  privado maximo
+  privado actual = 0
+  CONSTRUCTOR(max): yo.maximo = max
+  METODO subir():
+    SI yo.actual < yo.maximo: yo.actual = yo.actual + 1
+  PROPIEDAD valor: RETORNA yo.actual
+
+c = NUEVO Contador(3)
+c.subir(); c.subir(); c.subir(); c.subir()
+IMPRIMIR c.valor`,
     options: ["3", "4", "2", "0"],
     correctIndex: 0,
-    explanation: "El contador tiene max=3. Incrementa: 0→1→2→3. En el 4to intento ya está en 3 (=max), el if lo bloquea. El valor final es 3.",
+    explanation: "El contador tiene maximo=3. Incrementa: 0→1→2→3. En el 4to intento ya está en 3 (=maximo), el SI lo bloquea. El valor final es 3.",
     hint: null,
   },
 
@@ -912,8 +1250,16 @@ export const challenges = [
     id: "enc_005",
     topic: "encapsulamiento",
     difficulty: "dificil",
-    question: "¿Qué imprime este código?",
-    code: `class Edad {\n  #valor;\n  constructor(edad) {\n    this.#valor = edad < 0 ? 0 : edad;\n  }\n  get valor() { return this.#valor; }\n  set valor(n) { this.#valor = n < 0 ? 0 : n; }\n}\nconst e = new Edad(25);\ne.valor = -10;\nconsole.log(e.valor);`,
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Edad:
+  privado valor
+  CONSTRUCTOR(n): yo.valor = SI n < 0 ENTONCES 0 SINO n
+  PROPIEDAD valor: RETORNA yo.valor
+  SETTER valor(n): yo.valor = SI n < 0 ENTONCES 0 SINO n
+
+e = NUEVO Edad(25)
+e.valor = -10
+IMPRIMIR e.valor`,
     options: ["0", "-10", "25", "Error"],
     correctIndex: 0,
     explanation: "El setter valida el input: si n < 0, asigna 0. Al pasar -10, el setter lo convierte a 0. El getter retorna ese valor protegido.",
@@ -923,44 +1269,84 @@ export const challenges = [
     id: "enc_006",
     topic: "encapsulamiento",
     difficulty: "dificil",
-    question: "¿Qué imprime este código?",
-    code: `class CuentaBancaria {\n  #saldo = 0;\n  depositar(monto) { if (monto > 0) this.#saldo += monto; }\n  retirar(monto) {\n    if (monto > 0 && monto <= this.#saldo) this.#saldo -= monto;\n  }\n  get saldo() { return this.#saldo; }\n}\nconst c = new CuentaBancaria();\nc.depositar(1000);\nc.retirar(300);\nc.retirar(800);\nconsole.log(c.saldo);`,
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Cuenta:
+  privado saldo = 0
+  METODO depositar(n): SI n > 0: yo.saldo = yo.saldo + n
+  METODO retirar(n):
+    SI n > 0 Y n <= yo.saldo: yo.saldo = yo.saldo - n
+  PROPIEDAD saldo: RETORNA yo.saldo
+
+c = NUEVO Cuenta()
+c.depositar(1000); c.retirar(300); c.retirar(800)
+IMPRIMIR c.saldo`,
     options: ["700", "300", "1000", "-100"],
     correctIndex: 0,
-    explanation: "Depósito: 1000. Retiro de 300: saldo=700. Retiro de 800: 800 > 700, se rechaza. Saldo final: 700. El encapsulamiento impide que el saldo quede negativo.",
+    explanation: "Depósito: 1000. Retiro 300: saldo=700. Retiro 800: 800 > 700, se rechaza. Saldo final: 700. El encapsulamiento impide que el saldo quede negativo.",
     hint: null,
   },
   {
     id: "enc_013",
     topic: "encapsulamiento",
     difficulty: "dificil",
-    question: "¿Qué imprime este código?",
-    code: `class Pila {\n  #items = [];\n  push(v) { this.#items.push(v); }\n  pop() {\n    if (this.#items.length === 0) throw new Error("Pila vacía");\n    return this.#items.pop();\n  }\n  get size() { return this.#items.length; }\n  get isEmpty() { return this.#items.length === 0; }\n}\nconst p = new Pila();\np.push(1); p.push(2); p.push(3);\np.pop();\nconsole.log(p.size, p.isEmpty);`,
-    options: ["2 false", "3 false", "1 false", "2 true"],
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Pila:
+  privado items = []
+  METODO apilar(v): yo.items.agregar(v)
+  METODO desapilar(): RETORNA yo.items.extraerUltimo()
+  PROPIEDAD tamaño: RETORNA yo.items.tamaño
+  PROPIEDAD vacia: RETORNA yo.items.tamaño == 0
+
+p = NUEVO Pila()
+p.apilar(1); p.apilar(2); p.apilar(3)
+p.desapilar()
+IMPRIMIR p.tamaño + " " + p.vacia`,
+    options: ['"2 falso"', '"3 falso"', '"1 falso"', '"2 verdadero"'],
     correctIndex: 0,
-    explanation: "push×3 → [1,2,3], size=3. pop() elimina 3 → [1,2], size=2. isEmpty: 2 > 0 → false. Output: \"2 false\".",
+    explanation: "apilar×3 → [1,2,3], tamaño=3. desapilar() elimina 3 → [1,2], tamaño=2. vacia: 2 > 0 → falso. Output: \"2 falso\".",
     hint: null,
   },
   {
     id: "enc_014",
     topic: "encapsulamiento",
     difficulty: "dificil",
-    question: "¿Qué imprime este código?",
-    code: `class Config {\n  #data = {};\n  set(k, v) {\n    if (typeof k !== "string") throw new TypeError("Clave debe ser string");\n    this.#data[k] = v;\n    return this;\n  }\n  get(k) { return this.#data[k]; }\n  has(k) { return k in this.#data; }\n}\nconst cfg = new Config();\ncfg.set("host", "localhost").set("port", 3000);\nconsole.log(cfg.has("port"), cfg.get("host"));`,
-    options: ["true 'localhost'", "false 'localhost'", "Error", "true undefined"],
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Config:
+  privado datos = {}
+  METODO set(k, v):
+    SI NO es_texto(k): LANZAR "Clave debe ser texto"
+    yo.datos[k] = v; RETORNA yo
+  METODO get(k): RETORNA yo.datos[k]
+  METODO tiene(k): RETORNA yo.datos CONTIENE k
+
+cfg = NUEVO Config()
+cfg.set("host", "local").set("port", 3000)
+IMPRIMIR cfg.tiene("port") + " " + cfg.get("host")`,
+    options: ['"verdadero local"', '"falso local"', "Error", '"verdadero indefinido"'],
     correctIndex: 0,
-    explanation: "set() retorna this permitiendo encadenamiento. Tras las dos llamadas, #data tiene host y port. has(\"port\") → true. get(\"host\") → \"localhost\".",
+    explanation: "set() retorna 'yo' permitiendo encadenamiento. Tras las dos llamadas, datos tiene host y port. tiene(\"port\") → verdadero. get(\"host\") → \"local\".",
     hint: null,
   },
   {
     id: "enc_015",
     topic: "encapsulamiento",
     difficulty: "dificil",
-    question: "¿Qué imprime este código?",
-    code: `class Singleton {\n  static #instance = null;\n  #value;\n  constructor(v) { this.#value = v; }\n  static getInstance(v) {\n    if (!Singleton.#instance) {\n      Singleton.#instance = new Singleton(v);\n    }\n    return Singleton.#instance;\n  }\n  get value() { return this.#value; }\n}\nconst a = Singleton.getInstance("primera");\nconst b = Singleton.getInstance("segunda");\nconsole.log(a === b, b.value);`,
-    options: ["true 'primera'", "false 'segunda'", "true 'segunda'", "false 'primera'"],
+    question: "¿Qué imprime este pseudocódigo?",
+    code: `CLASE Singleton:
+  privado ESTATICO instancia = nulo
+  privado valor
+  CONSTRUCTOR(v): yo.valor = v
+  ESTATICO METODO getInstance(v):
+    SI Singleton.instancia == nulo:
+      Singleton.instancia = NUEVO Singleton(v)
+    RETORNA Singleton.instancia
+
+a = Singleton.getInstance("primera")
+b = Singleton.getInstance("segunda")
+IMPRIMIR (a == b) + " " + b.valor`,
+    options: ['"verdadero primera"', '"falso segunda"', '"verdadero segunda"', '"falso primera"'],
     correctIndex: 0,
-    explanation: "La primera llamada crea la instancia con \"primera\". La segunda devuelve la misma instancia (ya existe). a === b es true. b.value es \"primera\" — el Singleton no cambia su valor.",
+    explanation: "La primera llamada crea la instancia con 'primera'. La segunda devuelve la misma (ya existe). a == b es verdadero. b.valor es 'primera' — el Singleton no cambia su valor.",
     hint: null,
   },
 ];
