@@ -14,16 +14,16 @@ const TEMAS = [
 const MEDALLAS = ["🥇", "🥈", "🥉"];
 
 const RANKS_CUMULATIVE = [
-  { min: 4500, label: "Senior Master VRG",           emoji: "👑" },
-  { min: 3600, label: "Hacker de Cybercafé",          emoji: "⚡" },
-  { min: 2800, label: "Senior de Pasillo",            emoji: "🦾" },
-  { min: 2100, label: "Arquitecto del Polimorfismo",  emoji: "🏗️" },
-  { min: 1500, label: "Domador de Excepciones",       emoji: "🎯" },
-  { min: 1000, label: "Puesto Trucha",                emoji: "🔒" },
-  { min: 600,  label: 'En mi máquina sí funciona',    emoji: "💻" },
-  { min: 300,  label: "Compilando en la Mente",       emoji: "🧠" },
-  { min: 100,  label: "Junior Despistado",            emoji: "☕" },
-  { min: 0,    label: "Copypaster de StackOverflow",  emoji: "📋" },
+  { min: 4500, label: "Senior Master VRG",           emoji: "👑", desc: "Diseñas jerarquías de herencia de 5 niveles sin sudar. Polimorfismo, encapsulamiento y abstracción son tu vocabulario de diario. Los juniors te preguntan si usar interfaz o clase abstracta — y siempre tienes la respuesta. Leyenda de la facultad." },
+  { min: 3600, label: "Hacker de Cybercafé",         emoji: "⚡", desc: "Implementas Factory, Observer y Strategy sin pensarlo dos veces. Tu encapsulamiento es tan hermético que ni tú puedes romperlo por accidente. El compilador te teme — de lo limpio que sale tu código." },
+  { min: 2800, label: "Senior de Pasillo",           emoji: "🦾", desc: "Le resuelves a tus compas el problema de la herencia diamante en papel, entre clase y clase. Distingues composición de herencia sin titubear y sabes cuándo romper la jerarquía antes de que se convierta en espagueti." },
+  { min: 2100, label: "Arquitecto del Polimorfismo", emoji: "🏗️", desc: "La sobreescritura de métodos ya no te quita el sueño — la dominas junto con SUPER(), constructores encadenados e interfaces. Tus objetos cumplen el Principio de Sustitución de Liskov sin que nadie te lo haya pedido." },
+  { min: 1500, label: "Domador de Excepciones",      emoji: "🎯", desc: "Ni el NullPointerException te mueve el piso. Instancias clases, sobreescribes métodos y manejas herencia de 3 niveles como si el compilador fuera tu perro. El servidor te respeta, vrg." },
+  { min: 1000, label: "Puesto Trucha",               emoji: "🔒", desc: "Ya distingues sobrecargar de sobreescribir sin googlear. Sabes cuándo poner private, cuándo usar extends y cuándo composición le gana a la herencia. Le entiendes al pedo — falta pulir el polimorfismo avanzado." },
+  { min: 600,  label: 'En mi máquina sí funciona',   emoji: "💻", desc: "Declaras clases y objetos con confianza, pero herencia con sobreescritura o encapsulamiento con validación te tronan en el servidor. El instanceof no miente, compa — hay tarea pendiente." },
+  { min: 300,  label: "Compilando en la Mente",      emoji: "🧠", desc: "Ya sabes que un objeto no es una clase y que el constructor se llama una sola vez. Tus diagramas UML tienen sentido a medias. El polimorfismo y el encapsulamiento aún te dan dolor de cabeza." },
+  { min: 100,  label: "Junior Despistado",           emoji: "☕", desc: "Defines una clase como si fuera variable global y crees que la herencia es copypaste del padre. Los getters y setters te parecen relleno. Te falta barrio POO, pero aquí estás — y eso ya es algo." },
+  { min: 0,    label: "Copypaster de StackOverflow", emoji: "📋", desc: "No sabes si extends hereda métodos privados ni si el constructor del hijo llama solo al del padre. Lo pegas, compila de milagro y rezas pa' que el profe no pregunte. Nivel cero, carnal." },
 ];
 
 function getRankBadge(score) {
@@ -121,7 +121,7 @@ export default function Ranking({ onBack }) {
                     <span className="ranking-you"> (tú)</span>
                   )}
                 </span>
-                <span className="ranking-badge" title={badge.label}>
+                <span className="ranking-badge" title={badge.desc ?? badge.label}>
                   <span className="ranking-badge-emoji">{badge.emoji}</span>
                   <span className="ranking-badge-label">{badge.label}</span>
                 </span>

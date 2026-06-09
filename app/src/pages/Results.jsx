@@ -6,42 +6,42 @@ const RANKS_GAME = [
   {
     min: 1500,
     label: "Domador de Excepciones",
-    desc: "Ya no le temes al 'NullPointerException' ni a los crashes inesperados. Los capturas todos con bloques try-catch impecables como si fueras un maestro Pokémon del código.",
+    desc: "Ni el NullPointerException te mueve el piso. Instancias clases, sobreescribes métodos y manejas herencia de 3 niveles como si el compilador fuera tu perro. El servidor te respeta, vrg — y eso no se le da a cualquiera.",
     emoji: "🎯",
     color: "#f59e0b",
   },
   {
     min: 1000,
     label: "Puesto Trucha",
-    desc: "Nivel intermedio real. Dominas el encapsulamiento a la perfección, sabes cuándo ocultar atributos con 'private' y tus diagramas de clases ya tienen coherencia y sentido.",
+    desc: "Ya distingues sobrecargar de sobreescribir sin googlear. Sabes cuándo poner private, cuándo usar extends y cuándo composición le gana a la herencia. Le entiendes al pedo — solo te falta pulir el polimorfismo avanzado.",
     emoji: "🔒",
     color: "#6366f1",
   },
   {
     min: 600,
     label: 'El "En mi máquina sí funciona"',
-    desc: "Clásico. Tu código corre perfecto localmente, pero cuando lo subes al servidor de evaluación todo explota, se quema y se cae a pedazos. Culpas al entorno en el 100% de los casos.",
+    desc: "Declaras clases y objetos con confianza, pero cuando aparece herencia con sobreescritura o encapsulamiento con validación, tu código se tronca en el servidor de evaluación. El instanceof no miente, compa.",
     emoji: "💻",
     color: "#3b82f6",
   },
   {
     min: 300,
     label: "Compilando en la Mente",
-    desc: "Ya no necesitas correr el programa para saber en qué línea te faltó el punto y coma. Tu cerebro procesa flujos de datos básicos antes de que lo haga la computadora.",
+    desc: "Ya sabes que un objeto no es una clase y que el constructor se llama una sola vez. Tus diagramas UML tienen sentido a medias. Sigue farmeando — el polimorfismo y el encapsulamiento aún te dan dolor de cabeza.",
     emoji: "🧠",
     color: "#8b5cf6",
   },
   {
     min: 100,
     label: "Junior Despistado",
-    desc: "Ya sabes declarar variables y meter algún IF, pero todavía crees que el café se convierte en código por arte de magia. Conceptos como herencia o polimorfismo te dan amnesia selectiva.",
+    desc: "Defines una clase como si fuera variable global y crees que la herencia es copypaste del código del padre. Los getters y setters te parecen relleno innecesario. Te falta barrio POO, pero aquí estás — y eso ya es algo.",
     emoji: "☕",
     color: "#10b981",
   },
   {
     min: 0,
     label: "Copypaster de StackOverflow",
-    desc: "No sabes qué hace el código, pero si funciona, no le mueves. Tu mejor amigo es el Ctrl+C y Ctrl+V. Le rezas a deidades desconocidas para que no tire error el compilador.",
+    desc: "No sabes si extends hereda los métodos privados ni si el constructor del hijo llama solo al del padre. Lo pegas, compila de milagro y rezas pa' que el profe no pregunte cómo funciona. Nivel cero, carnal — pero el camino empieza aquí.",
     emoji: "📋",
     color: "#64748b",
   },
@@ -230,7 +230,7 @@ export default function Results({ result, config, onRestart, onRanking }) {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.97 }}
         >
-          ⚡ Reintentar Quest ({config?.topic === "todos" ? "todos" : config?.topic})
+          ⚡ Reintentar Quest
         </motion.button>
         <motion.button className="btn btn--ghost" onClick={onRanking}
           whileTap={{ scale: 0.97 }}>
