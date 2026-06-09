@@ -1517,13 +1517,14 @@ h1, h2, h3 {
 }
 .kgame-board-inner {
   flex: 1;
-  overflow-y: auto;
+  overflow: hidden;
   padding: 10px 4px;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  min-height: 0;
 }
-/* Caja visible solo cuando hay bloque de código */
+/* Caja con borde visible solo cuando hay bloque de código */
 .kgame-board-inner:has(.kgame-code) {
   padding: 10px 13px;
   background: rgba(255,255,255,.04);
@@ -1541,14 +1542,16 @@ h1, h2, h3 {
   line-height: 1.55;
   color: #f1f5f9;
 }
-/* Pregunta sin código: padding lateral para alinear con el resto de la UI */
+/* Pregunta sin código: más grande porque tiene todo el espacio disponible */
 .kgame-board-inner:not(:has(.kgame-code)) .kgame-q {
   padding: 0 8px;
-  font-size: 1rem;
+  font-size: 1.18rem;
+  line-height: 1.6;
+  font-weight: 700;
 }
 .kgame-code {
   margin: 0;
-  padding: 8px 12px;
+  padding: 10px 14px;
   background: rgba(0,0,0,.45);
   border: 1px solid rgba(99,102,241,.18);
   border-radius: 7px;
@@ -1558,8 +1561,8 @@ h1, h2, h3 {
   color: #c4b5fd;
   overflow-x: auto;
   overflow-y: auto;
-  max-height: 110px;
-  flex-shrink: 0;
+  flex: 1;
+  min-height: 0;
 }
 .kgame-hint {
   margin: 0;
@@ -1863,7 +1866,7 @@ h1, h2, h3 {
   }
   .kgame-board-inner { padding: 14px 18px; gap: 10px; }
   .kgame-q { font-size: 1rem; }
-  .kgame-code { font-size: .79rem; max-height: 160px; padding: 10px 16px; }
+  .kgame-code { font-size: .79rem; padding: 12px 16px; }
   .kgame-opts { gap: 8px; }
   .kopt { padding: 8px 14px; gap: 10px; border-radius: 10px; }
   .kopt-key { min-width: 26px; height: 26px; font-size: .66rem; border-radius: 6px; }
