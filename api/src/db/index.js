@@ -39,4 +39,19 @@ db.exec("CREATE INDEX IF NOT EXISTS idx_partidas_puntuacion ON partidas(puntuaci
 db.exec("CREATE INDEX IF NOT EXISTS idx_partidas_usuario    ON partidas(usuario_id)");
 db.exec("CREATE INDEX IF NOT EXISTS idx_partidas_tema       ON partidas(tema)");
 
+db.exec(`
+  CREATE TABLE IF NOT EXISTS partidas_arcade (
+    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    nombre     TEXT    NOT NULL,
+    tema       TEXT    NOT NULL,
+    puntuacion INTEGER NOT NULL,
+    correctas  INTEGER NOT NULL,
+    total      INTEGER NOT NULL,
+    dificultad TEXT    NOT NULL DEFAULT 'normal',
+    jugado_en  TEXT    NOT NULL DEFAULT (datetime('now'))
+  )
+`);
+
+db.exec("CREATE INDEX IF NOT EXISTS idx_arcade_puntuacion ON partidas_arcade(puntuacion DESC)");
+
 export default db;

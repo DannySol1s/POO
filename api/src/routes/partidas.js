@@ -38,39 +38,75 @@ partidasRouter.post("/", requireAuth, async (c) => {
   return c.json({ ok: true }, 201);
 });
 
-// Mejor puntuación + total acumulado por usuario (global o por tema)
+// Guardar partida sin cuenta (estilo arcade)
+partidasRouter.post("/arcade", async (c) => {
+  const body = await c.req.json().catch(() => null);
+  if (!body) return c.json({ error: "Cuerpo de solicitud inválido" }, 400);
+
+  const { nombre, tema, puntuacion, correctas, total, dificultad = "normal" } = body;
+
+  const nombreTrimmed = (nombre ?? "").trim().slice(0, 25);
+  if (!nombreTrimmed) return c.json({ error: "Nombre requerido" }, 400);
+
+  if (!TEMAS_VALIDOS.includes(tema)) return c.json({ error: "Tema inválido" }, 400);
+  if (!DIFICULTADES_VALIDAS.includes(dificultad)) return c.json({ error: "Dificultad inválida" }, 400);
+  if (
+    !Number.isInteger(puntuacion) || puntuacion < 0 || puntuacion > MAX_PUNTUACION ||
+    !Number.isInteger(correctas)  || correctas  < 0 ||
+    !Number.isInteger(total)      || total < 1  || total > 20 ||
+    correctas > total
+  ) return c.json({ error: "Datos de partida inválidos" }, 400);
+
+  db.prepare(
+    "INSERT INTO partidas_arcade (nombre, tema, puntuacion, correctas, total, dificultad) VALUES (?, ?, ?, ?, ?, ?)"
+  ).run(nombreTrimmed, tema, puntuacion, correctas, total, dificultad);
+
+  return c.json({ ok: true }, 201);
+});
+
+// Mejor puntuación + total acumulado (usuarios registrados + arcade)
 partidasRouter.get("/ranking", (c) => {
   const { tema, limit = "10" } = c.req.query();
   const lim = Math.min(Math.max(parseInt(limit) || 10, 1), 50);
   const filtrarTema = tema && tema !== "todos";
 
   const query = filtrarTema
-    ? `SELECT u.username,
-              MAX(p.puntuacion)                                               AS mejor_puntuacion,
-              SUM(p.puntuacion)                                               AS puntuacion_total,
-              COUNT(*)                                                        AS partidas,
-              ROUND(CAST(SUM(p.correctas) AS REAL) / SUM(p.total) * 100, 1) AS precision_pct,
-              p.tema
-         FROM partidas p
-         JOIN usuarios u ON u.id = p.usuario_id
-        WHERE p.tema = ?
-        GROUP BY p.usuario_id
-        ORDER BY mejor_puntuacion DESC
-        LIMIT ?`
-    : `SELECT u.username,
-              MAX(p.puntuacion)                                               AS mejor_puntuacion,
-              SUM(p.puntuacion)                                               AS puntuacion_total,
-              COUNT(*)                                                        AS partidas,
-              ROUND(CAST(SUM(p.correctas) AS REAL) / SUM(p.total) * 100, 1) AS precision_pct,
-              'todos'                                                         AS tema
-         FROM partidas p
-         JOIN usuarios u ON u.id = p.usuario_id
-        GROUP BY p.usuario_id
-        ORDER BY mejor_puntuacion DESC
-        LIMIT ?`;
+    ? `SELECT username,
+              MAX(puntuacion)                                               AS mejor_puntuacion,
+              SUM(puntuacion)                                               AS puntuacion_total,
+              COUNT(*)                                                      AS partidas,
+              ROUND(CAST(SUM(correctas) AS REAL) / SUM(total) * 100, 1)   AS precision_pct,
+              ?                                                             AS tema
+         FROM (
+           SELECT u.username, p.puntuacion, p.correctas, p.total
+             FROM partidas p JOIN usuarios u ON u.id = p.usuario_id
+            WHERE p.tema = ?
+           UNION ALL
+           SELECT nombre, puntuacion, correctas, total
+             FROM partidas_arcade WHERE tema = ?
+         )
+         GROUP BY username
+         ORDER BY mejor_puntuacion DESC
+         LIMIT ?`
+    : `SELECT username,
+              MAX(puntuacion)                                               AS mejor_puntuacion,
+              SUM(puntuacion)                                               AS puntuacion_total,
+              COUNT(*)                                                      AS partidas,
+              ROUND(CAST(SUM(correctas) AS REAL) / SUM(total) * 100, 1)   AS precision_pct,
+              'todos'                                                       AS tema
+         FROM (
+           SELECT u.username, p.puntuacion, p.correctas, p.total
+             FROM partidas p JOIN usuarios u ON u.id = p.usuario_id
+           UNION ALL
+           SELECT nombre, puntuacion, correctas, total
+             FROM partidas_arcade
+         )
+         GROUP BY username
+         ORDER BY mejor_puntuacion DESC
+         LIMIT ?`;
 
   const rows = filtrarTema
-    ? db.prepare(query).all(tema, lim)
+    ? db.prepare(query).all(tema, tema, tema, lim)
     : db.prepare(query).all(lim);
 
   return c.json({ data: rows });

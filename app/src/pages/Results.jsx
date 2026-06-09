@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { motion } from "motion/react";
+import { useEffect, useState, useCallback } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import { useAuth } from "../context/AuthContext.jsx";
 
 const RANKS_GAME = [
@@ -69,8 +69,26 @@ export default function Results({ result, config, onRestart, onRanking }) {
   const isPerfect = score === 1900;
   const isTopRank = rank?.label === "Domador de Excepciones";
 
-  const [saveStatus, setSaveStatus] = useState(null);
+  const [saveStatus, setSaveStatus]     = useState(null);
   const [displayScore, setDisplayScore] = useState(0);
+  const [arcadeName, setArcadeName]     = useState("");
+  const [arcadeStatus, setArcadeStatus] = useState(null); // null | "saving" | "saved" | "error" | "skipped"
+
+  const handleArcadeSave = useCallback(async () => {
+    const nombre = arcadeName.trim();
+    if (!nombre) return;
+    setArcadeStatus("saving");
+    try {
+      const res = await fetch("/api/partidas/arcade", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nombre, tema: topic, puntuacion: score, correctas: correct, total, dificultad: difficulty }),
+      });
+      setArcadeStatus(res.ok ? "saved" : "error");
+    } catch {
+      setArcadeStatus("error");
+    }
+  }, [arcadeName, topic, score, correct, total, difficulty]);
 
   useEffect(() => {
     let start = 0;
@@ -188,7 +206,66 @@ export default function Results({ result, config, onRestart, onRanking }) {
             {saveStatus === "error"  && "❌ Explotó el commit, no se guardó."}
           </div>
         )}
-        {!user && <p className="save-hint">Inicia sesión o te quedarás como Copypaster anónimo sin puntos.</p>}
+
+        {!user && (
+          <AnimatePresence mode="wait">
+            {arcadeStatus === null && (
+              <motion.div
+                key="arcade-input"
+                className="arcade-save"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                transition={{ duration: 0.25, delay: 0.4 }}
+              >
+                <p className="arcade-save-label">¿Dejar tu marca en el ranking?</p>
+                <div className="arcade-save-row">
+                  <input
+                    className="arcade-save-input"
+                    type="text"
+                    placeholder="¿Cómo te llaman?"
+                    maxLength={25}
+                    value={arcadeName}
+                    onChange={(e) => setArcadeName(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && handleArcadeSave()}
+                    autoComplete="off"
+                  />
+                  <motion.button
+                    className="btn btn--cta btn--sm"
+                    onClick={handleArcadeSave}
+                    disabled={!arcadeName.trim()}
+                    whileTap={{ scale: 0.97 }}
+                  >
+                    🏆 Dejar mi marca
+                  </motion.button>
+                </div>
+                <button className="btn-link btn-link--muted" onClick={() => setArcadeStatus("skipped")}>
+                  Ahora no
+                </button>
+              </motion.div>
+            )}
+            {arcadeStatus === "saving" && (
+              <motion.p key="saving" className="arcade-status" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                Grabando en el servidor...
+              </motion.p>
+            )}
+            {arcadeStatus === "saved" && (
+              <motion.p key="saved" className="arcade-status arcade-status--ok" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}>
+                ✓ ¡{arcadeName} quedó en el ranking!
+              </motion.p>
+            )}
+            {arcadeStatus === "error" && (
+              <motion.p key="error" className="arcade-status arcade-status--err" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                ❌ No se pudo guardar. Intenta de nuevo.
+              </motion.p>
+            )}
+            {arcadeStatus === "skipped" && (
+              <motion.p key="skipped" className="arcade-status" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                Score guardado solo en este dispositivo.
+              </motion.p>
+            )}
+          </AnimatePresence>
+        )}
       </motion.div>
 
       <section className="results-breakdown">
