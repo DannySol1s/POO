@@ -59,7 +59,7 @@ const rowVariants = {
   }),
 };
 
-export default function Results({ result, config, onRestart, onRanking }) {
+export default function Results({ result, config, onRestart, onRanking, restarting }) {
   const { user, token } = useAuth();
   const { score, answerHistory, topic, difficulty = "normal", gameOver = false } = result;
   const correct = answerHistory.filter((a) => a.correct).length;
@@ -332,10 +332,11 @@ export default function Results({ result, config, onRestart, onRanking }) {
         <motion.button
           className="btn btn--cta btn--lg"
           onClick={() => onRestart(true)}
+          disabled={restarting}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.97 }}
         >
-          ⚡ Reintentar Quest
+          {restarting ? "Cargando..." : "⚡ Reintentar Quest"}
         </motion.button>
         <motion.button className="btn btn--ghost" onClick={onRanking}
           whileTap={{ scale: 0.97 }}>

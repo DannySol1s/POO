@@ -10,6 +10,7 @@ export default function App() {
   const [page, setPage] = useState("home");
   const [gameConfig, setGameConfig] = useState(null);
   const [gameResult, setGameResult] = useState(null);
+  const [restarting, setRestarting] = useState(false);
 
   function handleStart(config) {
     setGameConfig(config);
@@ -21,9 +22,22 @@ export default function App() {
     setPage("results");
   }
 
-  function handleRestart(keepConfig) {
+  async function handleRestart(keepConfig) {
     if (keepConfig && gameConfig) {
-      setPage("game");
+      setRestarting(true);
+      try {
+        const res = await fetch(
+          `/api/challenges/random?topic=${gameConfig.topic}&difficulty=${gameConfig.difficulty}&count=10`
+        );
+        const json = await res.json();
+        if (!json.data?.length) throw new Error();
+        setGameConfig({ ...gameConfig, challenges: json.data });
+        setPage("game");
+      } catch {
+        setPage("home");
+      } finally {
+        setRestarting(false);
+      }
     } else {
       setPage("home");
     }
@@ -39,7 +53,7 @@ export default function App() {
           <Game key={Date.now()} config={gameConfig} onFinish={handleFinish} />
         )}
         {page === "results" && gameResult && (
-          <Results result={gameResult} config={gameConfig} onRestart={handleRestart} onRanking={() => setPage("ranking")} />
+          <Results result={gameResult} config={gameConfig} onRestart={handleRestart} onRanking={() => setPage("ranking")} restarting={restarting} />
         )}
       </div>
     </AuthProvider>
