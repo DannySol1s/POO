@@ -1345,8 +1345,13 @@ h1, h2, h3 {
 .ranking-row--header {
   font-size: .66rem; font-weight: 800;
   font-family: var(--font-heading);
-  text-transform: uppercase; letter-spacing: .1em;
+  text-transform: uppercase; letter-spacing: .04em;
   color: var(--text-dim); padding-bottom: 2px;
+}
+.ranking-row--header span:nth-child(4),
+.ranking-row--header span:nth-child(5),
+.ranking-row--header span:nth-child(6) {
+  text-align: right;
 }
 .ranking-row:not(.ranking-row--header) {
   background: var(--bg2); border: 1px solid var(--border);
@@ -1825,11 +1830,19 @@ h1, h2, h3 {
    RANKING — badge de rango
 ═══════════════════════════════════════ */
 .ranking-row:not(.ranking-row--header) {
-  grid-template-columns: 38px 1fr 28px 90px 60px 52px;
+  grid-template-columns: 28px minmax(0, 1fr) 18px 88px 64px;
 }
 .ranking-row--header {
-  grid-template-columns: 38px 1fr 28px 90px 60px 52px;
+  grid-template-columns: 28px minmax(0, 1fr) 18px 88px 64px;
 }
+.ranking-row--header span {
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.ranking-row > *:nth-child(6) {
+  display: none;
+}
+.ranking-badge-header-icon { display: inline; }
+.ranking-badge-header-text { display: none; }
 
 .ranking-badge {
   display: flex;
@@ -1852,7 +1865,12 @@ h1, h2, h3 {
 @media (min-width: 520px) {
   .ranking-row:not(.ranking-row--header),
   .ranking-row--header {
-    grid-template-columns: 38px 1fr minmax(80px, 120px) 90px 60px 52px;
+    grid-template-columns: 38px 1fr minmax(80px, 120px) 92px 64px 56px;
+  }
+  .ranking-badge-header-icon { display: none; }
+  .ranking-badge-header-text { display: inline; }
+  .ranking-row > *:nth-child(6) {
+    display: block;
   }
 }
 
@@ -2322,7 +2340,7 @@ h1, h2, h3 {
   .ranking { padding-top: 40px; gap: 24px; }
   .ranking-title { font-size: 2rem; }
   .ranking-row:not(.ranking-row--header),
-  .ranking-row--header { grid-template-columns: 52px 1fr 200px 130px 80px 70px; padding: 14px 20px; font-size: .9rem; }
+  .ranking-row--header { grid-template-columns: 52px 1fr 180px 120px 95px 85px; padding: 14px 20px; font-size: .9rem; }
   .ranking-badge-label { display: block; }
   .ranking-pos { font-size: 1.15rem; }
 }

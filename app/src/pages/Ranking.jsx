@@ -95,10 +95,13 @@ export default function Ranking({ onBack }) {
           <div className="ranking-row ranking-row--header">
             <span>#</span>
             <span>Developer</span>
-            <span>Rango de Barrio</span>
+            <span className="ranking-badge-header">
+              <span className="ranking-badge-header-icon">🏅</span>
+              <span className="ranking-badge-header-text">Rango de Barrio</span>
+            </span>
             <span>Máximo Botín</span>
-            <span>Precisión de Compilación</span>
-            <span>Quests Jugadas</span>
+            <span>Precisión</span>
+            <span>Partidas</span>
           </div>
 
           {rows.map((row, i) => {
