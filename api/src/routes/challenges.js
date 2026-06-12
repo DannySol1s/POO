@@ -1,7 +1,10 @@
 import { Hono } from "hono";
 import { challenges } from "../data/challenges.js";
+import { rateLimit } from "../middleware/rateLimit.js";
 
 export const challengesRouter = new Hono();
+
+const checkLimiter = rateLimit({ max: 60, windowMs: 5 * 60 * 1000, message: "Demasiadas verificaciones. Espera un momento." });
 
 function shuffle(arr) {
   const copy = [...arr];
@@ -12,29 +15,14 @@ function shuffle(arr) {
   return copy;
 }
 
-function randomizeOptions(challenge) {
-  const correctAnswer = challenge.options[challenge.correctIndex];
-  const shuffledOptions = shuffle(challenge.options);
-  return {
-    ...challenge,
-    options: shuffledOptions,
-    correctIndex: shuffledOptions.indexOf(correctAnswer),
-  };
+// Versión pública de un desafío: opciones mezcladas como {text, key} (key = índice
+// original en challenges.js) y sin correctIndex/explanation — el cliente no puede
+// saber qué key es la correcta sin llamar a /check.
+function toPublicChallenge(challenge) {
+  const { correctIndex, explanation, options, ...rest } = challenge;
+  const shuffledOptions = shuffle(options.map((text, key) => ({ text, key })));
+  return { ...rest, options: shuffledOptions };
 }
-
-challengesRouter.get("/", (c) => {
-  const { topic, difficulty } = c.req.query();
-  let result = challenges;
-
-  if (topic && topic !== "todos") {
-    result = result.filter((ch) => ch.topic === topic);
-  }
-  if (difficulty) {
-    result = result.filter((ch) => ch.difficulty === difficulty);
-  }
-
-  return c.json({ data: result, total: result.length });
-});
 
 // Modos de juego → dificultades de pregunta que incluyen
 const DIFFICULTY_MAP = {
@@ -66,7 +54,7 @@ challengesRouter.get("/random", (c) => {
     );
   }
 
-  const selected = shuffle(pool).slice(0, limit).map(randomizeOptions);
+  const selected = shuffle(pool).slice(0, limit).map(toPublicChallenge);
   return c.json({ data: selected, total: selected.length });
 });
 
@@ -82,19 +70,24 @@ challengesRouter.get("/topics", (c) => {
   return c.json({ data: topics });
 });
 
-challengesRouter.post("/:id/check", async (c) => {
+// Valida la opción elegida (key = índice original en challenges.js) y revela
+// la respuesta correcta + explicación. key inválido o ausente (timeout) → incorrecto.
+challengesRouter.post("/:id/check", checkLimiter, async (c) => {
   const { id } = c.req.param();
-  const { answer } = await c.req.json();
+  const body = await c.req.json().catch(() => null);
 
   const challenge = challenges.find((ch) => ch.id === id);
   if (!challenge) {
     return c.json({ error: "Desafío no encontrado" }, 404);
   }
 
-  const correct = answer === challenge.correctIndex;
+  const key = body?.key;
+  const validKey = Number.isInteger(key) && key >= 0 && key < challenge.options.length;
+  const correct = validKey && key === challenge.correctIndex;
+
   return c.json({
     correct,
-    correctIndex: challenge.correctIndex,
+    correctKey: challenge.correctIndex,
     explanation: challenge.explanation,
   });
 });
