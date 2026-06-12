@@ -14,6 +14,8 @@ export function useGame(challenges, config = {}) {
   const [lives, setLives]                   = useState(initialLives);
   const [gameOver, setGameOver]             = useState(false);
   const [gameOverReason, setGameOverReason] = useState(null);
+  const [isChecking, setIsChecking]         = useState(false);
+  const [checkResult, setCheckResult]       = useState(null);
   const timerRef = useRef(null);
 
   const currentChallenge = challenges[currentIndex] ?? null;
@@ -56,13 +58,40 @@ export function useGame(challenges, config = {}) {
     }
   }, [timeLeft, isAnswered, currentChallenge, gameOver]);
 
-  function processAnswer(optionIndex) {
+  async function processAnswer(optionIndex) {
     if (isAnswered || !currentChallenge || gameOver) return;
     stopTimer();
     setSelectedAnswer(optionIndex);
     setIsAnswered(true);
+    setIsChecking(true);
+    setCheckResult(null);
 
-    const correct = optionIndex === currentChallenge.correctIndex;
+    // optionIndex === -1 → se acabó el tiempo sin responder
+    const selectedKey = optionIndex >= 0 ? currentChallenge.options[optionIndex].key : -1;
+
+    let correct = false;
+    let correctIndex = null;
+    let explanation = null;
+
+    try {
+      const res = await fetch(`/api/challenges/${currentChallenge.id}/check`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ key: selectedKey }),
+      });
+      const data = await res.json();
+      correct = Boolean(data.correct);
+      explanation = data.explanation ?? null;
+      const idx = currentChallenge.options.findIndex((o) => o.key === data.correctKey);
+      correctIndex = idx >= 0 ? idx : null;
+    } catch {
+      // Sin conexión con la API: no se otorgan puntos, el juego sigue
+      correct = false;
+    }
+
+    setIsChecking(false);
+    setCheckResult({ correct, correctIndex, explanation });
+
     let points = 0;
     let newStreak = streak;
 
@@ -99,6 +128,8 @@ export function useGame(challenges, config = {}) {
         challenge: currentChallenge,
         selectedAnswer: optionIndex,
         correct,
+        correctIndex,
+        explanation,
         points,
         timeLeft,
       },
@@ -114,14 +145,15 @@ export function useGame(challenges, config = {}) {
       setCurrentIndex(nextIndex);
       setSelectedAnswer(null);
       setIsAnswered(false);
+      setIsChecking(false);
+      setCheckResult(null);
       setTimeLeft(maxTime);
     }
   }
 
-  const isCorrect =
-    selectedAnswer !== null && currentChallenge
-      ? selectedAnswer === currentChallenge.correctIndex
-      : false;
+  const isCorrect    = checkResult?.correct ?? false;
+  const correctIndex = checkResult?.correctIndex ?? null;
+  const explanation  = checkResult?.explanation ?? null;
 
   return {
     currentChallenge,
@@ -133,7 +165,10 @@ export function useGame(challenges, config = {}) {
     maxTime,
     selectedAnswer,
     isAnswered,
+    isChecking,
     isCorrect,
+    correctIndex,
+    explanation,
     answerHistory,
     isFinished,
     lives,

@@ -64,10 +64,13 @@ export default function Game({ config, onFinish }) {
 
   const {
     currentChallenge, currentIndex, total, score, streak,
-    timeLeft, maxTime, selectedAnswer, isAnswered, isCorrect,
+    timeLeft, maxTime, selectedAnswer, isAnswered, isChecking, isCorrect,
+    correctIndex, explanation,
     answerHistory, isFinished, lives, gameOver,
     selectAnswer, nextQuestion,
   } = useGame(config.challenges, { lives: config.lives, maxTime: config.maxTime, multiplier: config.multiplier, paused: countdown > 0 });
+
+  const showResult = isAnswered && !isChecking;
 
   useEffect(() => {
     if (isFinished) {
@@ -76,11 +79,11 @@ export default function Game({ config, onFinish }) {
   }, [isFinished]);
 
   useEffect(() => {
-    if (!isAnswered) return;
+    if (!showResult) return;
     if (selectedAnswer === -1) setFeedbackMsg(pick(MSG_TIMEOUT));
     else if (isCorrect) setFeedbackMsg(pick(MSG_CORRECT));
     else setFeedbackMsg(pick(MSG_WRONG));
-  }, [isAnswered]);
+  }, [showResult]);
 
   useEffect(() => {
     if (countdown <= 0) return;
@@ -303,12 +306,12 @@ export default function Game({ config, onFinish }) {
         {currentChallenge.options.map((opt, i) => (
           <motion.button
             key={`${currentIndex}-${i}`}
-            className={optClass(i, selectedAnswer, isAnswered, isCorrect, currentChallenge.correctIndex)}
+            className={optClass(i, selectedAnswer, showResult, isCorrect, correctIndex)}
             initial={{ opacity: 0, x: -10 }}
             animate={
-              isAnswered && i === currentChallenge.correctIndex
+              showResult && i === correctIndex
                 ? { opacity: 1, x: 0, scale: [1, 1.03, 1], transition: { duration: 0.3, delay: 0.08 } }
-                : isAnswered && i === selectedAnswer && !isCorrect
+                : showResult && i === selectedAnswer && !isCorrect
                 ? { opacity: 1, x: [-7, 7, -5, 5, -2, 2, 0], transition: { duration: 0.38 } }
                 : { opacity: 1, x: 0, transition: { delay: i * 0.06, duration: 0.22, ease: "easeOut" } }
             }
@@ -317,11 +320,11 @@ export default function Game({ config, onFinish }) {
             whileTap={!isAnswered ? { scale: 0.97, y: 2 } : {}}
           >
             <span className="kopt-key">{String.fromCharCode(65 + i)}</span>
-            <span className="kopt-text">{opt}</span>
-            {isAnswered && i === currentChallenge.correctIndex && (
+            <span className="kopt-text">{opt.text}</span>
+            {showResult && i === correctIndex && (
               <span className="kopt-mark">✓</span>
             )}
-            {isAnswered && i === selectedAnswer && !isCorrect && (
+            {showResult && i === selectedAnswer && !isCorrect && (
               <span className="kopt-mark">✗</span>
             )}
           </motion.button>
@@ -330,9 +333,25 @@ export default function Game({ config, onFinish }) {
 
       {/* Fila 6: Feedback + botón siguiente — espacio siempre reservado */}
       <div className="kgame-foot">
-        <AnimatePresence>
-          {isAnswered && (
+        <AnimatePresence mode="wait">
+          {isChecking && (
             <motion.div
+              key="checking"
+              className="kgame-fb kgame-fb--checking"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+            >
+              <span className="kgame-fb-icon">⏳</span>
+              <div className="kgame-fb-body">
+                <strong className="kgame-fb-msg">Verificando respuesta...</strong>
+              </div>
+            </motion.div>
+          )}
+          {showResult && (
+            <motion.div
+              key="result"
               className={`kgame-fb ${isCorrect ? "kgame-fb--correct" : "kgame-fb--wrong"}`}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -342,13 +361,13 @@ export default function Game({ config, onFinish }) {
               <span className="kgame-fb-icon">{isCorrect ? "✓" : "✗"}</span>
               <div className="kgame-fb-body">
                 <strong className="kgame-fb-msg">{feedbackMsg}</strong>
-                <p className="kgame-fb-expl">{currentChallenge.explanation}</p>
+                <p className="kgame-fb-expl">{explanation}</p>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
         <AnimatePresence>
-          {isAnswered && (
+          {showResult && (
             <motion.button
               className="btn btn--primary kgame-next-btn"
               onClick={nextQuestion}

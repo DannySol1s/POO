@@ -318,7 +318,7 @@ export default function Results({ result, config, onRestart, onRanking, restarti
                   <span className="breakdown-topic">{entry.challenge.topic}</span>
                   {!entry.correct && (
                     <span className="breakdown-answer">
-                      Resp. correcta: {entry.challenge.options[entry.challenge.correctIndex]}
+                      Resp. correcta: {entry.challenge.options[entry.correctIndex]?.text}
                     </span>
                   )}
                 </div>
