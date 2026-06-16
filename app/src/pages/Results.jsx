@@ -208,7 +208,7 @@ export default function Results({ result, config, onRestart, onRanking, restarti
 
         {user && (
           <div className={`save-status save-status--${saveStatus}`}>
-            {saveStatus === "saving" && "Escribiendo en SQLite..."}
+            {saveStatus === "saving" && "Guardando en el servidor..."}
             {saveStatus === "ok"     && "✓ Guardado en el ranking global"}
             {saveStatus === "error"  && "❌ Explotó el commit, no se guardó."}
           </div>
