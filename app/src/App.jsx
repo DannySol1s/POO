@@ -23,7 +23,7 @@ function LoadingScreen() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.5, ease: "easeOut" }}
         >
-          <span className="sys-boot-title">POO Challenge</span>
+          <span className="sys-boot-title">POO CHALLENGE</span>
           <span className="sys-boot-badge">TVRG</span>
         </motion.div>
 
