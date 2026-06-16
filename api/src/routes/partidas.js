@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import db from "../db/index.js";
+import { db } from "../db/index.js";
 import { requireAuth } from "../middleware/auth.js";
 import { rateLimit } from "../middleware/rateLimit.js";
 
@@ -30,15 +30,16 @@ partidasRouter.post("/", requireAuth, async (c) => {
 
   const { tema, puntuacion, correctas, total, dificultad = "normal" } = body;
 
-  if (!TEMAS_VALIDOS.includes(tema))        return c.json({ error: "Tema inválido" }, 400);
+  if (!TEMAS_VALIDOS.includes(tema))             return c.json({ error: "Tema inválido" }, 400);
   if (!DIFICULTADES_VALIDAS.includes(dificultad)) return c.json({ error: "Dificultad inválida" }, 400);
   if (!validarPartida(puntuacion, correctas, total, dificultad)) {
     return c.json({ error: "Datos de partida inválidos" }, 400);
   }
 
-  db.prepare(
-    "INSERT INTO partidas (usuario_id, tema, puntuacion, correctas, total, dificultad) VALUES (?, ?, ?, ?, ?, ?)"
-  ).run(user.sub, tema, puntuacion, correctas, total, dificultad);
+  await db.execute({
+    sql: "INSERT INTO partidas (usuario_id, tema, puntuacion, correctas, total, dificultad) VALUES (?, ?, ?, ?, ?, ?)",
+    args: [user.sub, tema, puntuacion, correctas, total, dificultad],
+  });
 
   return c.json({ ok: true }, 201);
 });
@@ -56,28 +57,30 @@ partidasRouter.post("/arcade", arcadeLimiter, async (c) => {
     return c.json({ error: "El nombre solo puede contener letras y números" }, 400);
   }
 
-  if (!TEMAS_VALIDOS.includes(tema))        return c.json({ error: "Tema inválido" }, 400);
+  if (!TEMAS_VALIDOS.includes(tema))             return c.json({ error: "Tema inválido" }, 400);
   if (!DIFICULTADES_VALIDAS.includes(dificultad)) return c.json({ error: "Dificultad inválida" }, 400);
   if (!validarPartida(puntuacion, correctas, total, dificultad)) {
     return c.json({ error: "Datos de partida inválidos" }, 400);
   }
 
-  const existing = db
-    .prepare("SELECT MAX(puntuacion) AS prev FROM partidas_arcade WHERE nombre = ?")
-    .get(nombreTrimmed);
-  const prevBest = existing?.prev ?? null;
+  const { rows } = await db.execute({
+    sql: "SELECT MAX(puntuacion) AS prev FROM partidas_arcade WHERE nombre = ?",
+    args: [nombreTrimmed],
+  });
+  const prevBest = rows[0]?.prev ?? null;
   const firstTime = prevBest === null;
   const newRecord = firstTime || puntuacion > prevBest;
 
-  db.prepare(
-    "INSERT INTO partidas_arcade (nombre, tema, puntuacion, correctas, total, dificultad) VALUES (?, ?, ?, ?, ?, ?)"
-  ).run(nombreTrimmed, tema, puntuacion, correctas, total, dificultad);
+  await db.execute({
+    sql: "INSERT INTO partidas_arcade (nombre, tema, puntuacion, correctas, total, dificultad) VALUES (?, ?, ?, ?, ?, ?)",
+    args: [nombreTrimmed, tema, puntuacion, correctas, total, dificultad],
+  });
 
   return c.json({ ok: true, firstTime, newRecord, prevBest }, 201);
 });
 
 // Mejor puntuación + total acumulado (usuarios registrados + arcade)
-partidasRouter.get("/ranking", (c) => {
+partidasRouter.get("/ranking", async (c) => {
   const { tema, limit = "10" } = c.req.query();
   const lim = Math.min(Math.max(parseInt(limit) || 10, 1), 50);
   const filtrarTema = tema && tema !== "todos";
@@ -117,24 +120,25 @@ partidasRouter.get("/ranking", (c) => {
          ORDER BY mejor_puntuacion DESC
          LIMIT ?`;
 
-  const rows = filtrarTema
-    ? db.prepare(query).all(tema, tema, tema, lim)
-    : db.prepare(query).all(lim);
+  const { rows } = filtrarTema
+    ? await db.execute({ sql: query, args: [tema, tema, tema, lim] })
+    : await db.execute({ sql: query, args: [lim] });
 
   return c.json({ data: rows });
 });
 
 // Historial del usuario autenticado
-partidasRouter.get("/mis-partidas", requireAuth, (c) => {
+partidasRouter.get("/mis-partidas", requireAuth, async (c) => {
   const user = c.get("user");
 
-  const rows = db.prepare(
-    `SELECT tema, dificultad, puntuacion, correctas, total, jugado_en
-       FROM partidas
-      WHERE usuario_id = ?
-      ORDER BY jugado_en DESC
-      LIMIT 20`
-  ).all(user.sub);
+  const { rows } = await db.execute({
+    sql: `SELECT tema, dificultad, puntuacion, correctas, total, jugado_en
+            FROM partidas
+           WHERE usuario_id = ?
+           ORDER BY jugado_en DESC
+           LIMIT 20`,
+    args: [user.sub],
+  });
 
   return c.json({ data: rows });
 });

@@ -5,8 +5,9 @@ import { secureHeaders } from "hono/secure-headers";
 import { challengesRouter } from "./routes/challenges.js";
 import { authRouter } from "./routes/auth.js";
 import { partidasRouter } from "./routes/partidas.js";
-import { seedAdmin } from "./db/index.js";
+import { initDb, seedAdmin } from "./db/index.js";
 
+await initDb();
 await seedAdmin();
 
 // Orígenes permitidos: siempre localhost en dev + dominios de producción vía env
@@ -37,6 +38,6 @@ app.route("/api/partidas", partidasRouter);
 app.notFound((c) => c.json({ error: "Ruta no encontrada" }, 404));
 
 export default {
-  port: 3000,
+  port: process.env.PORT || 3000,
   fetch: app.fetch,
 };

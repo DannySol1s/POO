@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { sign } from "hono/jwt";
-import db from "../db/index.js";
+import { db } from "../db/index.js";
 import { JWT_SECRET } from "../middleware/auth.js";
 import { rateLimit } from "../middleware/rateLimit.js";
 
@@ -26,9 +26,11 @@ authRouter.post("/login", authLimiter, async (c) => {
     return c.json({ error: "Usuario y contraseña son obligatorios" }, 400);
   }
 
-  const user = db
-    .prepare("SELECT id, username, password_hash FROM usuarios WHERE username = ?")
-    .get(username);
+  const { rows } = await db.execute({
+    sql: "SELECT id, username, password_hash FROM usuarios WHERE username = ?",
+    args: [username],
+  });
+  const user = rows[0];
 
   if (!user) return c.json({ error: "Credenciales incorrectas" }, 401);
 
